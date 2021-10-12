@@ -27,23 +27,18 @@ services:
     depends_on:
       - db-mysql
   migration:
-    image: flyway/flyway:7.5.1
-    command: -configFiles=/flyway/conf/flyway.config -locations=filesystem:/flyway/sql -connectRetries=60 migrate
+    build:
+      context: ./flyway
+      dockerfile: Dockerfile
+    environment:
+      FLYWAY_EDITION: community
     volumes:
-      - ${PWD}/flyway/db-migration/main:/flyway/sql
-      - ${PWD}/flyway/conf/flyway_main.conf:/flyway/conf/flyway.config
-    depends_on:
-      - db-mysql
-  seed:
-    image: flyway/flyway:7.5.1
-    command: -configFiles=/flyway/conf/flyway.config -locations=filesystem:/flyway/sql -connectRetries=60 migrate
-    volumes:
-      - ${PWD}/flyway/db-migration/seed:/flyway/sql
-      - ${PWD}/flyway/conf/flyway_seed.conf:/flyway/conf/flyway.config
+      - ${PWD}/flyway/db-migration:/flyway/sql
+      - ${PWD}/flyway/conf:/flyway/conf
     depends_on:
       - db-mysql
   db-mysql:
-    image: mysql:5.7.34
+    image: mysql:5.7
     ports:
       - "3306:3306"
     env_file:

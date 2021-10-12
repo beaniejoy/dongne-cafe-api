@@ -1,27 +1,19 @@
-package io.beaniejoy.dongnecafe.cafe.dto;
+package io.beaniejoy.dongnecafe.cafe.dto.cafe;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CafeResponseDto {
-
-    private UUID cafeId;
+public class CafeUpdateRequestDto {
 
     private String name;
 
     private String address;
 
     private String phoneNumber;
-
-    private Double totalRate;
 
     private String description;
 }

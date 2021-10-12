@@ -1,5 +1,6 @@
 package io.beaniejoy.dongnecafe.cafe.domain;
 
+import io.beaniejoy.dongnecafe.cafe.dto.cafe.CafeImageResponseDto;
 import io.beaniejoy.dongnecafe.common.domain.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,4 +29,10 @@ public class CafeImage extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "cafe_id")
     private Cafe cafe;
+
+    public CafeImageResponseDto toResponseDto() {
+        return CafeImageResponseDto.builder()
+                .imgUrl(imgUrl)
+                .build();
+    }
 }

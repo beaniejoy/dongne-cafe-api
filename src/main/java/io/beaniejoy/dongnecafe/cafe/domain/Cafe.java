@@ -1,6 +1,7 @@
 package io.beaniejoy.dongnecafe.cafe.domain;
 
-import io.beaniejoy.dongnecafe.cafe.dto.CafeResponseDto;
+import io.beaniejoy.dongnecafe.cafe.dto.cafe.CafeInfoResponseDto;
+import io.beaniejoy.dongnecafe.cafe.dto.cafe.CafeSearchResponseDto;
 import io.beaniejoy.dongnecafe.common.domain.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +12,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -35,20 +37,48 @@ public class Cafe extends BaseTimeEntity {
 
     private String description;
 
-    @OneToMany(mappedBy = "cafe", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cafe", fetch = FetchType.LAZY)
     private List<CafeMenu> cafeMenuList;
 
-    @OneToMany(mappedBy = "cafe", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cafe", fetch = FetchType.LAZY)
     private List<CafeImage> cafeImageList;
 
-    public CafeResponseDto toResponseDto() {
-        return CafeResponseDto.builder()
+    public void updateInfo(String name, String address, String phoneNumber, String description) {
+        this.name = name;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.description = description;
+    }
+
+    public CafeSearchResponseDto toSearchResponseDto() {
+        return CafeSearchResponseDto.builder()
+                .cafeId(cafeId)
+                .name(name)
+                .address(address)
+                .totalRate(totalRate)
+                .imageList(cafeImageList
+                        .stream()
+                        .map(CafeImage::toResponseDto)
+                        .collect(Collectors.toList()))
+                .build();
+    }
+
+    public CafeInfoResponseDto toInfoResponseDto() {
+        return CafeInfoResponseDto.builder()
                 .cafeId(cafeId)
                 .name(name)
                 .address(address)
                 .phoneNumber(phoneNumber)
                 .totalRate(totalRate)
                 .description(description)
+                .menuList(cafeMenuList
+                        .stream()
+                        .map(CafeMenu::toListResponseDto)
+                        .collect(Collectors.toList()))
+                .imageList(cafeImageList
+                        .stream()
+                        .map(CafeImage::toResponseDto)
+                        .collect(Collectors.toList()))
                 .build();
     }
 }
