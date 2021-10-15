@@ -1,4 +1,4 @@
-package io.beaniejoy.dongecafe;
+package io.beaniejoy.dongnecafe;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
