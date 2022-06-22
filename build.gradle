@@ -1,48 +1,74 @@
-plugins {
-    id 'org.springframework.boot' version '2.5.4'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'java'
+buildscript {
+    ext {
+        springBootVersion = '2.7.0'
+        dependencyManagementVersion = '1.0.11.RELEASE'
+        kotlinVersion = '1.6.21'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath "io.spring.gradle:dependency-management-plugin:${dependencyManagementVersion}"
+
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
+        classpath "org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}"
+        classpath "org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}"
+    }
 }
+
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-spring'
+apply plugin: "kotlin-jpa"
+apply plugin: "kotlin-noarg"
+apply plugin: "kotlin-allopen"
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
 group = 'io.beaniejoy.dongecafe'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
+sourceCompatibility = '17'
 
 repositories {
     mavenCentral()
 }
 
+allOpen {
+    annotation("javax.persistence.Entity")
+    annotation("javax.persistence.MappedSuperclass")
+    annotation("javax.persistence.Embeddable")
+}
+
 dependencies {
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
+
+    implementation('io.github.microutils:kotlin-logging:2.1.21')
+
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
     // log4j2
-    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
-    testImplementation 'org.springframework.boot:spring-boot-starter-log4j2'
+//    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+//    testImplementation 'org.springframework.boot:spring-boot-starter-log4j2'
 
-    compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-    // MySQL
-    runtimeOnly 'mysql:mysql-connector-java'
+    runtimeOnly 'mysql:mysql-connector-java' // MySQL
+    runtimeOnly 'com.h2database:h2' // H2
 
-    annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-configurations {
-    all {
-        // log4j2 적용을 위해 기존 spring boot에서 제공하는 logging exclude
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-    }
-}
+//configurations {
+//    all {
+//        // log4j2 적용을 위해 기존 spring boot에서 제공하는 logging exclude
+//        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+//    }
+//}
 
 test {
     useJUnitPlatform()
