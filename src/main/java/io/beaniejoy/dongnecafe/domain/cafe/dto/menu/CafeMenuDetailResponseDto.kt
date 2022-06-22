@@ -13,7 +13,7 @@ data class CafeMenuDetailResponseDto(
             return CafeMenuDetailResponseDto(
                 name = cafeMenu.name,
                 price = cafeMenu.price,
-                optionList = cafeMenu.menuOptionList.map { it.toResponseDto() }
+                optionList = cafeMenu.menuOptionList.map { MenuOptionResponseDto.of(it) }
             )
         }
     }

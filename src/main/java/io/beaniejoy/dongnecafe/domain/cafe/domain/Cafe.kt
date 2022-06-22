@@ -3,25 +3,26 @@ package io.beaniejoy.dongnecafe.domain.cafe.domain
 import io.beaniejoy.dongnecafe.common.domain.BaseTimeEntity
 import javax.persistence.*
 
-@Entity(name = "cafe")
+@Entity
+@Table(name = "cafe")
 class Cafe(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     var name: String,
 
-    @Column(name = "address")
+    @Column(name = "address", nullable = false)
     var address: String,
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", nullable = false)
     var phoneNumber: String,
 
-    @Column(name = "total_rate")
+    @Column(name = "total_rate", nullable = false)
     val totalRate: Double,
 
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     var description: String,
 
     @OneToMany(mappedBy = "cafe", fetch = FetchType.LAZY)
