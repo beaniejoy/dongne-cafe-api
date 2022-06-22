@@ -1,6 +1,6 @@
 package io.beaniejoy.dongnecafe.domain.cafe.dto.cafe
 
-import io.beaniejoy.dongnecafe.domain.cafe.domain.Cafe
+import io.beaniejoy.dongnecafe.domain.cafe.entity.Cafe
 import io.beaniejoy.dongnecafe.domain.cafe.dto.menu.CafeMenuResponseDto
 
 data class CafeInfoResponseDto(

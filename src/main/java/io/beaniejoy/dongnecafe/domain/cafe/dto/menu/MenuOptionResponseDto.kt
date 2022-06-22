@@ -1,6 +1,6 @@
 package io.beaniejoy.dongnecafe.domain.cafe.dto.menu
 
-import io.beaniejoy.dongnecafe.domain.cafe.domain.MenuOption
+import io.beaniejoy.dongnecafe.domain.cafe.entity.MenuOption
 
 data class MenuOptionResponseDto(
     val id: Long = 0L,

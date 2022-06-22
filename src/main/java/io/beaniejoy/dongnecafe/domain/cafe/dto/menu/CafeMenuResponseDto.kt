@@ -1,6 +1,6 @@
 package io.beaniejoy.dongnecafe.domain.cafe.dto.menu
 
-import io.beaniejoy.dongnecafe.domain.cafe.domain.CafeMenu
+import io.beaniejoy.dongnecafe.domain.cafe.entity.CafeMenu
 import java.math.BigDecimal
 
 data class CafeMenuResponseDto(

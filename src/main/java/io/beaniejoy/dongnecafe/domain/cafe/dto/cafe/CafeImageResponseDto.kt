@@ -1,6 +1,6 @@
 package io.beaniejoy.dongnecafe.domain.cafe.dto.cafe
 
-import io.beaniejoy.dongnecafe.domain.cafe.domain.CafeImage
+import io.beaniejoy.dongnecafe.domain.cafe.entity.CafeImage
 
 data class CafeImageResponseDto(
     val imgUrl: String? = null

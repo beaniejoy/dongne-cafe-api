@@ -1,4 +1,4 @@
-package io.beaniejoy.dongnecafe.domain.cafe.domain
+package io.beaniejoy.dongnecafe.domain.cafe.entity
 
 import io.beaniejoy.dongnecafe.common.domain.BaseTimeEntity
 import javax.persistence.*
