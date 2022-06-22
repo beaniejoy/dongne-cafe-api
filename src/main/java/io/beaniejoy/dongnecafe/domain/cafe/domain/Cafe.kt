@@ -1,16 +1,13 @@
 package io.beaniejoy.dongnecafe.domain.cafe.domain
 
 import io.beaniejoy.dongnecafe.common.domain.BaseTimeEntity
-import io.beaniejoy.dongnecafe.domain.cafe.dto.cafe.CafeInfoResponseDto
-import io.beaniejoy.dongnecafe.domain.cafe.dto.cafe.CafeSearchResponseDto
-import java.util.stream.Collectors
 import javax.persistence.*
 
 @Entity(name = "cafe")
 class Cafe(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long = 0L,
 
     @Column(name = "name")
     var name: String,

@@ -1,7 +1,7 @@
 package io.beaniejoy.dongnecafe.domain.cafe.dto.cafe
 
 import io.beaniejoy.dongnecafe.domain.cafe.domain.Cafe
-import io.beaniejoy.dongnecafe.domain.cafe.dto.menu.CafeMenuListResponseDto
+import io.beaniejoy.dongnecafe.domain.cafe.dto.menu.CafeMenuResponseDto
 
 data class CafeInfoResponseDto(
     val id: Long? = null,
@@ -10,7 +10,7 @@ data class CafeInfoResponseDto(
     val phoneNumber: String? = null,
     val totalRate: Double? = null,
     val description: String? = null,
-    val menuList: List<CafeMenuListResponseDto> = emptyList(),
+    val menuList: List<CafeMenuResponseDto> = emptyList(),
     val imageList: List<CafeImageResponseDto> = emptyList()
 ) {
     companion object {
@@ -22,7 +22,7 @@ data class CafeInfoResponseDto(
                 phoneNumber = cafe.phoneNumber,
                 totalRate = cafe.totalRate,
                 description = cafe.description,
-                menuList = cafe.cafeMenuList.map { it.toListResponseDto() },
+                menuList = cafe.cafeMenuList.map { CafeMenuResponseDto.of(it) },
                 imageList = cafe.cafeImageList.map { CafeImageResponseDto.of(it) }
             )
         }

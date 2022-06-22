@@ -8,9 +8,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.util.*
 
 @RestController
 @RequestMapping("/cafes")
@@ -24,18 +22,17 @@ class CafeController(
         return cafeService.getCafeList(pageable)
     }
 
-    @GetMapping("/{cafeId}")
-    fun getCafeDetailedInfo(@PathVariable("cafeId") cafeId: UUID): ResponseEntity<CafeInfoResponseDto> {
-        val cafeResponse = cafeService.getCafeInfoByCafeId(cafeId)
-        return ResponseEntity.ok(cafeResponse)
+    @GetMapping("/{id}")
+    fun getCafeDetailedInfo(@PathVariable("id") id: Long): CafeInfoResponseDto {
+        return cafeService.getCafeInfoByCafeId(id)
     }
 
     // TODO spring boot validation 적용 필요
     @PutMapping("/{id}")
     fun updateCafeInfo(
-        @PathVariable("id") id: UUID,
+        @PathVariable("id") id: Long,
         @RequestBody resource: CafeUpdateRequestDto
-    ): ResponseEntity<String> {
+    ): String {
         cafeService.updateCafe(
             id = id,
             name = resource.name!!,
@@ -44,6 +41,6 @@ class CafeController(
             description = resource.description!!
         )
 
-        return ResponseEntity.ok("Successfully Cafe[$id] Info Updated")
+        return "Successfully Cafe[$id] Info Updated"
     }
 }

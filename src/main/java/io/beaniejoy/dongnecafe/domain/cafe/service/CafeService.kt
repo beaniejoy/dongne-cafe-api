@@ -9,7 +9,6 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.*
 
 @Service
 @Transactional
@@ -25,15 +24,15 @@ class CafeService(
     }
 
     @Transactional(readOnly = true)
-    fun getCafeInfoByCafeId(cafeId: UUID): CafeInfoResponseDto {
-        val cafe = cafeRepository.findByIdOrNull(cafeId)
-            ?: throw CafeNotFoundException(cafeId)
+    fun getCafeInfoByCafeId(id: Long): CafeInfoResponseDto {
+        val cafe = cafeRepository.findByIdOrNull(id)
+            ?: throw CafeNotFoundException(id)
 
         return CafeInfoResponseDto.of(cafe)
     }
 
     fun updateCafe(
-        id: UUID,
+        id: Long,
         name: String,
         address: String,
         phoneNumber: String,
