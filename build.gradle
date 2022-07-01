@@ -3,7 +3,7 @@ buildscript {
         springBootVersion = '2.7.0'
         dependencyManagementVersion = '1.0.11.RELEASE'
         kotlinVersion = '1.6.21'
-        flywayVersion = '8.5.11'
+        flywayVersion = '7.15.0'
     }
     repositories {
         mavenCentral()
@@ -45,6 +45,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     implementation('io.github.microutils:kotlin-logging:2.1.21')
 

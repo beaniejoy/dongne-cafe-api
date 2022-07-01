@@ -13,7 +13,7 @@ data class OptionDetailResponseDto(
             return OptionDetailResponseDto(
                 id = optionDetail.id,
                 name = optionDetail.name,
-                extra = optionDetail.extra
+                extra = optionDetail.extraPrice
             )
         }
     }
