@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS `cafe`;
+
 CREATE TABLE `cafe` (
     `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '카페 ID',
     `name` varchar(20) NOT NULL COMMENT '카페명',

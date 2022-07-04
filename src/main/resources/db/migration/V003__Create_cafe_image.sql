@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS `cafe_image`;
+
 CREATE TABLE `cafe_image` (
     `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '카페 이미지 ID',
     `img_url` varchar(255) NOT NULL COMMENT '이미지 경로',

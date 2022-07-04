@@ -2,8 +2,10 @@ package io.beaniejoy.dongnecafe.domain.cafe.service
 
 import io.beaniejoy.dongnecafe.domain.cafe.dto.cafe.CafeInfoResponseDto
 import io.beaniejoy.dongnecafe.domain.cafe.dto.cafe.CafeSearchResponseDto
+import io.beaniejoy.dongnecafe.domain.cafe.entity.Cafe
 import io.beaniejoy.dongnecafe.domain.cafe.error.CafeNotFoundException
 import io.beaniejoy.dongnecafe.domain.cafe.repository.CafeRepository
+import mu.KLogging
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
@@ -15,12 +17,13 @@ import org.springframework.transaction.annotation.Transactional
 class CafeService(
     private val cafeRepository: CafeRepository
 ) {
+    companion object: KLogging()
 
     @Transactional(readOnly = true)
     fun getCafeList(pageable: Pageable): Page<CafeSearchResponseDto> {
-        val cafeListWithPagination = cafeRepository.findAll(pageable)
+        val cafeList: Page<Cafe> = cafeRepository.findAll(pageable)
 
-        return cafeListWithPagination.map { CafeSearchResponseDto.of(it) }
+        return cafeList.map { CafeSearchResponseDto.of(it) }
     }
 
     @Transactional(readOnly = true)
