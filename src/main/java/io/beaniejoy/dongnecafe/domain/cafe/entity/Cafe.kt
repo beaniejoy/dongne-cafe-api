@@ -61,7 +61,7 @@ class Cafe protected constructor(
     }
 
     fun addCafeMenu(cafeMenu: CafeMenu) {
-        cafeMenuList.add(cafeMenu)
+        this.cafeMenuList.add(cafeMenu)
         cafeMenu.updateCafe(this)
     }
 

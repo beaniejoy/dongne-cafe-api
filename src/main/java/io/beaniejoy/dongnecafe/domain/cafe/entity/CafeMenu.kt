@@ -6,7 +6,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "cafe_menu")
-class CafeMenu(
+class CafeMenu protected constructor(
     name: String,
     price: BigDecimal,
 ) : BaseTimeEntity() {
@@ -29,15 +29,22 @@ class CafeMenu(
     val menuOptionList: MutableList<MenuOption> = arrayListOf()
 
     companion object {
-        fun createCafeMenu(name: String, price: BigDecimal): CafeMenu {
+        fun createCafeMenu(name: String, price: BigDecimal, menuOptionList: List<MenuOption>): CafeMenu {
             return CafeMenu(
                 name = name,
                 price = price
-            )
+            ).apply {
+                menuOptionList.forEach { this.addMenuOption(it) }
+            }
         }
     }
 
     fun updateCafe(cafe: Cafe) {
         this.cafe = cafe
+    }
+
+    fun addMenuOption(menuOption: MenuOption) {
+        this.menuOptionList.add(menuOption)
+        menuOption.updateCafeMenu(this)
     }
 }
