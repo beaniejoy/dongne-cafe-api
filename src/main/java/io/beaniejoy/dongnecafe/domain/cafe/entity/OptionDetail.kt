@@ -17,7 +17,7 @@ class OptionDetail(
     @Column(name = "extra_price", nullable = false)
     val extraPrice: BigDecimal,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "option_id", nullable = false)
     val menuOption: MenuOption
 ): BaseTimeEntity()

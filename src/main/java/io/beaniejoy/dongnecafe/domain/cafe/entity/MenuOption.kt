@@ -13,10 +13,10 @@ class MenuOption(
     @Column(name = "title", nullable = false)
     val title: String,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id", nullable = false)
     val cafeMenu: CafeMenu,
 
-    @OneToMany(mappedBy = "menuOption", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "menuOption", fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
     val optionDetailList: MutableList<OptionDetail>
 ) : BaseTimeEntity()

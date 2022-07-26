@@ -11,16 +11,16 @@ import javax.persistence.MappedSuperclass
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener::class)
-class BaseTimeEntity(
+class BaseTimeEntity protected constructor() {
     @CreatedDate
-    val createdAt: LocalDateTime = LocalDateTime.now(),
+    val createdAt: LocalDateTime = LocalDateTime.now()
 
     @CreatedBy
-    val createdBy: String = "",
+    val createdBy: String = ""
 
     @LastModifiedDate
-    val updatedAt: LocalDateTime? = null,
+    val updatedAt: LocalDateTime? = null
 
     @LastModifiedBy
     val updatedBy: String? = null
-)
+}
