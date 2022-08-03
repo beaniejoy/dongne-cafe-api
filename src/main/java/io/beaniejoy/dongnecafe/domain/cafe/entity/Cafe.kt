@@ -47,8 +47,26 @@ class Cafe protected constructor(
             address: String,
             phoneNumber: String,
             description: String,
-            cafeMenuList: List<CafeMenu>
+            cafeMenuRequestList: List<CafeMenuInfoRequestDto>,
         ): Cafe {
+            val cafeMenuList = cafeMenuRequestList.map { cafeMenuRequestDto ->
+                CafeMenu.createCafeMenu(
+                    name = cafeMenuRequestDto.name!!,
+                    price = cafeMenuRequestDto.price,
+                    menuOptionList = cafeMenuRequestDto.menuOptionList.map { menuOptionRequestDto ->
+                        MenuOption.createMenuOption(
+                            title = menuOptionRequestDto.title,
+                            optionDetailList = menuOptionRequestDto.optionDetailList.map { optionDetailRequestDto ->
+                                OptionDetail.createOptionDetail(
+                                    name = optionDetailRequestDto.name,
+                                    extraPrice = optionDetailRequestDto.extraPrice
+                                )
+                            }
+                        )
+                    }
+                )
+            }
+
             return Cafe(
                 name = name,
                 address = address,
@@ -69,7 +87,7 @@ class Cafe protected constructor(
         name: String,
         address: String,
         phoneNumber: String,
-        description: String
+        description: String,
     ) {
         this.name = name
         this.address = address

@@ -5,6 +5,8 @@ import io.beaniejoy.dongnecafe.domain.cafe.dto.cafe.CafeSearchResponseDto
 import io.beaniejoy.dongnecafe.domain.cafe.dto.request.CafeMenuInfoRequestDto
 import io.beaniejoy.dongnecafe.domain.cafe.entity.Cafe
 import io.beaniejoy.dongnecafe.domain.cafe.entity.CafeMenu
+import io.beaniejoy.dongnecafe.domain.cafe.entity.MenuOption
+import io.beaniejoy.dongnecafe.domain.cafe.entity.OptionDetail
 import io.beaniejoy.dongnecafe.domain.cafe.error.CafeExistedException
 import io.beaniejoy.dongnecafe.domain.cafe.error.CafeNotFoundException
 import io.beaniejoy.dongnecafe.domain.cafe.repository.CafeRepository
@@ -22,6 +24,9 @@ class CafeService(
 ) {
     companion object : KLogging()
 
+    /**
+     * 카페 생성 로직
+     */
     fun createCafe(
         name: String,
         address: String,
@@ -31,18 +36,12 @@ class CafeService(
     ): Long {
         checkCafeExistedByName(name)
 
-
-
-        val cafeMenuList = cafeMenuRequestList.map {
-            CafeMenu.createCafeMenu(it.name!!, it.price)
-        }
-
         val cafe = Cafe.createCafe(
             name = name,
             address = address,
             phoneNumber = phoneNumber,
             description = description,
-            cafeMenuList = cafeMenuList
+            cafeMenuRequestList = cafeMenuRequestList
         )
 
         val savedCafe = cafeRepository.save(cafe)

@@ -16,8 +16,8 @@ class CafeController(
     private val cafeService: CafeService
 ) {
     @PostMapping
-    fun createCafe(@RequestBody resource: CafeInfoRequestDto) {
-        val savedCafeId = cafeService.createCafe(
+    fun createCafe(@RequestBody resource: CafeInfoRequestDto): Long {
+        return cafeService.createCafe(
             name = resource.name!!,
             address = resource.address!!,
             phoneNumber = resource.phoneNumber!!,
