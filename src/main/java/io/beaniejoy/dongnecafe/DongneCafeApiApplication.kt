@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class DongneCafeSirenOrderApplication
+class DongneCafeApiApplication
 
 fun main(args: Array<String>) {
-    runApplication<DongneCafeSirenOrderApplication>(*args)
+    runApplication<DongneCafeApiApplication>(*args)
 }
