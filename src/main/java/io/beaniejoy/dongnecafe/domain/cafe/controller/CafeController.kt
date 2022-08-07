@@ -27,7 +27,7 @@ class CafeController(
     }
 
     @GetMapping
-    fun searchCafeList(
+    fun searchCafe(
         @PageableDefault(sort = ["name"], direction = Sort.Direction.ASC, page = 0, size = 10) pageable: Pageable
     ): Page<CafeSearchResponseDto> {
         return cafeService.getCafeList(pageable)

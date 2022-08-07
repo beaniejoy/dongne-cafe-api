@@ -32,6 +32,7 @@ class CafeService(
      * - 메뉴 옵션 (옵션 이름 /ex. 사이즈)
      * - 옵션 상세 (상세 이름, 추가 금액 /ex. [(medium, 0), (large, 200), (venti, 700)])
      */
+    @Transactional
     fun createCafe(
         name: String,
         address: String,

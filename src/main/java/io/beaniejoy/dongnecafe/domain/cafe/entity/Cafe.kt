@@ -49,21 +49,11 @@ class Cafe protected constructor(
             description: String,
             cafeMenuRequestList: List<CafeMenuInfoRequestDto>,
         ): Cafe {
-            val cafeMenuList = cafeMenuRequestList.map { cafeMenuRequestDto ->
+            val cafeMenuEntityList = cafeMenuRequestList.map { cafeMenuRequestDto ->
                 CafeMenu.createCafeMenu(
                     name = cafeMenuRequestDto.name!!,
                     price = cafeMenuRequestDto.price,
-                    menuOptionList = cafeMenuRequestDto.menuOptionList.map { menuOptionRequestDto ->
-                        MenuOption.createMenuOption(
-                            title = menuOptionRequestDto.title,
-                            optionDetailList = menuOptionRequestDto.optionDetailList.map { optionDetailRequestDto ->
-                                OptionDetail.createOptionDetail(
-                                    name = optionDetailRequestDto.name,
-                                    extraPrice = optionDetailRequestDto.extraPrice
-                                )
-                            }
-                        )
-                    }
+                    menuOptionRequestList = cafeMenuRequestDto.menuOptionList
                 )
             }
 
@@ -73,7 +63,7 @@ class Cafe protected constructor(
                 phoneNumber = phoneNumber,
                 description = description
             ).apply {
-                cafeMenuList.forEach { this.addCafeMenu(it) }
+                cafeMenuEntityList.forEach { this.addCafeMenu(it) }
             }
         }
     }

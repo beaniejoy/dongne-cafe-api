@@ -1,6 +1,7 @@
 package io.beaniejoy.dongnecafe.domain.cafe.entity
 
 import io.beaniejoy.dongnecafe.common.entity.BaseTimeEntity
+import io.beaniejoy.dongnecafe.domain.cafe.dto.request.MenuOptionInfoRequestDto
 import java.math.BigDecimal
 import javax.persistence.*
 
@@ -29,12 +30,19 @@ class CafeMenu protected constructor(
     val menuOptionList: MutableList<MenuOption> = arrayListOf()
 
     companion object {
-        fun createCafeMenu(name: String, price: BigDecimal, menuOptionList: List<MenuOption>): CafeMenu {
+        fun createCafeMenu(name: String, price: BigDecimal, menuOptionRequestList: List<MenuOptionInfoRequestDto>): CafeMenu {
+            val menuOptionEntityList = menuOptionRequestList.map { menuOptionRequestDto ->
+                MenuOption.createMenuOption(
+                    title = menuOptionRequestDto.title,
+                    optionDetailRequestList = menuOptionRequestDto.optionDetailList
+                )
+            }
+
             return CafeMenu(
                 name = name,
                 price = price
             ).apply {
-                menuOptionList.forEach { this.addMenuOption(it) }
+                menuOptionEntityList.forEach { this.addMenuOption(it) }
             }
         }
     }
