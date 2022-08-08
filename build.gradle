@@ -63,6 +63,7 @@ dependencies {
     runtimeOnly 'com.h2database:h2' // H2
 
     implementation "org.flywaydb:flyway-core:${flywayVersion}" // flyway
+    implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0") // query logging
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

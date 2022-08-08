@@ -1,0 +1,8 @@
+spring:
+  flyway:
+    enabled: false
+
+logging:
+  level:
+    org.hibernate.SQL: debug # logger 통해 로깅
+    org.hibernate.type: trace
