@@ -9,6 +9,7 @@ import io.beaniejoy.dongnecafe.domain.cafe.entity.CafeMenu
 import io.beaniejoy.dongnecafe.domain.cafe.entity.MenuOption
 import io.beaniejoy.dongnecafe.domain.cafe.entity.OptionDetail
 import org.junit.jupiter.api.Assertions
+import java.math.BigDecimal
 
 class CafeTestUtils {
     companion object {
@@ -29,7 +30,10 @@ class CafeTestUtils {
                 Assertions.assertEquals(cafeMenuRequestList[index].name, cafeMenuList[index].name)
                 Assertions.assertEquals(cafeMenuRequestList[index].price, cafeMenuList[index].price)
 
-                assertMenuOptionListEquals(cafeMenuRequestList[index].menuOptionList, cafeMenuList[index].menuOptionList)
+                assertMenuOptionListEquals(
+                    cafeMenuRequestList[index].menuOptionList,
+                    cafeMenuList[index].menuOptionList
+                )
             }
         }
 
@@ -56,6 +60,44 @@ class CafeTestUtils {
                 Assertions.assertEquals(optionDetailRequestList[index].extraPrice, optionDetailList[index].extraPrice)
 
             }
+        }
+
+        fun createCafeRequestDto(): CafeInfoRequestDto {
+            val cafeName = "beanie_cafe"
+            val cafeAddress = "beanie_cafe_address"
+            val phoneNumber = "01012345678"
+            val description = "beanie_cafe_description"
+
+            val sizeOptionDetailList = listOf(
+                OptionDetailInfoRequestDto(name = "medium", extraPrice = BigDecimal.ZERO),
+                OptionDetailInfoRequestDto(name = "large", extraPrice = BigDecimal.valueOf(200L)),
+                OptionDetailInfoRequestDto(name = "venti", extraPrice = BigDecimal.valueOf(700L))
+            )
+            val sizeMenuOption = MenuOptionInfoRequestDto(
+                title = "size",
+                optionDetailList = sizeOptionDetailList
+            )
+
+            val cafeMenuList = listOf(
+                CafeMenuInfoRequestDto(
+                    name = "menu1",
+                    price = BigDecimal.valueOf(2_800L),
+                    menuOptionList = listOf(sizeMenuOption)
+                ),
+                CafeMenuInfoRequestDto(
+                    name = "menu2",
+                    price = BigDecimal.valueOf(3_500L),
+                    menuOptionList = listOf(sizeMenuOption)
+                ),
+            )
+
+            return CafeInfoRequestDto(
+                name = cafeName,
+                address = cafeAddress,
+                phoneNumber = phoneNumber,
+                description = description,
+                cafeMenuList = cafeMenuList
+            )
         }
     }
 }

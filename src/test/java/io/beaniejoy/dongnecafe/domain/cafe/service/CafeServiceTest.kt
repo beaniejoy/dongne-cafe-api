@@ -1,25 +1,17 @@
 package io.beaniejoy.dongnecafe.domain.cafe.service
 
-import io.beaniejoy.dongnecafe.domain.cafe.dto.request.CafeInfoRequestDto
-import io.beaniejoy.dongnecafe.domain.cafe.dto.request.CafeMenuInfoRequestDto
-import io.beaniejoy.dongnecafe.domain.cafe.dto.request.MenuOptionInfoRequestDto
-import io.beaniejoy.dongnecafe.domain.cafe.dto.request.OptionDetailInfoRequestDto
 import io.beaniejoy.dongnecafe.domain.cafe.entity.Cafe
 import io.beaniejoy.dongnecafe.domain.cafe.error.CafeExistedException
 import io.beaniejoy.dongnecafe.domain.cafe.error.CafeNotFoundException
 import io.beaniejoy.dongnecafe.domain.cafe.repository.CafeRepository
+import io.beaniejoy.dongnecafe.domain.cafe.utils.CafeTestUtils
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.MethodOrderer
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestMethodOrder
-import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.junit.jupiter.MockitoExtension
-import java.math.BigDecimal
 import java.util.*
 import javax.persistence.GeneratedValue
 
@@ -36,7 +28,7 @@ internal class CafeServiceTest {
     @DisplayName("카페 신규 생성 테스트")
     fun create_cafe_test() {
         // given
-        val cafeRequestDto = createCreateCafeRequestDto()
+        val cafeRequestDto = CafeTestUtils.createCafeRequestDto()
         val savedMockCafeId = 100L
 
         `when`(mockCafeRepository.findByName(cafeRequestDto.name!!)).thenReturn(null)
@@ -64,7 +56,7 @@ internal class CafeServiceTest {
     @DisplayName("카페 신규 생성시 이미 존재하는 카페 예외 발생 테스트")
     fun fail_create_cafe_when_existed() {
         // given
-        val cafeRequestDto = createCreateCafeRequestDto()
+        val cafeRequestDto = CafeTestUtils.createCafeRequestDto()
         val cafe = Cafe.createCafe(
             name = cafeRequestDto.name!!,
             address = cafeRequestDto.address!!,
@@ -86,13 +78,15 @@ internal class CafeServiceTest {
                 cafeMenuRequestList = cafeRequestDto.cafeMenuList
             )
         }
+
+        verify(mockCafeRepository).findByName(cafeRequestDto.name!!)
     }
 
     @Test
     @DisplayName("카페 정보 변경 테스트")
     fun update_cafe_test() {
         // given
-        val cafeRequestDto = createCreateCafeRequestDto()
+        val cafeRequestDto = CafeTestUtils.createCafeRequestDto()
         val cafe = Cafe.createCafe(
             name = cafeRequestDto.name!!,
             address = cafeRequestDto.address!!,
@@ -136,44 +130,6 @@ internal class CafeServiceTest {
                 description = "",
             )
         }
-    }
-
-    private fun createCreateCafeRequestDto(): CafeInfoRequestDto {
-        val cafeName = "beanie_cafe"
-        val cafeAddress = "beanie_cafe_address"
-        val phoneNumber = "01012345678"
-        val description = "beanie_cafe_description"
-
-        val sizeOptionDetailList = listOf(
-            OptionDetailInfoRequestDto(name = "medium", extraPrice = BigDecimal.ZERO),
-            OptionDetailInfoRequestDto(name = "large", extraPrice = BigDecimal.valueOf(200L)),
-            OptionDetailInfoRequestDto(name = "venti", extraPrice = BigDecimal.valueOf(700L))
-        )
-        val sizeMenuOption = MenuOptionInfoRequestDto(
-            title = "size",
-            optionDetailList = sizeOptionDetailList
-        )
-
-        val cafeMenuList = listOf(
-            CafeMenuInfoRequestDto(
-                name = "menu1",
-                price = BigDecimal.valueOf(2_800L),
-                menuOptionList = listOf(sizeMenuOption)
-            ),
-            CafeMenuInfoRequestDto(
-                name = "menu2",
-                price = BigDecimal.valueOf(3_500L),
-                menuOptionList = listOf(sizeMenuOption)
-            ),
-        )
-
-        return CafeInfoRequestDto(
-            name = cafeName,
-            address = cafeAddress,
-            phoneNumber = phoneNumber,
-            description = description,
-            cafeMenuList = cafeMenuList
-        )
     }
 
     private fun injectCafeId(
