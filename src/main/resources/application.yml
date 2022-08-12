@@ -11,8 +11,13 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         format_sql: true
-    show-sql: true
+        show-sql: false
   flyway:
     baseline-on-migrate: true
     locations: classpath:db/migration,classpath:db/seed
 #    baseline-version: 0
+
+logging:
+  level:
+    org.hibernate.SQL: debug # logger 통해 로깅
+#    org.hibernate.type: trace

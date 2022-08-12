@@ -2,7 +2,7 @@ package io.beaniejoy.dongnecafe.domain.cafe.controller
 
 import io.beaniejoy.dongnecafe.domain.cafe.dto.cafe.CafeInfoResponseDto
 import io.beaniejoy.dongnecafe.domain.cafe.dto.cafe.CafeSearchResponseDto
-import io.beaniejoy.dongnecafe.domain.cafe.dto.cafe.CafeUpdateRequestDto
+import io.beaniejoy.dongnecafe.domain.cafe.dto.request.CafeInfoRequestDto
 import io.beaniejoy.dongnecafe.domain.cafe.service.CafeService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -15,8 +15,19 @@ import org.springframework.web.bind.annotation.*
 class CafeController(
     private val cafeService: CafeService
 ) {
+    @PostMapping
+    fun createCafe(@RequestBody resource: CafeInfoRequestDto): Long {
+        return cafeService.createCafe(
+            name = resource.name!!,
+            address = resource.address!!,
+            phoneNumber = resource.phoneNumber!!,
+            description = resource.description!!,
+            cafeMenuRequestList = resource.cafeMenuList
+        )
+    }
+
     @GetMapping
-    fun searchCafeList(
+    fun searchCafe(
         @PageableDefault(sort = ["name"], direction = Sort.Direction.ASC, page = 0, size = 10) pageable: Pageable
     ): Page<CafeSearchResponseDto> {
         return cafeService.getCafeList(pageable)
@@ -31,7 +42,7 @@ class CafeController(
     @PutMapping("/{id}")
     fun updateCafeInfo(
         @PathVariable("id") id: Long,
-        @RequestBody resource: CafeUpdateRequestDto
+        @RequestBody resource: CafeInfoRequestDto
     ): String {
         cafeService.updateCafe(
             id = id,
