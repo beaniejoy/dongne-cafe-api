@@ -8,16 +8,16 @@ import io.beaniejoy.dongnecafe.domain.cafe.entity.Cafe
 import io.beaniejoy.dongnecafe.domain.cafe.entity.CafeMenu
 import io.beaniejoy.dongnecafe.domain.cafe.entity.MenuOption
 import io.beaniejoy.dongnecafe.domain.cafe.entity.OptionDetail
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.*
 import java.math.BigDecimal
 
 class CafeTestUtils {
     companion object {
         fun assertCafeEquals(request: CafeInfoRequestDto, entity: Cafe) {
-            Assertions.assertEquals(request.name, entity.name)
-            Assertions.assertEquals(request.address, entity.address)
-            Assertions.assertEquals(request.phoneNumber, entity.phoneNumber)
-            Assertions.assertEquals(request.description, entity.description)
+            assertEquals(request.name, entity.name)
+            assertEquals(request.address, entity.address)
+            assertEquals(request.phoneNumber, entity.phoneNumber)
+            assertEquals(request.description, entity.description)
 
             assertCafeMenuListEquals(request.cafeMenuList, entity.cafeMenuList)
         }
@@ -27,8 +27,8 @@ class CafeTestUtils {
             cafeMenuList: List<CafeMenu>,
         ) {
             for (index in cafeMenuRequestList.indices) {
-                Assertions.assertEquals(cafeMenuRequestList[index].name, cafeMenuList[index].name)
-                Assertions.assertEquals(cafeMenuRequestList[index].price, cafeMenuList[index].price)
+                assertEquals(cafeMenuRequestList[index].name, cafeMenuList[index].name)
+                assertEquals(cafeMenuRequestList[index].price, cafeMenuList[index].price)
 
                 assertMenuOptionListEquals(
                     cafeMenuRequestList[index].menuOptionList,
@@ -42,7 +42,7 @@ class CafeTestUtils {
             menuOptionList: List<MenuOption>,
         ) {
             for (index in menuOptionRequestList.indices) {
-                Assertions.assertEquals(menuOptionRequestList[index].title, menuOptionList[index].title)
+                assertEquals(menuOptionRequestList[index].title, menuOptionList[index].title)
 
                 assertOptionDetailListEquals(
                     menuOptionRequestList[index].optionDetailList,
@@ -56,9 +56,8 @@ class CafeTestUtils {
             optionDetailList: MutableList<OptionDetail>,
         ) {
             for (index in optionDetailRequestList.indices) {
-                Assertions.assertEquals(optionDetailRequestList[index].name, optionDetailList[index].name)
-                Assertions.assertEquals(optionDetailRequestList[index].extraPrice, optionDetailList[index].extraPrice)
-
+                assertEquals(optionDetailRequestList[index].name, optionDetailList[index].name)
+                assertEquals(optionDetailRequestList[index].extraPrice, optionDetailList[index].extraPrice)
             }
         }
 
