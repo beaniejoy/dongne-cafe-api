@@ -1,5 +1,3 @@
-DROP TABLE IF EXISTS `option_detail`;
-
 CREATE TABLE `option_detail` (
     `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '옵션 상세 ID',
     `name` varchar(50) NOT NULL COMMENT '옵션 상세명',

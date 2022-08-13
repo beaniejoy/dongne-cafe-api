@@ -14,8 +14,8 @@ spring:
         show-sql: false
   flyway:
     baseline-on-migrate: true
+    baseline-version: 0
     locations: classpath:db/migration,classpath:db/seed
-#    baseline-version: 0
 
 logging:
   level:

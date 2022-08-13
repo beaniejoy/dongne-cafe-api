@@ -1,5 +1,3 @@
-DROP TABLE IF EXISTS `menu_option`;
-
 CREATE TABLE `menu_option`(
     `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '옵션 ID',
     `title` varchar(50) NOT NULL COMMENT '메뉴 옵션 이름',
