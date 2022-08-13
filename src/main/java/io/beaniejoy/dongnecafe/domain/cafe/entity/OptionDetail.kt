@@ -12,6 +12,7 @@ class OptionDetail protected constructor(
 ) : BaseTimeEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "option_detail_id", nullable = false)
     val id: Long = 0L
 
     @Column(name = "name", nullable = false)
@@ -20,8 +21,8 @@ class OptionDetail protected constructor(
     @Column(name = "extra_price", nullable = false)
     val extraPrice: BigDecimal = extraPrice
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "option_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "menu_option_id", nullable = false)
     var menuOption: MenuOption? = null
         protected set
 

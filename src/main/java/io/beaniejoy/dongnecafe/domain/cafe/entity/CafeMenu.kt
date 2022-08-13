@@ -13,6 +13,7 @@ class CafeMenu protected constructor(
 ) : BaseTimeEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cafe_menu_id", nullable = false)
     val id: Long = 0L
 
     @Column(name = "name", nullable = false)

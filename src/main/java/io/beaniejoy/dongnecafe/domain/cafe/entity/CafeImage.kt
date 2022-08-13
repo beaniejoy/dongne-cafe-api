@@ -8,6 +8,7 @@ import javax.persistence.*
 class CafeImage(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cafe_image_id", nullable = false)
     val id: Long,
 
     @Column(name = "img_url", nullable = false)

@@ -11,17 +11,18 @@ class MenuOption protected constructor(
 ) : BaseTimeEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "menu_option_id", nullable = false)
     val id: Long = 0L
 
     @Column(name = "title", nullable = false)
     val title: String = title
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "menu_id", nullable = false)
+    @JoinColumn(name = "cafe_menu_id", nullable = false)
     var cafeMenu: CafeMenu? = null
         protected set
 
-    @OneToMany(mappedBy = "menuOption", fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "menuOption", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     val optionDetailList: MutableList<OptionDetail> = arrayListOf()
 
     companion object {
