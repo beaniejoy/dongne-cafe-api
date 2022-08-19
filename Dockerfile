@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk11:latest as BUILD_IMAGE
+FROM openjdk:17-alpine as BUILD_IMAGE
 
 ENV WORK_DIR=/usr/app/
 
@@ -18,17 +18,15 @@ COPY src src
 # jar 파일 build
 RUN ./gradlew bootjar
 
-FROM adoptopenjdk/openjdk11:latest
+FROM openjdk:17-alpine
 
 ENV WORK_DIR=/usr/app/
 
 WORKDIR $WORK_DIR
 
-COPY --from=BUILD_IMAGE $WORK_DIR/build/libs/*.jar tripleapp.jar
+COPY --from=BUILD_IMAGE $WORK_DIR/build/libs/*.jar dongne-api.jar
 
 ENTRYPOINT ["java", \
 "-jar", \
 "-Dspring.profiles.active=${PROFILE_OPTION}", \
-"-Dspring.datasource.url=${SPRING_DATASOURCE_URL}", \
-"-Dredis.host=${REDIS_HOST}", \
-"tripleapp.jar"]
+"dongne-api.jar"]

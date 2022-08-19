@@ -1,8 +1,7 @@
 spring:
+  profiles:
+    active: local
   datasource:
-    url: jdbc:mysql://localhost:3306/dongne?autoreconnect=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
-    username: root
-    password: beaniejoy # TODO 추후 보안에 대해 생각해보기
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -20,4 +19,4 @@ spring:
 logging:
   level:
     org.hibernate.SQL: debug # logger 통해 로깅
-#    org.hibernate.type: trace
+    #    org.hibernate.type: trace

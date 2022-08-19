@@ -1,15 +1,14 @@
 version: "3.9"
 services:
-  nginx:
-    image: nginx
-    container_name: nginx
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx/:/etc/nginx/conf.d/
   app-server:
     build:
       context: .
       dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
     env_file:
       - env/app.env
+networks:
+  default:
+    external:
+      name: api-net
