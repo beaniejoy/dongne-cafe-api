@@ -1,4 +1,4 @@
-# local 내 docker 테스트용도
+# local docker 환경 내 local db 활용
 spring:
   datasource:
     url: jdbc:mysql://beanie-test-db:3306/dongne?autoreconnect=true&characterEncoding=utf8&serverTimezone=Asia/Seoul

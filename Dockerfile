@@ -11,7 +11,7 @@ COPY build.gradle $WORK_DIR
 COPY settings.gradle $WORK_DIR
 COPY gradle $WORK_DIR/gradle
 
-RUN ./gradlew -x test build || return 0
+RUN ./gradlew test build || return 0
 
 COPY src src
 
