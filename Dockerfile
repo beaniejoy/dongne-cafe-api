@@ -20,13 +20,23 @@ RUN ./gradlew bootjar
 
 FROM openjdk:17-alpine
 
+ENV DOCKERIZE_VERSION v0.6.1
 ENV WORK_DIR=/usr/app/
 
 WORKDIR $WORK_DIR
 
 COPY --from=BUILD_IMAGE $WORK_DIR/build/libs/*.jar dongne-api.jar
 
-ENTRYPOINT ["java", \
-"-jar", \
-"-Dspring.profiles.active=${PROFILE_OPTION}", \
-"dongne-api.jar"]
+# run in order through dockerize utility (alpine version)
+# link - https://github.com/jwilder/dockerize
+RUN apk add --no-cache openssl bash
+
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+
+COPY ./script/docker-entrypoint.sh docker-entrypoint.sh
+
+RUN chmod +x docker-entrypoint.sh
+
+ENTRYPOINT ["./docker-entrypoint.sh"]

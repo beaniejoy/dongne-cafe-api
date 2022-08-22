@@ -17,9 +17,11 @@ services:
       - "8080:8080"
     env_file:
       - env/app.env
-
-# docker 환경에서 local db 활용하기 위한 설정
-networks:
-  default:
-    external:
-      name: api-net
+    depends_on:
+      - db
+  db:
+    image: mysql:5.7.34
+    ports:
+      - "3306:3306"
+    env_file:
+      - env/db.env

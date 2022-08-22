@@ -1,6 +1,0 @@
-# local docker 환경 내 local db 활용
-spring:
-  datasource:
-    url: jdbc:mysql://beanie-test-db:3306/dongne?autoreconnect=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
-    username: root
-    password: beaniejoy # TODO 추후 보안에 대해 생각해보기
