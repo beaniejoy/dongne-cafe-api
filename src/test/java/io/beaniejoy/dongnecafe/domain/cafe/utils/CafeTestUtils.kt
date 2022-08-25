@@ -1,9 +1,9 @@
 package io.beaniejoy.dongnecafe.domain.cafe.utils
 
-import io.beaniejoy.dongnecafe.domain.cafe.dto.request.CafeInfoRequestDto
-import io.beaniejoy.dongnecafe.domain.cafe.dto.request.CafeMenuInfoRequestDto
-import io.beaniejoy.dongnecafe.domain.cafe.dto.request.MenuOptionInfoRequestDto
-import io.beaniejoy.dongnecafe.domain.cafe.dto.request.OptionDetailInfoRequestDto
+import io.beaniejoy.dongnecafe.domain.cafe.model.request.CafeRegisterRequest
+import io.beaniejoy.dongnecafe.domain.cafe.model.request.CafeMenuRegisterRequest
+import io.beaniejoy.dongnecafe.domain.cafe.model.request.MenuOptionRegisterRequest
+import io.beaniejoy.dongnecafe.domain.cafe.model.request.OptionDetailRegisterRequest
 import io.beaniejoy.dongnecafe.domain.cafe.entity.Cafe
 import io.beaniejoy.dongnecafe.domain.cafe.entity.CafeMenu
 import io.beaniejoy.dongnecafe.domain.cafe.entity.MenuOption
@@ -13,7 +13,7 @@ import java.math.BigDecimal
 
 class CafeTestUtils {
     companion object {
-        fun assertCafeEquals(request: CafeInfoRequestDto, entity: Cafe) {
+        fun assertCafeEquals(request: CafeRegisterRequest, entity: Cafe) {
             assertEquals(request.name, entity.name)
             assertEquals(request.address, entity.address)
             assertEquals(request.phoneNumber, entity.phoneNumber)
@@ -23,7 +23,7 @@ class CafeTestUtils {
         }
 
         private fun assertCafeMenuListEquals(
-            cafeMenuRequestList: List<CafeMenuInfoRequestDto>,
+            cafeMenuRequestList: List<CafeMenuRegisterRequest>,
             cafeMenuList: List<CafeMenu>,
         ) {
             for (index in cafeMenuRequestList.indices) {
@@ -38,7 +38,7 @@ class CafeTestUtils {
         }
 
         private fun assertMenuOptionListEquals(
-            menuOptionRequestList: List<MenuOptionInfoRequestDto>,
+            menuOptionRequestList: List<MenuOptionRegisterRequest>,
             menuOptionList: List<MenuOption>,
         ) {
             for (index in menuOptionRequestList.indices) {
@@ -52,7 +52,7 @@ class CafeTestUtils {
         }
 
         private fun assertOptionDetailListEquals(
-            optionDetailRequestList: List<OptionDetailInfoRequestDto>,
+            optionDetailRequestList: List<OptionDetailRegisterRequest>,
             optionDetailList: MutableList<OptionDetail>,
         ) {
             for (index in optionDetailRequestList.indices) {
@@ -61,36 +61,36 @@ class CafeTestUtils {
             }
         }
 
-        fun createCafeRequestDto(): CafeInfoRequestDto {
+        fun createCafeRequestDto(): CafeRegisterRequest {
             val cafeName = "beanie_cafe"
             val cafeAddress = "beanie_cafe_address"
             val phoneNumber = "01012345678"
             val description = "beanie_cafe_description"
 
             val sizeOptionDetailList = listOf(
-                OptionDetailInfoRequestDto(name = "medium", extraPrice = BigDecimal.ZERO),
-                OptionDetailInfoRequestDto(name = "large", extraPrice = BigDecimal.valueOf(200L)),
-                OptionDetailInfoRequestDto(name = "venti", extraPrice = BigDecimal.valueOf(700L))
+                OptionDetailRegisterRequest(name = "medium", extraPrice = BigDecimal.ZERO),
+                OptionDetailRegisterRequest(name = "large", extraPrice = BigDecimal.valueOf(200L)),
+                OptionDetailRegisterRequest(name = "venti", extraPrice = BigDecimal.valueOf(700L))
             )
-            val sizeMenuOption = MenuOptionInfoRequestDto(
+            val sizeMenuOption = MenuOptionRegisterRequest(
                 title = "size",
                 optionDetailList = sizeOptionDetailList
             )
 
             val cafeMenuList = listOf(
-                CafeMenuInfoRequestDto(
+                CafeMenuRegisterRequest(
                     name = "menu1",
                     price = BigDecimal.valueOf(2_800L),
                     menuOptionList = listOf(sizeMenuOption)
                 ),
-                CafeMenuInfoRequestDto(
+                CafeMenuRegisterRequest(
                     name = "menu2",
                     price = BigDecimal.valueOf(3_500L),
                     menuOptionList = listOf(sizeMenuOption)
                 ),
             )
 
-            return CafeInfoRequestDto(
+            return CafeRegisterRequest(
                 name = cafeName,
                 address = cafeAddress,
                 phoneNumber = phoneNumber,

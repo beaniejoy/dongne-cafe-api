@@ -1,12 +1,9 @@
 package io.beaniejoy.dongnecafe.domain.cafe.service
 
-import io.beaniejoy.dongnecafe.domain.cafe.dto.cafe.CafeInfoResponseDto
-import io.beaniejoy.dongnecafe.domain.cafe.dto.cafe.CafeSearchResponseDto
-import io.beaniejoy.dongnecafe.domain.cafe.dto.request.CafeMenuInfoRequestDto
+import io.beaniejoy.dongnecafe.domain.cafe.model.response.CafeDetailedInfo
+import io.beaniejoy.dongnecafe.domain.cafe.model.response.CafeSearchInfo
+import io.beaniejoy.dongnecafe.domain.cafe.model.request.CafeMenuRegisterRequest
 import io.beaniejoy.dongnecafe.domain.cafe.entity.Cafe
-import io.beaniejoy.dongnecafe.domain.cafe.entity.CafeMenu
-import io.beaniejoy.dongnecafe.domain.cafe.entity.MenuOption
-import io.beaniejoy.dongnecafe.domain.cafe.entity.OptionDetail
 import io.beaniejoy.dongnecafe.domain.cafe.error.CafeExistedException
 import io.beaniejoy.dongnecafe.domain.cafe.error.CafeNotFoundException
 import io.beaniejoy.dongnecafe.domain.cafe.repository.CafeRepository
@@ -38,7 +35,7 @@ class CafeService(
         address: String,
         phoneNumber: String,
         description: String,
-        cafeMenuRequestList: List<CafeMenuInfoRequestDto>,
+        cafeMenuRequestList: List<CafeMenuRegisterRequest>,
     ): Long {
         checkCafeExistedByName(name)
 
@@ -62,17 +59,17 @@ class CafeService(
         }
     }
 
-    fun getCafeList(pageable: Pageable): Page<CafeSearchResponseDto> {
+    fun getCafeList(pageable: Pageable): Page<CafeSearchInfo> {
         val cafeList: Page<Cafe> = cafeRepository.findAll(pageable)
 
-        return cafeList.map { CafeSearchResponseDto.of(it) }
+        return cafeList.map { CafeSearchInfo.of(it) }
     }
 
-    fun getCafeInfoByCafeId(id: Long): CafeInfoResponseDto {
+    fun getCafeInfoByCafeId(id: Long): CafeDetailedInfo {
         val cafe = cafeRepository.findByIdOrNull(id)
             ?: throw CafeNotFoundException(id)
 
-        return CafeInfoResponseDto.of(cafe)
+        return CafeDetailedInfo.of(cafe)
     }
 
     /**

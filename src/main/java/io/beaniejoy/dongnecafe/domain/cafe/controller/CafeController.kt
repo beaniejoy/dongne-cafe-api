@@ -1,8 +1,9 @@
 package io.beaniejoy.dongnecafe.domain.cafe.controller
 
-import io.beaniejoy.dongnecafe.domain.cafe.dto.cafe.CafeInfoResponseDto
-import io.beaniejoy.dongnecafe.domain.cafe.dto.cafe.CafeSearchResponseDto
-import io.beaniejoy.dongnecafe.domain.cafe.dto.request.CafeInfoRequestDto
+import io.beaniejoy.dongnecafe.domain.cafe.model.response.CafeDetailedInfo
+import io.beaniejoy.dongnecafe.domain.cafe.model.response.CafeSearchInfo
+import io.beaniejoy.dongnecafe.domain.cafe.model.request.CafeRegisterRequest
+import io.beaniejoy.dongnecafe.domain.cafe.model.request.CafeUpdateRequest
 import io.beaniejoy.dongnecafe.domain.cafe.service.CafeService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -16,7 +17,7 @@ class CafeController(
     private val cafeService: CafeService
 ) {
     @PostMapping
-    fun createCafe(@RequestBody resource: CafeInfoRequestDto): Long {
+    fun createCafe(@RequestBody resource: CafeRegisterRequest): Long {
         return cafeService.createCafe(
             name = resource.name!!,
             address = resource.address!!,
@@ -29,12 +30,12 @@ class CafeController(
     @GetMapping
     fun searchCafe(
         @PageableDefault(sort = ["name"], direction = Sort.Direction.ASC, page = 0, size = 10) pageable: Pageable
-    ): Page<CafeSearchResponseDto> {
+    ): Page<CafeSearchInfo> {
         return cafeService.getCafeList(pageable)
     }
 
     @GetMapping("/{id}")
-    fun getCafeDetailedInfo(@PathVariable("id") id: Long): CafeInfoResponseDto {
+    fun getCafeDetailedInfo(@PathVariable("id") id: Long): CafeDetailedInfo {
         return cafeService.getCafeInfoByCafeId(id)
     }
 
@@ -42,7 +43,7 @@ class CafeController(
     @PutMapping("/{id}")
     fun updateCafeInfo(
         @PathVariable("id") id: Long,
-        @RequestBody resource: CafeInfoRequestDto
+        @RequestBody resource: CafeUpdateRequest
     ): String {
         cafeService.updateCafe(
             id = id,
