@@ -3,7 +3,7 @@ package io.beaniejoy.dongnecafe.domain.cafe.model.response
 import io.beaniejoy.dongnecafe.domain.cafe.entity.Cafe
 
 data class CafeSearchInfo(
-    val id: Long = 0L,
+    val cafeId: Long = 0L,
     val name: String? = null,
     val address: String? = null,
     val totalRate: Double? = null,
@@ -12,7 +12,7 @@ data class CafeSearchInfo(
     companion object {
         fun of(cafe: Cafe): CafeSearchInfo {
             return CafeSearchInfo(
-                id = cafe.id,
+                cafeId = cafe.id,
                 name = cafe.name,
                 address = cafe.address,
                 totalRate = cafe.totalRate,

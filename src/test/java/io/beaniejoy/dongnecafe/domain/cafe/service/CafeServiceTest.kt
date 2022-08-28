@@ -28,7 +28,7 @@ internal class CafeServiceTest {
     @DisplayName("카페 신규 생성 테스트")
     fun create_cafe_test() {
         // given
-        val cafeRequestDto = CafeTestUtils.createCafeRequestDto()
+        val cafeRequestDto = CafeTestUtils.createCafeRegisterRequest()
         val savedMockCafeId = 100L
 
         `when`(mockCafeRepository.findByName(cafeRequestDto.name!!)).thenReturn(null)
@@ -37,7 +37,7 @@ internal class CafeServiceTest {
         }
 
         // when
-        val savedCafeId = mockCafeService.createCafe(
+        val savedCafeId = mockCafeService.createNew(
             name = cafeRequestDto.name!!,
             address = cafeRequestDto.address!!,
             phoneNumber = cafeRequestDto.phoneNumber!!,
@@ -56,7 +56,7 @@ internal class CafeServiceTest {
     @DisplayName("카페 신규 생성시 이미 존재하는 카페 예외 발생 테스트")
     fun fail_create_cafe_when_existed() {
         // given
-        val cafeRequestDto = CafeTestUtils.createCafeRequestDto()
+        val cafeRequestDto = CafeTestUtils.createCafeRegisterRequest()
         val cafe = Cafe.createCafe(
             name = cafeRequestDto.name!!,
             address = cafeRequestDto.address!!,
@@ -70,7 +70,7 @@ internal class CafeServiceTest {
         // then
         assertThrows<CafeExistedException> {
             // when
-            mockCafeService.createCafe(
+            mockCafeService.createNew(
                 name = cafeRequestDto.name!!,
                 address = cafeRequestDto.address!!,
                 phoneNumber = cafeRequestDto.phoneNumber!!,
@@ -86,7 +86,7 @@ internal class CafeServiceTest {
     @DisplayName("카페 정보 변경 테스트")
     fun update_cafe_test() {
         // given
-        val cafeRequestDto = CafeTestUtils.createCafeRequestDto()
+        val cafeRequestDto = CafeTestUtils.createCafeRegisterRequest()
         val cafe = Cafe.createCafe(
             name = cafeRequestDto.name!!,
             address = cafeRequestDto.address!!,
@@ -100,7 +100,7 @@ internal class CafeServiceTest {
         `when`(mockCafeRepository.findById(cafeId)).thenReturn(Optional.of(cafe))
 
         // then
-        mockCafeService.updateCafe(
+        mockCafeService.updateInfo(
             id = cafeId,
             name = "",
             address = "",
@@ -122,7 +122,7 @@ internal class CafeServiceTest {
         `when`(mockCafeRepository.findById(cafeId)).thenReturn(Optional.empty())
 
         assertThrows<CafeNotFoundException> {
-            mockCafeService.updateCafe(
+            mockCafeService.updateInfo(
                 id = cafeId,
                 name = "",
                 address = "",

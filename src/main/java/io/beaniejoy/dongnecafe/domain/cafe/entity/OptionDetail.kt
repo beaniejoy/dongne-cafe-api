@@ -16,10 +16,12 @@ class OptionDetail protected constructor(
     val id: Long = 0L
 
     @Column(name = "name", nullable = false)
-    val name: String = name
+    var name: String = name
+        protected set
 
     @Column(name = "extra_price", nullable = false)
-    val extraPrice: BigDecimal = extraPrice
+    var extraPrice: BigDecimal = extraPrice
+        protected set
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_option_id", nullable = false)
@@ -37,5 +39,10 @@ class OptionDetail protected constructor(
 
     fun updateMenuOption(menuOption: MenuOption) {
         this.menuOption = menuOption
+    }
+
+    fun updateInfo(name: String, extraPrice: BigDecimal) {
+        this.name = name
+        this.extraPrice = extraPrice
     }
 }

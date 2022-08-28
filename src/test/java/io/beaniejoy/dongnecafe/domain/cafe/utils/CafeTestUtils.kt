@@ -61,7 +61,7 @@ class CafeTestUtils {
             }
         }
 
-        fun createCafeRequestDto(): CafeRegisterRequest {
+        fun createCafeRegisterRequest(): CafeRegisterRequest {
             val cafeName = "beanie_cafe"
             val cafeAddress = "beanie_cafe_address"
             val phoneNumber = "01012345678"

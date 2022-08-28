@@ -2,11 +2,14 @@ package io.beaniejoy.dongnecafe.domain.cafe.entity
 
 import io.beaniejoy.dongnecafe.common.entity.BaseTimeEntity
 import io.beaniejoy.dongnecafe.domain.cafe.model.request.MenuOptionRegisterRequest
+import io.beaniejoy.dongnecafe.domain.cafe.model.request.MenuOptionUpdateRequest
+import org.hibernate.annotations.DynamicUpdate
 import java.math.BigDecimal
 import javax.persistence.*
 
 @Entity
 @Table(name = "cafe_menu")
+@DynamicUpdate
 class CafeMenu protected constructor(
     name: String,
     price: BigDecimal,
@@ -17,10 +20,12 @@ class CafeMenu protected constructor(
     val id: Long = 0L
 
     @Column(name = "name", nullable = false)
-    val name: String = name
+    var name: String = name
+        protected set
 
     @Column(name = "price", nullable = false)
-    val price: BigDecimal = price
+    var price: BigDecimal = price
+        protected set
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_id", nullable = false)
@@ -55,5 +60,13 @@ class CafeMenu protected constructor(
     fun addMenuOption(menuOption: MenuOption) {
         this.menuOptionList.add(menuOption)
         menuOption.updateCafeMenu(this)
+    }
+
+    fun updateInfo(
+        name: String,
+        price: BigDecimal
+    ) {
+        this.name = name
+        this.price = price
     }
 }

@@ -15,7 +15,8 @@ class MenuOption protected constructor(
     val id: Long = 0L
 
     @Column(name = "title", nullable = false)
-    val title: String = title
+    var title: String = title
+        protected set
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_menu_id", nullable = false)
@@ -49,5 +50,9 @@ class MenuOption protected constructor(
     fun addOptionDetail(optionDetail: OptionDetail) {
         this.optionDetailList.add(optionDetail)
         optionDetail.updateMenuOption(this)
+    }
+
+    fun updateInfo(title: String) {
+        this.title = title
     }
 }

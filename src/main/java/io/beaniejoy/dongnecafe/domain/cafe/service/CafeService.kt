@@ -30,7 +30,7 @@ class CafeService(
      * - 옵션 상세 (상세 이름, 추가 금액 /ex. [(medium, 0), (large, 200), (venti, 700)])
      */
     @Transactional
-    fun createCafe(
+    fun createNew(
         name: String,
         address: String,
         phoneNumber: String,
@@ -59,13 +59,13 @@ class CafeService(
         }
     }
 
-    fun getCafeList(pageable: Pageable): Page<CafeSearchInfo> {
+    fun searchCafeList(pageable: Pageable): Page<CafeSearchInfo> {
         val cafeList: Page<Cafe> = cafeRepository.findAll(pageable)
 
         return cafeList.map { CafeSearchInfo.of(it) }
     }
 
-    fun getCafeInfoByCafeId(id: Long): CafeDetailedInfo {
+    fun getDetailedInfoByCafeId(id: Long): CafeDetailedInfo {
         val cafe = cafeRepository.findByIdOrNull(id)
             ?: throw CafeNotFoundException(id)
 
@@ -77,7 +77,7 @@ class CafeService(
      * - 카페 정보만 수정 (하위 엔티티에 대해서는 각 도메인 영역에서 수정)
      */
     @Transactional
-    fun updateCafe(
+    fun updateInfo(
         id: Long,
         name: String,
         address: String,
