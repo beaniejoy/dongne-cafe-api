@@ -9,11 +9,12 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 class CafeMenuService(
     private val cafeMenuRepository: CafeMenuRepository,
     private val menuOptionService: MenuOptionService
 ) {
+    @Transactional(readOnly = true)
     fun getDetailedInfoByMenuId(menuId: Long, cafeId: Long): CafeMenuDetailedInfo {
         val cafeMenu = cafeMenuRepository.findByIdOrNull(menuId)
             ?: throw CafeMenuNotFoundException(menuId = menuId, cafeId = cafeId)
@@ -21,7 +22,6 @@ class CafeMenuService(
         return CafeMenuDetailedInfo.of(cafeMenu)
     }
 
-    @Transactional
     fun updateInfoAndBulkUpdate(menuId: Long, cafeId: Long, resource: CafeMenuUpdateRequest) {
         val cafeMenu = cafeMenuRepository.findByIdOrNull(menuId)
             ?: throw CafeMenuNotFoundException(menuId = menuId, cafeId = cafeId)
@@ -31,7 +31,6 @@ class CafeMenuService(
         menuOptionService.bulkUpdate(resource.menuOptionList)
     }
 
-    @Transactional
     fun deleteByCafeMenuId(menuId: Long, cafeId: Long) {
         val cafeMenu = cafeMenuRepository.findByIdOrNull(menuId)
             ?: throw CafeMenuNotFoundException(menuId = menuId, cafeId = cafeId)
@@ -39,7 +38,6 @@ class CafeMenuService(
         cafeMenuRepository.delete(cafeMenu)
     }
 
-    @Transactional
     fun bulkDelete(cafeId: Long, cafeMenuIdList: List<Long>) {
         cafeMenuIdList.forEach {
             deleteByCafeMenuId(menuId = it, cafeId = cafeId)
