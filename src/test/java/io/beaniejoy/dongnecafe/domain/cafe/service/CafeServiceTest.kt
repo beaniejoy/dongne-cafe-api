@@ -97,9 +97,9 @@ internal class CafeServiceTest {
         )
         val cafeId = 50L
 
-        // TODO findByIdOrNull은 kotlin test 라이브러리 필요한 듯
+        // TODO 'findByIdOrNull'은 kotlin test 라이브러리 필요한 듯
         val mockCafe = mock(Cafe::class.java)
-        `when`(mockCafeRepository.findById(cafeId)).thenReturn(Optional.of(mockCafe))
+            doReturn(Optional.of(cafe)).`when`(mockCafeRepository.findById(eq(cafeId)))
 
         doNothing().`when`(mockCafe).updateInfo(
             name = anyString(),
@@ -110,7 +110,7 @@ internal class CafeServiceTest {
 
         // when
         mockCafeService.updateInfo(
-            id = cafeId,
+            id = eq(cafeId),
             name = "updated_name",
             address = "updated_address",
             phoneNumber = "updated_phoneNumber",

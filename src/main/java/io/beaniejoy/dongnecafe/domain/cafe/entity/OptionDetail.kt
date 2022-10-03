@@ -1,9 +1,11 @@
 package io.beaniejoy.dongnecafe.domain.cafe.entity
 
 import io.beaniejoy.dongnecafe.common.entity.BaseTimeEntity
+import org.hibernate.annotations.DynamicUpdate
 import java.math.BigDecimal
 import javax.persistence.*
 
+@DynamicUpdate
 @Entity
 @Table(name = "option_detail")
 class OptionDetail protected constructor(

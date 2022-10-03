@@ -38,9 +38,6 @@ internal class CafeMenuServiceTest {
     @InjectMocks
     lateinit var mockCafeMenuService: CafeMenuService
 
-
-
-
     @Test
     @DisplayName("카페 메뉴 ID를 통한 카페 메뉴 상세 조회")
     fun find_cafe_menu_by_cafe_menu_id() {

@@ -7,9 +7,9 @@ import org.hibernate.annotations.DynamicUpdate
 import java.math.BigDecimal
 import javax.persistence.*
 
+@DynamicUpdate
 @Entity
 @Table(name = "cafe_menu")
-@DynamicUpdate
 class CafeMenu protected constructor(
     name: String,
     price: BigDecimal,

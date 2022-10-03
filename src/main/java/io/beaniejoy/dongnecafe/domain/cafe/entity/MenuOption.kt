@@ -2,8 +2,10 @@ package io.beaniejoy.dongnecafe.domain.cafe.entity
 
 import io.beaniejoy.dongnecafe.common.entity.BaseTimeEntity
 import io.beaniejoy.dongnecafe.domain.cafe.model.request.OptionDetailRegisterRequest
+import org.hibernate.annotations.DynamicUpdate
 import javax.persistence.*
 
+@DynamicUpdate
 @Entity
 @Table(name = "menu_option")
 class MenuOption protected constructor(
