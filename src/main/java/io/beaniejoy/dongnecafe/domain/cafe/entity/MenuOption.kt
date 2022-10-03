@@ -1,7 +1,7 @@
 package io.beaniejoy.dongnecafe.domain.cafe.entity
 
 import io.beaniejoy.dongnecafe.common.entity.BaseTimeEntity
-import io.beaniejoy.dongnecafe.domain.cafe.dto.request.OptionDetailInfoRequestDto
+import io.beaniejoy.dongnecafe.domain.cafe.model.request.OptionDetailRegisterRequest
 import javax.persistence.*
 
 @Entity
@@ -15,7 +15,8 @@ class MenuOption protected constructor(
     val id: Long = 0L
 
     @Column(name = "title", nullable = false)
-    val title: String = title
+    var title: String = title
+        protected set
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_menu_id", nullable = false)
@@ -26,7 +27,7 @@ class MenuOption protected constructor(
     val optionDetailList: MutableList<OptionDetail> = arrayListOf()
 
     companion object {
-        fun createMenuOption(title: String, optionDetailRequestList: List<OptionDetailInfoRequestDto>): MenuOption {
+        fun createMenuOption(title: String, optionDetailRequestList: List<OptionDetailRegisterRequest>): MenuOption {
             val optionDetailEntityList = optionDetailRequestList.map { optionDetailRequestDto ->
                 OptionDetail.createOptionDetail(
                     name = optionDetailRequestDto.name,
@@ -49,5 +50,9 @@ class MenuOption protected constructor(
     fun addOptionDetail(optionDetail: OptionDetail) {
         this.optionDetailList.add(optionDetail)
         optionDetail.updateMenuOption(this)
+    }
+
+    fun updateInfo(title: String) {
+        this.title = title
     }
 }

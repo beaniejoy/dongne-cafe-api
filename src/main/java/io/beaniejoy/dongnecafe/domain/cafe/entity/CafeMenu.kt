@@ -1,7 +1,7 @@
 package io.beaniejoy.dongnecafe.domain.cafe.entity
 
 import io.beaniejoy.dongnecafe.common.entity.BaseTimeEntity
-import io.beaniejoy.dongnecafe.domain.cafe.dto.request.MenuOptionInfoRequestDto
+import io.beaniejoy.dongnecafe.domain.cafe.model.request.MenuOptionRegisterRequest
 import java.math.BigDecimal
 import javax.persistence.*
 
@@ -17,10 +17,12 @@ class CafeMenu protected constructor(
     val id: Long = 0L
 
     @Column(name = "name", nullable = false)
-    val name: String = name
+    var name: String = name
+        protected set
 
     @Column(name = "price", nullable = false)
-    val price: BigDecimal = price
+    var price: BigDecimal = price
+        protected set
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_id", nullable = false)
@@ -31,7 +33,7 @@ class CafeMenu protected constructor(
     val menuOptionList: MutableList<MenuOption> = arrayListOf()
 
     companion object {
-        fun createCafeMenu(name: String, price: BigDecimal, menuOptionRequestList: List<MenuOptionInfoRequestDto>): CafeMenu {
+        fun createCafeMenu(name: String, price: BigDecimal, menuOptionRequestList: List<MenuOptionRegisterRequest>): CafeMenu {
             val menuOptionEntityList = menuOptionRequestList.map { menuOptionRequestDto ->
                 MenuOption.createMenuOption(
                     title = menuOptionRequestDto.title,
@@ -55,5 +57,13 @@ class CafeMenu protected constructor(
     fun addMenuOption(menuOption: MenuOption) {
         this.menuOptionList.add(menuOption)
         menuOption.updateCafeMenu(this)
+    }
+
+    fun updateInfo(
+        name: String,
+        price: BigDecimal
+    ) {
+        this.name = name
+        this.price = price
     }
 }

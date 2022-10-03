@@ -1,7 +1,7 @@
 package io.beaniejoy.dongnecafe.domain.cafe.entity
 
 import io.beaniejoy.dongnecafe.common.entity.BaseTimeEntity
-import io.beaniejoy.dongnecafe.domain.cafe.dto.request.CafeMenuInfoRequestDto
+import io.beaniejoy.dongnecafe.domain.cafe.model.request.CafeMenuRegisterRequest
 import javax.persistence.*
 
 @Entity
@@ -48,7 +48,7 @@ class Cafe protected constructor(
             address: String,
             phoneNumber: String,
             description: String,
-            cafeMenuRequestList: List<CafeMenuInfoRequestDto>,
+            cafeMenuRequestList: List<CafeMenuRegisterRequest>,
         ): Cafe {
             val cafeMenuEntityList = cafeMenuRequestList.map { cafeMenuRequestDto ->
                 CafeMenu.createCafeMenu(

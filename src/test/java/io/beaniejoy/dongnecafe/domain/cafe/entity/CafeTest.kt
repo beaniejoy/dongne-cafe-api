@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 internal class CafeTest {
     @Test
     fun create_cafe_test() {
-        val cafeRequestDto = CafeTestUtils.createCafeRequestDto()
+        val cafeRequestDto = CafeTestUtils.createCafeRegisterRequest()
 
         val cafe = Cafe.createCafe(
             name = cafeRequestDto.name!!,
