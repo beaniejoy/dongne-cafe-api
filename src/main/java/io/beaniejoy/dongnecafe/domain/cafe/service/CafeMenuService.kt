@@ -8,6 +8,9 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
+// TODO
+//  - cafeMenu에 대한 생성, 수정, 삭제를 단일 카페 상세 페이지 내에서 한꺼번에 수행할지 고민
+//  - front 개발 후에 CafeMenu에 대한 전체적인 로직 수정이 필요해 보임
 @Service
 @Transactional
 class CafeMenuService(

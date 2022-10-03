@@ -2,12 +2,9 @@ package io.beaniejoy.dongnecafe.domain.cafe.entity
 
 import io.beaniejoy.dongnecafe.common.entity.BaseTimeEntity
 import io.beaniejoy.dongnecafe.domain.cafe.model.request.MenuOptionRegisterRequest
-import io.beaniejoy.dongnecafe.domain.cafe.model.request.MenuOptionUpdateRequest
-import org.hibernate.annotations.DynamicUpdate
 import java.math.BigDecimal
 import javax.persistence.*
 
-@DynamicUpdate
 @Entity
 @Table(name = "cafe_menu")
 class CafeMenu protected constructor(

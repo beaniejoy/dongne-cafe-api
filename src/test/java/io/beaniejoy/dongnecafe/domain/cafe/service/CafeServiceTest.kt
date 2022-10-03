@@ -13,7 +13,6 @@ import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.junit.jupiter.MockitoExtension
 import java.util.*
-import javax.persistence.GeneratedValue
 
 // TODO: BDD 스타일로 리팩토링 해볼 것(추후 mockK도 사용해보자)
 @ExtendWith(MockitoExtension::class)
