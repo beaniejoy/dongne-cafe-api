@@ -12,7 +12,7 @@ import org.springframework.data.web.PageableDefault
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/cafes")
+@RequestMapping("/api/cafes")
 class CafeController(
     private val cafeService: CafeService
 ) {

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/cafes/{cafeId}/menus")
+@RequestMapping("/api/cafes/{cafeId}/menus")
 class CafeMenuController(
     private val cafeMenuService: CafeMenuService
 ) {
