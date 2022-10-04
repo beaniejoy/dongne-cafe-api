@@ -5,19 +5,21 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: none # flyway migration 사용
+      ddl-auto: none # use [service-api] flyway migration
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         format_sql: true
         show-sql: false
+    open-in-view:
   flyway:
-    baseline-on-migrate: true
-    baseline-version: 0
-    locations: classpath:db/migration,classpath:db/seed
+    enabled: false
   devtools:
     livereload:
       enabled: false # no use devtools' LiveReload Server
+
+server:
+  port: 9090
 
 logging:
   level:
