@@ -10,7 +10,7 @@ plugins {
     id("org.springframework.boot") version "2.7.0"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.6.21"
-    kotlin("plugin.spring") version "1.6.21" apply false
+    kotlin("plugin.spring") version "1.6.21" apply false    // TODO: apply false what?
     kotlin("plugin.jpa") version "1.6.21" apply false
 }
 
@@ -52,6 +52,7 @@ subprojects {
         implementation("org.springframework.boot:spring-boot-starter-data-jpa")
         implementation("org.springframework.boot:spring-boot-starter-web")
         implementation("org.springframework.boot:spring-boot-starter-validation")
+        implementation("org.springframework.boot:spring-boot-starter-security")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
         developmentOnly("org.springframework.boot:spring-boot-devtools")
 
@@ -62,6 +63,7 @@ subprojects {
         // DB
         runtimeOnly("mysql:mysql-connector-java") // MySQL
         runtimeOnly("com.h2database:h2") // H2
+        implementation("org.flywaydb:flyway-core:7.15.0") // flyway
 
         // Logging
         // log4j2
@@ -69,10 +71,9 @@ subprojects {
         // testImplementation("org.springframework.boot:spring-boot-starter-log4j2")
         implementation("io.github.microutils:kotlin-logging:2.1.21")
 
-        implementation("org.flywaydb:flyway-core:7.15.0") // flyway
-
         // Test
         testImplementation("org.springframework.boot:spring-boot-starter-test")
+        testImplementation("org.springframework.security:spring-security-test")
     }
 
     tasks.withType<KotlinCompile> {
