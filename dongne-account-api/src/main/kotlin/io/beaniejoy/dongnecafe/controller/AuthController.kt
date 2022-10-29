@@ -13,12 +13,11 @@ import org.springframework.web.bind.annotation.RestController
 class AuthController(
     private val authenticationManagerBuilder: AuthenticationManagerBuilder
 ) {
-
-    @PostMapping("/authenticate")
-    fun signIn(@RequestBody signInRequest: SignInRequest) {
-        val authenticationToken =
-            UsernamePasswordAuthenticationToken(signInRequest.email, signInRequest.password)
-
-        val authenticate = authenticationManagerBuilder.`object`.authenticate(authenticationToken)
-    }
+//    @PostMapping("/authenticate")
+//    fun signIn(@RequestBody signInRequest: SignInRequest) {
+//        val authenticationToken =
+//            UsernamePasswordAuthenticationToken(signInRequest.email, signInRequest.password)
+//
+//        val authenticate = authenticationManagerBuilder.`object`.authenticate(authenticationToken)
+//    }
 }

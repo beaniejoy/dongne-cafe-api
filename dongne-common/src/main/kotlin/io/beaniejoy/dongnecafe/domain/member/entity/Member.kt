@@ -38,6 +38,10 @@ class Member(
     var roleType: RoleType = RoleType.ROLE_USER
         protected set
 
+    @Column(name = "activated", nullable = false)
+    var activated: Boolean = true
+        protected set
+
     companion object {
         fun createMember(
             email: String,
