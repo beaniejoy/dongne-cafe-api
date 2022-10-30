@@ -31,8 +31,10 @@ class ApiAuthenticationProvider(
             throw BadCredentialsException("Input password does not match stored password")
         }
 
+        logger.info { "User password ${user.password}" }
+
         // password null로 반환
-        return UsernamePasswordAuthenticationToken(email, null, user.authorities)
+        return UsernamePasswordAuthenticationToken(user, null, user.authorities)
     }
 
     override fun supports(authentication: Class<*>): Boolean {

@@ -23,6 +23,7 @@ class ApiAuthenticationFilter(requestMatcher: AntPathRequestMatcher) :
         request: HttpServletRequest,
         response: HttpServletResponse,
     ): Authentication {
+        log.info { "[API Filter] attempt to authenticate" }
         if (isPostMethod(request).not()) {
             val errorMsg = "Authentication is not supported (only support for POST method)"
             log.error { errorMsg }
@@ -30,6 +31,7 @@ class ApiAuthenticationFilter(requestMatcher: AntPathRequestMatcher) :
         }
 
         val signInRequest = objectMapper.readValue(request.reader, SignInRequest::class.java)
+        request.setAttribute("email", signInRequest.email)
 
         val token = signInRequest.let {
             if (StringUtils.hasText(it.email).not() || StringUtils.hasText(it.password).not()) {
@@ -40,7 +42,9 @@ class ApiAuthenticationFilter(requestMatcher: AntPathRequestMatcher) :
             UsernamePasswordAuthenticationToken(it.email, it.password)
         }
 
-        return authenticationManager.authenticate(token)
+        val authenticate = authenticationManager.authenticate(token)
+        logger.info("attempt authentication ${authenticate.principal}")
+        return authenticate
     }
 
     private fun isPostMethod(request: HttpServletRequest): Boolean {
