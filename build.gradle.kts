@@ -1,17 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-}
-
 plugins {
-    id("org.springframework.boot") version "2.7.0"
-    id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    kotlin("jvm") version "1.6.21"
-    kotlin("plugin.spring") version "1.6.21" apply false    // TODO: apply false what?
-    kotlin("plugin.jpa") version "1.6.21" apply false
+    id(Plugins.SPRING_BOOT) version Plugins.SPRING_BOOT_VERSION
+    id(Plugins.SPRING_DEPENDENCY_MANAGEMENT) version Plugins.SPRING_DEPENDENCY_MANAGEMENT_VERSION
+    kotlin(Plugins.Kotlin.JVM) version Plugins.Kotlin.VERSION
+    kotlin(Plugins.Kotlin.SPRING) version Plugins.Kotlin.VERSION apply false    // TODO: apply false what?
+    kotlin(Plugins.Kotlin.JPA) version Plugins.Kotlin.VERSION apply false
 }
 
 java.sourceCompatibility = JavaVersion.VERSION_17
