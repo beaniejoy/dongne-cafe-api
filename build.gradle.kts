@@ -1,11 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id(Plugins.SPRING_BOOT) version Plugins.SPRING_BOOT_VERSION
-    id(Plugins.SPRING_DEPENDENCY_MANAGEMENT) version Plugins.SPRING_DEPENDENCY_MANAGEMENT_VERSION
+    id(Plugins.Spring.BOOT) version Plugins.Spring.BOOT_VERSION
+    id(Plugins.Spring.DEPENDENCY_MANAGEMENT) version Plugins.Spring.DEPENDENCY_MANAGEMENT_VERSION
     kotlin(Plugins.Kotlin.JVM) version Plugins.Kotlin.VERSION
-    kotlin(Plugins.Kotlin.SPRING) version Plugins.Kotlin.VERSION apply false    // TODO: apply false what?
-    kotlin(Plugins.Kotlin.JPA) version Plugins.Kotlin.VERSION apply false
+    kotlin(Plugins.Kotlin.PLUGIN_SPRING) version Plugins.Kotlin.VERSION apply false    // TODO: apply false what?
+    kotlin(Plugins.Kotlin.PLUGIN_JPA) version Plugins.Kotlin.VERSION apply false
 }
 
 java.sourceCompatibility = JavaVersion.VERSION_17
@@ -20,15 +20,15 @@ allprojects {
 }
 
 subprojects {
-    apply(plugin = "java")
+    apply(plugin = Plugins.JAVA)
 
-    apply(plugin = "io.spring.dependency-management")
-    apply(plugin = "org.springframework.boot")
-    apply(plugin = "org.jetbrains.kotlin.plugin.spring")
+    apply(plugin = Plugins.Spring.DEPENDENCY_MANAGEMENT)
+    apply(plugin = Plugins.Spring.BOOT)
+    apply(plugin = "org.jetbrains.kotlin.plugin.spring") // TODO: 알아보기
 
-    apply(plugin = "kotlin")
-    apply(plugin = "kotlin-spring")
-    apply(plugin = "kotlin-jpa")
+    apply(plugin = Plugins.Kotlin.KOTLIN)
+    apply(plugin = Plugins.Kotlin.KOTLIN_SPRING)
+    apply(plugin = Plugins.Kotlin.KOTLIN_JPA)
 
     repositories {
         mavenCentral()
@@ -43,9 +43,9 @@ subprojects {
 
     dependencies {
         // Spring Boot Project
-        implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-        implementation("org.springframework.boot:spring-boot-starter-web")
-        implementation("org.springframework.boot:spring-boot-starter-validation")
+        implementation("${Plugins.Spring.BOOT}:spring-boot-starter-data-jpa")
+        implementation("${Plugins.Spring.BOOT}:spring-boot-starter-web")
+        implementation("${Plugins.Spring.BOOT}:spring-boot-starter-validation")
         implementation("org.springframework.boot:spring-boot-starter-security")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
         developmentOnly("org.springframework.boot:spring-boot-devtools")
