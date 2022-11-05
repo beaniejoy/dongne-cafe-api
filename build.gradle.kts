@@ -1,24 +1,20 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-}
+import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
-    id("org.springframework.boot") version "2.7.0"
-    id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    kotlin("jvm") version "1.6.21"
-    kotlin("plugin.spring") version "1.6.21" apply false    // TODO: apply false what?
-    kotlin("plugin.jpa") version "1.6.21" apply false
+    id(Plugins.Spring.boot).version(Version.Spring.boot)
+    id(Plugins.Spring.dependencyManagement).version(Version.Spring.dependencyManagement).apply(false)
+    kotlin(Plugins.Kotlin.jvm).version(Version.kotlin)
+    kotlin(Plugins.Kotlin.pluginSpring).version(Version.kotlin).apply(false)
+    kotlin(Plugins.Kotlin.pluginJpa).version(Version.kotlin).apply(false)
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_17
+val bootJar: BootJar by tasks
+bootJar.enabled = false
 
 allprojects {
     group = "io.beaniejoy.dongecafe"
-    version = "0.0.1-SNAPSHOT"
+    version = Version.projectVersion
 
     repositories {
         mavenCentral()
@@ -26,26 +22,17 @@ allprojects {
 }
 
 subprojects {
-    apply(plugin = "java")
+    apply {
+        plugin(Plugins.java)
+        plugin(Plugins.Spring.dependencyManagement)
+        plugin(Plugins.Spring.boot)
 
-    apply(plugin = "io.spring.dependency-management")
-    apply(plugin = "org.springframework.boot")
-    apply(plugin = "org.jetbrains.kotlin.plugin.spring")
-
-    apply(plugin = "kotlin")
-    apply(plugin = "kotlin-spring")
-    apply(plugin = "kotlin-jpa")
-
-    repositories {
-        mavenCentral()
+        plugin(Plugins.Kotlin.kotlin)
+        plugin(Plugins.Kotlin.kotlinSpring)
+        plugin(Plugins.Kotlin.kotlinJpa)
     }
 
-//    configurations {
-//        all {
-//            // log4j2 적용을 위해 기존 spring boot에서 제공하는 logging exclude
-//            exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-//        }
-//    }
+    java.sourceCompatibility = JavaVersion.VERSION_17
 
     dependencies {
         // Spring Boot Project
@@ -63,13 +50,10 @@ subprojects {
         // DB
         runtimeOnly("mysql:mysql-connector-java") // MySQL
         runtimeOnly("com.h2database:h2") // H2
-        implementation("org.flywaydb:flyway-core:7.15.0") // flyway
+        implementation("org.flywaydb:flyway-core:${Version.Deps.flywayCore}") // flyway
 
         // Logging
-        // log4j2
-        // implementation("org.springframework.boot:spring-boot-starter-log4j2")
-        // testImplementation("org.springframework.boot:spring-boot-starter-log4j2")
-        implementation("io.github.microutils:kotlin-logging:2.1.21")
+        implementation("io.github.microutils:kotlin-logging:${Version.Deps.kotlinLogging}")
 
         // Test
         testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -77,9 +61,10 @@ subprojects {
     }
 
     tasks.withType<KotlinCompile> {
+        println("### Configuring $name in project ${project.name} ###")
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
-            jvmTarget = "17"
+            jvmTarget = JavaVersion.VERSION_17.toString()
         }
     }
 
