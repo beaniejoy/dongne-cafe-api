@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer
-import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
@@ -35,7 +34,6 @@ class SecurityConfig {
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
             .csrf().disable()
-            .formLogin().disable()
 
             .authorizeRequests()
             .antMatchers("/auth/members/sign-up").permitAll()
