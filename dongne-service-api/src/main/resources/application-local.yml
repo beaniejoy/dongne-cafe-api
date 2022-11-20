@@ -3,3 +3,6 @@ spring:
     url: jdbc:mysql://localhost:3306/dongne?autoreconnect=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
     username: root
     password: beaniejoy # TODO 추후 보안에 대해 생각해보기
+jwt:
+  secret_key: aG9wZS15b3UtYWx3YXlzLWJlLWhhcHB5LXRoaXMteWVhcgo=
+  expiration_time: 86400

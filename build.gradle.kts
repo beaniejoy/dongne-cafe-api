@@ -52,6 +52,11 @@ subprojects {
         runtimeOnly("com.h2database:h2") // H2
         implementation("org.flywaydb:flyway-core:${Version.Deps.flywayCore}") // flyway
 
+        // JWT
+        implementation("io.jsonwebtoken:jjwt-api:${Version.Deps.Jwt}")
+        runtimeOnly("io.jsonwebtoken:jjwt-impl:${Version.Deps.Jwt}")
+        runtimeOnly("io.jsonwebtoken:jjwt-jackson:${Version.Deps.Jwt}")
+
         // Logging
         implementation("io.github.microutils:kotlin-logging:${Version.Deps.kotlinLogging}")
 
