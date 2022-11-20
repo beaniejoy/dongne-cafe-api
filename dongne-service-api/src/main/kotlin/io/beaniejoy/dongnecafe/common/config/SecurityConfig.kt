@@ -1,5 +1,8 @@
 package io.beaniejoy.dongnecafe.common.config
 
+import io.beaniejoy.dongnecafe.security.JwtAuthenticationConfigurer
+import io.beaniejoy.dongnecafe.security.JwtTokenUtils
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -11,17 +14,26 @@ import org.springframework.security.web.SecurityFilterChain
 @Configuration
 @EnableWebSecurity
 class SecurityConfig {
+    @Autowired
+    lateinit var jwtTokenUtils: JwtTokenUtils
+
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
             .csrf().disable()
-            .formLogin().disable()
 
             .authorizeRequests()
-            .anyRequest().authenticated() // 임시 허용
+            .anyRequest().authenticated()
 
             .and()
+            .also { jwtAuthenticationConfigurer(it) }
             .build()
+    }
+
+    private fun jwtAuthenticationConfigurer(http: HttpSecurity) {
+        http
+            .apply(JwtAuthenticationConfigurer())
+            .jwtTokenUtils(jwtTokenUtils)
     }
 
     @Bean

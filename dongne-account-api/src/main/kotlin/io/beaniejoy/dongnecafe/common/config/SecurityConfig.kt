@@ -22,7 +22,6 @@ class SecurityConfig {
             .authorizeRequests()
             .antMatchers("/auth/members/sign-up").permitAll()
             .antMatchers("/auth/authenticate").permitAll()
-            .antMatchers("/test").hasRole("USER")   // 임시 인가 테스트용
             .anyRequest().authenticated()
 
             .and()
