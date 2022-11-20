@@ -1,5 +1,6 @@
 package io.beaniejoy.dongnecafe.common.security
 
+import io.beaniejoy.dongnecafe.security.SecurityUser
 import mu.KLogging
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.BadCredentialsException
@@ -26,14 +27,13 @@ class ApiAuthenticationProvider(
         val email = authentication.name
         val password = authentication.credentials as String?
 
-        val user = userDetailsService.loadUserByUsername(email)
+        val user = userDetailsService.loadUserByUsername(email) as SecurityUser
         if (!passwordEncoder.matches(password, user.password)) {
             throw BadCredentialsException("Input password does not match stored password")
         }
 
         logger.info { "User password ${user.password}" }
 
-        // password null로 반환
         return UsernamePasswordAuthenticationToken(user, null, user.authorities)
     }
 

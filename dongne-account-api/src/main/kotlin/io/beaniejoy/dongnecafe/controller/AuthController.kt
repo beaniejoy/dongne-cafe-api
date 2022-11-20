@@ -1,8 +1,9 @@
 package io.beaniejoy.dongnecafe.controller
 
+import io.beaniejoy.dongnecafe.security.JwtTokenUtils
 import io.beaniejoy.dongnecafe.domain.member.model.request.SignInRequest
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
+import io.beaniejoy.dongnecafe.model.TokenResponse
+import io.beaniejoy.dongnecafe.service.AuthService
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -11,13 +12,18 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/auth")
 class AuthController(
-    private val authenticationManagerBuilder: AuthenticationManagerBuilder
+    private val authService: AuthService,
+    private val jwtTokenUtils: JwtTokenUtils
 ) {
-//    @PostMapping("/authenticate")
-//    fun signIn(@RequestBody signInRequest: SignInRequest) {
-//        val authenticationToken =
-//            UsernamePasswordAuthenticationToken(signInRequest.email, signInRequest.password)
-//
-//        val authenticate = authenticationManagerBuilder.`object`.authenticate(authenticationToken)
-//    }
+    @PostMapping("/authenticate")
+    fun signIn(@RequestBody signInRequest: SignInRequest): TokenResponse {
+        val authentication = authService.signIn(
+            email = signInRequest.email,
+            password = signInRequest.password
+        )
+
+        val accessToken = jwtTokenUtils.createToken(authentication)
+
+        return TokenResponse(accessToken)
+    }
 }
