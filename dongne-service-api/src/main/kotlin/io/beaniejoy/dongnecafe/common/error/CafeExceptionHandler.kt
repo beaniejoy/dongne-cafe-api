@@ -1,5 +1,6 @@
-package io.beaniejoy.dongnecafe.domain.cafe.error
+package io.beaniejoy.dongnecafe.common.error
 
+import io.beaniejoy.dongnecafe.common.error.exception.CafeNotFoundException
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice

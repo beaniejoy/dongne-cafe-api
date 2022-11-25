@@ -1,7 +1,6 @@
 package io.beaniejoy.dongnecafe.security.filter
 
 import io.beaniejoy.dongnecafe.security.JwtTokenUtils
-import mu.KLogging
 import mu.KotlinLogging
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.GenericFilterBean
@@ -26,7 +25,7 @@ class JwtAuthenticationFilter(
      */
     override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
         val httpRequest = request as HttpServletRequest
-        log.info { "[JwtAuthenticationFilter][${request.dispatcherType}][${request.requestURI}]" }
+        log.info { "[JwtAuthenticationFilter][${request.dispatcherType}] uri: ${request.requestURI}" }
 
         getAccessToken(httpRequest)?.let {
             jwtTokenUtils.getAuthentication(it)

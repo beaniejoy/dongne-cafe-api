@@ -1,6 +1,6 @@
 package io.beaniejoy.dongnecafe.domain.cafe.service
 
-import io.beaniejoy.dongnecafe.domain.cafe.error.MenuOptionNotFoundException
+import io.beaniejoy.dongnecafe.common.error.exception.MenuOptionNotFoundException
 import io.beaniejoy.dongnecafe.domain.cafe.model.request.MenuOptionUpdateRequest
 import io.beaniejoy.dongnecafe.domain.cafe.repository.MenuOptionRepository
 import org.springframework.data.repository.findByIdOrNull
