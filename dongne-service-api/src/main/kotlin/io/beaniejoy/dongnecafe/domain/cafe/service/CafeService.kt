@@ -4,8 +4,8 @@ import io.beaniejoy.dongnecafe.domain.cafe.model.response.CafeDetailedInfo
 import io.beaniejoy.dongnecafe.domain.cafe.model.response.CafeSearchInfo
 import io.beaniejoy.dongnecafe.domain.cafe.model.request.CafeMenuRegisterRequest
 import io.beaniejoy.dongnecafe.domain.cafe.entity.Cafe
-import io.beaniejoy.dongnecafe.domain.cafe.error.CafeExistedException
-import io.beaniejoy.dongnecafe.domain.cafe.error.CafeNotFoundException
+import io.beaniejoy.dongnecafe.error.exception.CafeExistedException
+import io.beaniejoy.dongnecafe.error.exception.CafeNotFoundException
 import io.beaniejoy.dongnecafe.domain.cafe.repository.CafeRepository
 import mu.KLogging
 import org.springframework.data.domain.Page

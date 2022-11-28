@@ -1,7 +1,7 @@
 package io.beaniejoy.dongnecafe.domain.cafe.service
 
 import io.beaniejoy.dongnecafe.domain.cafe.model.response.CafeMenuDetailedInfo
-import io.beaniejoy.dongnecafe.domain.cafe.error.CafeMenuNotFoundException
+import io.beaniejoy.dongnecafe.error.exception.CafeMenuNotFoundException
 import io.beaniejoy.dongnecafe.domain.cafe.model.request.CafeMenuUpdateRequest
 import io.beaniejoy.dongnecafe.domain.cafe.repository.CafeMenuRepository
 import org.springframework.data.repository.findByIdOrNull

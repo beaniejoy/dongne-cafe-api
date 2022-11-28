@@ -14,4 +14,4 @@ logging:
 
 jwt:
   secret_key: ZG9uZ25lLWNhZmUtcHJvamVjdC1rZXktZm9yLXRlc3QtY29kZQo
-  expiration_time: 60
+  validity_time_in_sec: 60
