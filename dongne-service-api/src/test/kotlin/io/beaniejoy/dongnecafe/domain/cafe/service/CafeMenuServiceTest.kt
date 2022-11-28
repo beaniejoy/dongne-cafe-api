@@ -1,7 +1,7 @@
 package io.beaniejoy.dongnecafe.domain.cafe.service
 
 import io.beaniejoy.dongnecafe.domain.cafe.entity.CafeMenu
-import io.beaniejoy.dongnecafe.common.error.exception.CafeMenuNotFoundException
+import io.beaniejoy.dongnecafe.error.exception.CafeMenuNotFoundException
 import io.beaniejoy.dongnecafe.domain.cafe.repository.CafeMenuRepository
 import io.beaniejoy.dongnecafe.domain.cafe.repository.MenuOptionRepository
 import io.beaniejoy.dongnecafe.domain.cafe.repository.OptionDetailRepository

@@ -22,7 +22,7 @@ class UserDetailsServiceImpl(
         return memberRepository.findByEmail(email)?.let {
             logger.info { "[LOAD MEMBER] email: ${it.email}, role: ${it.roleType}, activated: ${it.activated}" }
             createSecurityUser(it)
-        } ?: throw UsernameNotFoundException(email)
+        } ?: throw UsernameNotFoundException("${email} is not found")
     }
 
     private fun createSecurityUser(member: Member): SecurityUser {

@@ -1,6 +1,6 @@
 package io.beaniejoy.dongnecafe.domain.cafe.service
 
-import io.beaniejoy.dongnecafe.common.error.exception.OptionDetailNotFoundException
+import io.beaniejoy.dongnecafe.error.exception.OptionDetailNotFoundException
 import io.beaniejoy.dongnecafe.domain.cafe.model.request.OptionDetailUpdateRequest
 import io.beaniejoy.dongnecafe.domain.cafe.repository.OptionDetailRepository
 import org.springframework.data.repository.findByIdOrNull

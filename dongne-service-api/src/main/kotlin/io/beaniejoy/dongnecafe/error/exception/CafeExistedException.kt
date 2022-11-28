@@ -1,3 +1,3 @@
-package io.beaniejoy.dongnecafe.common.error.exception
+package io.beaniejoy.dongnecafe.error.exception
 
 class CafeExistedException(name: String) : RuntimeException("Cafe[$name] is already existed")

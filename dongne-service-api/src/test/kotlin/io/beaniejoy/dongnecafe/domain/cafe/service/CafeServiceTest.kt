@@ -1,8 +1,8 @@
 package io.beaniejoy.dongnecafe.domain.cafe.service
 
 import io.beaniejoy.dongnecafe.domain.cafe.entity.Cafe
-import io.beaniejoy.dongnecafe.common.error.exception.CafeExistedException
-import io.beaniejoy.dongnecafe.common.error.exception.CafeNotFoundException
+import io.beaniejoy.dongnecafe.error.exception.CafeExistedException
+import io.beaniejoy.dongnecafe.error.exception.CafeNotFoundException
 import io.beaniejoy.dongnecafe.domain.cafe.repository.CafeRepository
 import io.beaniejoy.dongnecafe.domain.cafe.utils.CafeTestUtils
 import org.junit.jupiter.api.*
