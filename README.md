@@ -13,6 +13,14 @@
 
 <br>
 
+## Multi Modules
+- `dongne-account-api`
+  - 회원가입, 인증 관련 내용
+- `dongne-service-api`
+  - 카페 관련 도메인 내용(추후 주문, 결제 적용 계획)
+
+<br>
+
 ## Run Application
 
 ### 로컬 환경 내 로컬 DB 따로 구성
