@@ -22,9 +22,10 @@ class SecurityConfig {
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
             .csrf().disable()
+            .formLogin().disable()
 
             .authorizeRequests()
-            .anyRequest().authenticated()
+            .anyRequest().permitAll()
 
             .and()
             .also { jwtAuthenticationConfigurer(it) }

@@ -1,12 +1,12 @@
 package io.beaniejoy.dongnecafe.domain.cafe.service
 
+import io.beaniejoy.dongnecafe.domain.cafe.entity.Cafe
+import io.beaniejoy.dongnecafe.domain.cafe.model.request.CafeMenuRegisterRequest
 import io.beaniejoy.dongnecafe.domain.cafe.model.response.CafeDetailedInfo
 import io.beaniejoy.dongnecafe.domain.cafe.model.response.CafeSearchInfo
-import io.beaniejoy.dongnecafe.domain.cafe.model.request.CafeMenuRegisterRequest
-import io.beaniejoy.dongnecafe.domain.cafe.entity.Cafe
-import io.beaniejoy.dongnecafe.error.exception.CafeExistedException
-import io.beaniejoy.dongnecafe.error.exception.CafeNotFoundException
 import io.beaniejoy.dongnecafe.domain.cafe.repository.CafeRepository
+import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
+import io.beaniejoy.dongnecafe.common.error.exception.BusinessException
 import mu.KLogging
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -55,7 +55,7 @@ class CafeService(
     private fun checkCafeExistedByName(name: String) {
         val findCafe = cafeRepository.findByName(name)
         if (findCafe != null) {
-            throw CafeExistedException(name)
+            throw BusinessException(ErrorCode.CAFE_EXISTED)
         }
     }
 
@@ -67,7 +67,7 @@ class CafeService(
 
     fun getDetailedInfoByCafeId(id: Long): CafeDetailedInfo {
         val cafe = cafeRepository.findByIdOrNull(id)
-            ?: throw CafeNotFoundException(id)
+            ?: throw BusinessException(ErrorCode.CAFE_NOT_FOUND)
 
         return CafeDetailedInfo.of(cafe)
     }
@@ -85,7 +85,7 @@ class CafeService(
         description: String,
     ) {
         val cafe = cafeRepository.findByIdOrNull(id)
-            ?: throw CafeNotFoundException(id)
+            ?: throw BusinessException(ErrorCode.CAFE_NOT_FOUND)
 
         cafe.updateInfo(
             name = name,

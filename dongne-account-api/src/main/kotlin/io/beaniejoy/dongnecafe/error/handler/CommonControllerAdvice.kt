@@ -1,6 +1,6 @@
 package io.beaniejoy.dongnecafe.error.handler
 
-import io.beaniejoy.dongnecafe.error.ErrorResponse
+import io.beaniejoy.dongnecafe.common.response.ApplicationResponse
 import mu.KLogging
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -15,10 +15,10 @@ class CommonControllerAdvice {
     companion object : KLogging()
 
     @ExceptionHandler(AuthenticationException::class)
-    fun handleAuthenticationException(e: AuthenticationException): ResponseEntity<ErrorResponse> {
+    fun handleAuthenticationException(e: AuthenticationException): ResponseEntity<ApplicationResponse<Any?>> {
         logger.error { "AuthenticationException: ${e.message}" }
         return ResponseEntity.ok().body(
-            ErrorResponse(
+            ApplicationResponse(
                 code = HttpStatus.BAD_REQUEST.value(),
                 message = "계정 혹은 비밀번호가 일치하지 않습니다."
             )
