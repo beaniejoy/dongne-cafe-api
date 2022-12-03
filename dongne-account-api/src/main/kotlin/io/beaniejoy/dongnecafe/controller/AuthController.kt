@@ -1,5 +1,6 @@
 package io.beaniejoy.dongnecafe.controller
 
+import io.beaniejoy.dongnecafe.common.response.ApplicationResponse
 import io.beaniejoy.dongnecafe.security.JwtTokenUtils
 import io.beaniejoy.dongnecafe.domain.member.model.request.SignInRequest
 import io.beaniejoy.dongnecafe.model.TokenResponse
@@ -16,7 +17,7 @@ class AuthController(
     private val jwtTokenUtils: JwtTokenUtils
 ) {
     @PostMapping("/authenticate")
-    fun signIn(@RequestBody signInRequest: SignInRequest): TokenResponse {
+    fun signIn(@RequestBody signInRequest: SignInRequest): ApplicationResponse {
         val authentication = authService.signIn(
             email = signInRequest.email,
             password = signInRequest.password
@@ -24,6 +25,8 @@ class AuthController(
 
         val accessToken = jwtTokenUtils.createToken(authentication)
 
-        return TokenResponse(accessToken)
+        return ApplicationResponse
+            .success("success authenticate")
+            .data(TokenResponse(accessToken))
     }
 }

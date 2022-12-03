@@ -30,11 +30,15 @@ class ApplicationResponse {
 
     companion object {
         fun success(message: String? = null): ApplicationResponse {
-            return ApplicationResponse(ResultCode.SUCCESS, message)
+            return ApplicationResponse(resultCode = ResultCode.SUCCESS, message = message)
         }
 
-        fun fail(errorCode: ErrorCode, message: String?): ApplicationResponse {
-            return ApplicationResponse(ResultCode.FAIL, errorCode, message)
+        fun fail(errorCode: ErrorCode, message: String? = null): ApplicationResponse {
+            return ApplicationResponse(
+                resultCode = ResultCode.FAIL,
+                errorCode = errorCode,
+                message = message
+            )
         }
     }
 

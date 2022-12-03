@@ -3,10 +3,7 @@ package io.beaniejoy.dongnecafe.domain.cafe.controller
 import io.beaniejoy.dongnecafe.common.response.ApplicationResponse
 import io.beaniejoy.dongnecafe.domain.cafe.model.request.CafeRegisterRequest
 import io.beaniejoy.dongnecafe.domain.cafe.model.request.CafeUpdateRequest
-import io.beaniejoy.dongnecafe.domain.cafe.model.response.CafeDetailedInfo
-import io.beaniejoy.dongnecafe.domain.cafe.model.response.CafeSearchInfo
 import io.beaniejoy.dongnecafe.domain.cafe.service.CafeService
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
@@ -30,7 +27,9 @@ class CafeController(
             cafeMenuRequestList = resource.cafeMenuList
         )
 
-        return ApplicationResponse.success("OK").data(newCafeId)
+        return ApplicationResponse
+            .success("OK")
+            .data(newCafeId)
     }
 
     /**
@@ -40,15 +39,23 @@ class CafeController(
     fun searchCafeList(
         @PageableDefault(sort = ["name"], direction = Sort.Direction.ASC, page = 0, size = 10) pageable: Pageable
     ): ApplicationResponse {
-        return ApplicationResponse.success().data(cafeService.searchCafeList(pageable))
+        val searchCafes = cafeService.searchCafeList(pageable)
+
+        return ApplicationResponse
+            .success()
+            .data(searchCafes)
     }
 
     /**
      * 단일 카페 상세 조회
      */
     @GetMapping("/{id}")
-    fun getDetailedInfo(@PathVariable("id") id: Long): CafeDetailedInfo {
-        return cafeService.getDetailedInfoByCafeId(id)
+    fun getDetailedInfo(@PathVariable("id") id: Long): ApplicationResponse {
+        val cafeDetailedInfo = cafeService.getDetailedInfoByCafeId(id)
+
+        return ApplicationResponse
+            .success()
+            .data(cafeDetailedInfo)
     }
 
     /**
@@ -59,7 +66,7 @@ class CafeController(
     fun updateInfo(
         @PathVariable("id") id: Long,
         @RequestBody resource: CafeUpdateRequest
-    ): String {
+    ): ApplicationResponse {
         cafeService.updateInfo(
             id = id,
             name = resource.name!!,
@@ -68,6 +75,7 @@ class CafeController(
             description = resource.description!!
         )
 
-        return "Successfully Cafe[$id] Info Updated"
+        return ApplicationResponse.success("Successfully Cafe[$id] Info Updated")
+
     }
 }
