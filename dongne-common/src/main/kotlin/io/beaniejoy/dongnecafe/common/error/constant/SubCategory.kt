@@ -1,7 +1,7 @@
 package io.beaniejoy.dongnecafe.common.error.constant
 
 enum class SubCategory {
-    COMMON,
+    SERVER_ERROR,
     INVALID_AUTHENTICATE_REQUEST,
     NOT_FOUND,
     EXISTED,

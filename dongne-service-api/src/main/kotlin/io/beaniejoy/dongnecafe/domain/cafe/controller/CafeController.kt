@@ -76,6 +76,5 @@ class CafeController(
         )
 
         return ApplicationResponse.success("Successfully Cafe[$id] Info Updated")
-
     }
 }

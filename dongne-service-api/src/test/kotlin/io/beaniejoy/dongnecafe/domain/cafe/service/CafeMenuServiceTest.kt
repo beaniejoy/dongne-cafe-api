@@ -1,7 +1,8 @@
 package io.beaniejoy.dongnecafe.domain.cafe.service
 
+import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
+import io.beaniejoy.dongnecafe.common.error.exception.BusinessException
 import io.beaniejoy.dongnecafe.domain.cafe.entity.CafeMenu
-import io.beaniejoy.dongnecafe.error.exception.CafeMenuNotFoundException
 import io.beaniejoy.dongnecafe.domain.cafe.repository.CafeMenuRepository
 import io.beaniejoy.dongnecafe.domain.cafe.repository.MenuOptionRepository
 import io.beaniejoy.dongnecafe.domain.cafe.repository.OptionDetailRepository
@@ -81,12 +82,12 @@ internal class CafeMenuServiceTest {
         `when`(mockCafeMenuRepository.findById(findCafeMenuId)).thenReturn(Optional.empty())
 
         // then
-        val exception = assertThrows<CafeMenuNotFoundException> {
+        val exception = assertThrows<BusinessException> {
             // when
             mockCafeMenuService.getDetailedInfoByMenuId(findCafeMenuId, findCafeId)
         }
 
-        assertEquals("Cafe[${findCafeId}]의 Menu[${findCafeMenuId}]는 존재하지 않는 메뉴입니다.", exception.message)
+        assertEquals(ErrorCode.CAFE_MENU_NOT_FOUND, exception.errorCode)
 
         verify(mockCafeMenuRepository).findById(findCafeMenuId)
     }
