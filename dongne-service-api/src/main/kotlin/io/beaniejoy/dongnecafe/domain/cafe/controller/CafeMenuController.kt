@@ -3,6 +3,7 @@ package io.beaniejoy.dongnecafe.domain.cafe.controller
 import io.beaniejoy.dongnecafe.common.response.ApplicationResponse
 import io.beaniejoy.dongnecafe.domain.cafe.model.request.CafeMenuBulkDeleteRequest
 import io.beaniejoy.dongnecafe.domain.cafe.model.request.CafeMenuUpdateRequest
+import io.beaniejoy.dongnecafe.domain.cafe.model.response.CafeMenuDetailedInfo
 import io.beaniejoy.dongnecafe.domain.cafe.service.CafeMenuService
 import org.springframework.web.bind.annotation.*
 
@@ -18,7 +19,7 @@ class CafeMenuController(
     fun getDetailedInfo(
         @PathVariable("cafeId") cafeId: Long,
         @PathVariable("menuId") menuId: Long
-    ): ApplicationResponse {
+    ): ApplicationResponse<CafeMenuDetailedInfo> {
         val cafeMenuDetailedInfo = cafeMenuService.getDetailedInfoByMenuId(
             menuId = menuId,
             cafeId = cafeId
@@ -40,14 +41,16 @@ class CafeMenuController(
         @PathVariable("cafeId") cafeId: Long,
         @PathVariable("menuId") menuId: Long,
         @RequestBody cafeMenuUpdateRequest: CafeMenuUpdateRequest
-    ): ApplicationResponse {
+    ): ApplicationResponse<Nothing> {
         cafeMenuService.updateInfoAndBulkUpdate(
             menuId = menuId,
             cafeId = cafeId,
             resource = cafeMenuUpdateRequest
         )
 
-        return ApplicationResponse.success("Success Update Cafe[$cafeId]'s CafeMenu[$menuId]")
+        return ApplicationResponse
+            .success("Success Update Cafe[$cafeId]'s CafeMenu[$menuId]")
+            .build()
     }
 
     /**
@@ -57,13 +60,15 @@ class CafeMenuController(
     fun delete(
         @PathVariable("cafeId") cafeId: Long,
         @PathVariable("menuId") menuId: Long
-    ): ApplicationResponse {
+    ): ApplicationResponse<Nothing> {
         cafeMenuService.deleteByCafeMenuId(
             menuId = menuId,
             cafeId = cafeId
         )
 
-        return ApplicationResponse.success("Success Delete Cafe[$cafeId]'s CafeMenu[$menuId]")
+        return ApplicationResponse
+            .success("Success Delete Cafe[$cafeId]'s CafeMenu[$menuId]")
+            .build()
     }
 
     /**
@@ -73,9 +78,11 @@ class CafeMenuController(
     fun bulkDelete(
         @PathVariable("cafeId") cafeId: Long,
         @RequestBody resource: CafeMenuBulkDeleteRequest
-    ): ApplicationResponse {
+    ): ApplicationResponse<Nothing> {
         cafeMenuService.bulkDelete(cafeId, resource.cafeMenuIdList)
 
-        return ApplicationResponse.success("Success Delete Cafe[$cafeId]'s CafeMenu List")
+        return ApplicationResponse
+            .success("Success Delete Cafe[$cafeId]'s CafeMenu List")
+            .build()
     }
 }

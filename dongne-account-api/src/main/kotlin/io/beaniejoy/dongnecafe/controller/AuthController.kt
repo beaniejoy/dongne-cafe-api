@@ -17,7 +17,7 @@ class AuthController(
     private val jwtTokenUtils: JwtTokenUtils
 ) {
     @PostMapping("/authenticate")
-    fun signIn(@RequestBody signInRequest: SignInRequest): ApplicationResponse {
+    fun signIn(@RequestBody signInRequest: SignInRequest): ApplicationResponse<TokenResponse> {
         val authentication = authService.signIn(
             email = signInRequest.email,
             password = signInRequest.password

@@ -24,6 +24,7 @@ class SecurityConfig {
             .csrf().disable()
             .formLogin().disable()
 
+            // FIXME 임시 permitAll 설정
             .authorizeRequests()
             .anyRequest().permitAll()
 

@@ -14,7 +14,7 @@ class MemberController(
     private val memberService: MemberService
 ) {
     @PostMapping("/sign-up")
-    fun signUp(@RequestBody resource: MemberRegisterRequest): ApplicationResponse {
+    fun signUp(@RequestBody resource: MemberRegisterRequest): ApplicationResponse<Long> {
         val registerMemberId = memberService.registerMember(resource)
 
         return ApplicationResponse

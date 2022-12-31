@@ -20,9 +20,9 @@ class BasicControllerAdvice {
      */
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception::class)
-    fun handleException(e: Exception): ApplicationResponse {
+    fun handleException(e: Exception): ApplicationResponse<Nothing> {
         logger.error { "[COMMON][${e.javaClass.simpleName}] $e" }
-        return ApplicationResponse.fail(errorCode = ErrorCode.COMMON_SERVER_ERROR)
+        return ApplicationResponse.fail(errorCode = ErrorCode.COMMON_SERVER_ERROR).build()
     }
 
     /**
@@ -31,8 +31,8 @@ class BasicControllerAdvice {
      */
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(BusinessException::class)
-    fun handleBusinessException(e: BusinessException): ApplicationResponse {
+    fun handleBusinessException(e: BusinessException): ApplicationResponse<Nothing> {
         logger.error { "[${BusinessException::class.simpleName}] <ErrorCode>: ${e.errorCode.name}, <ErrorMessage>: ${e.message}" }
-        return ApplicationResponse.fail(errorCode = e.errorCode)
+        return ApplicationResponse.fail(errorCode = e.errorCode).build()
     }
 }

@@ -4,47 +4,46 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-class ApplicationResponse {
-    var result: ResultCode
-        private set
-
-    var data: Any? = null
-        private set
-
-    var message: String?
-        private set
-
-    var errorCode: String? = null
-        private set
-
-    constructor(resultCode: ResultCode, message: String?) {
-        this.result = resultCode
-        this.message = message
-    }
-
-    constructor(resultCode: ResultCode, errorCode: ErrorCode, message: String?) {
-        this.result = resultCode
-        this.errorCode = errorCode.name
-        this.message = message
-    }
-
+class ApplicationResponse<T>(
+    val result: ResultCode,
+    val message: String? = null,
+    val errorCode: String? = null,
+    val data: T? = null
+) {
     companion object {
-        fun success(message: String? = null): ApplicationResponse {
-            return ApplicationResponse(resultCode = ResultCode.SUCCESS, message = message)
-        }
-
-        fun fail(errorCode: ErrorCode, message: String? = null): ApplicationResponse {
-            return ApplicationResponse(
-                resultCode = ResultCode.FAIL,
-                errorCode = errorCode,
+        fun success(message: String? = null): ApplicationResponseBuilder {
+            return ApplicationResponseBuilder(
+                result = ResultCode.SUCCESS,
                 message = message
             )
         }
+
+        fun fail(errorCode: ErrorCode, message: String? = null): ApplicationResponseBuilder {
+            return ApplicationResponseBuilder(
+                result = ResultCode.FAIL,
+                message = message,
+                errorCode = errorCode.name
+            )
+        }
+    }
+}
+
+class ApplicationResponseBuilder(
+    var result: ResultCode,
+    var message: String? = null,
+    var errorCode: String? = null
+) {
+    fun build(): ApplicationResponse<Nothing> {
+        return data(null)
     }
 
-    fun data(data: Any): ApplicationResponse {
-        this.data = data
-
-        return this
+    fun <T> data(data: T?): ApplicationResponse<T> {
+        return ApplicationResponse(
+            result = this.result,
+            message = this.message,
+            data = data,
+            errorCode = errorCode
+        )
     }
+
 }
