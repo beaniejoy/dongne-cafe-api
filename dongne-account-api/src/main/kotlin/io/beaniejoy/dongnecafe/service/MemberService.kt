@@ -1,9 +1,10 @@
 package io.beaniejoy.dongnecafe.service
 
+import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
+import io.beaniejoy.dongnecafe.common.error.exception.BusinessException
 import io.beaniejoy.dongnecafe.domain.member.entity.Member
 import io.beaniejoy.dongnecafe.domain.member.model.request.MemberRegisterRequest
 import io.beaniejoy.dongnecafe.domain.member.repository.MemberRepository
-import io.beaniejoy.dongnecafe.error.MemberExistedException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -16,7 +17,7 @@ class MemberService(
 ) {
     fun registerMember(resource: MemberRegisterRequest): Long {
         memberRepository.findByEmail(resource.email!!)?.also {
-            throw MemberExistedException(resource.email!!)
+            throw BusinessException(ErrorCode.MEMBER_EXISTED)
         }
 
         val registeredMember = memberRepository.save(

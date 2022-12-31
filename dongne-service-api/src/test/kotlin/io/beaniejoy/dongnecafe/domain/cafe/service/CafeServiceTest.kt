@@ -1,10 +1,10 @@
 package io.beaniejoy.dongnecafe.domain.cafe.service
 
 import io.beaniejoy.dongnecafe.domain.cafe.entity.Cafe
-import io.beaniejoy.dongnecafe.error.exception.CafeExistedException
-import io.beaniejoy.dongnecafe.error.exception.CafeNotFoundException
 import io.beaniejoy.dongnecafe.domain.cafe.repository.CafeRepository
 import io.beaniejoy.dongnecafe.domain.cafe.utils.CafeTestUtils
+import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
+import io.beaniejoy.dongnecafe.common.error.exception.BusinessException
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.extension.ExtendWith
@@ -68,7 +68,7 @@ internal class CafeServiceTest {
         `when`(mockCafeRepository.findByName(name)).thenReturn(cafe)
 
         // then
-        assertThrows<CafeExistedException> {
+        val exception = assertThrows<BusinessException> {
             // when
             mockCafeService.createNew(
                 name = name,
@@ -78,8 +78,8 @@ internal class CafeServiceTest {
                 cafeMenuRequestList = cafeMenuList
             )
         }
-
         verify(mockCafeRepository).findByName(name)
+        assertEquals(ErrorCode.CAFE_EXISTED, exception.errorCode)
     }
 
     @Test
@@ -134,7 +134,7 @@ internal class CafeServiceTest {
 
         `when`(mockCafeRepository.findById(cafeId)).thenReturn(Optional.empty())
 
-        assertThrows<CafeNotFoundException> {
+        val exception = assertThrows<BusinessException> {
             mockCafeService.updateInfo(
                 id = cafeId,
                 name = "",
@@ -143,5 +143,7 @@ internal class CafeServiceTest {
                 description = "",
             )
         }
+
+        assertEquals(ErrorCode.CAFE_NOT_FOUND, exception.errorCode)
     }
 }

@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer
+import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
@@ -22,9 +22,15 @@ class SecurityConfig {
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
             .csrf().disable()
+            .formLogin().disable()
 
+            // FIXME 임시 permitAll 설정
             .authorizeRequests()
-            .anyRequest().authenticated()
+            .anyRequest().permitAll()
+
+            .and()
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 방식(세션 불필요)
 
             .and()
             .also { jwtAuthenticationConfigurer(it) }

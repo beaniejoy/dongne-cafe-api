@@ -1,6 +1,7 @@
 package io.beaniejoy.dongnecafe.domain.cafe.service
 
-import io.beaniejoy.dongnecafe.error.exception.OptionDetailNotFoundException
+import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
+import io.beaniejoy.dongnecafe.common.error.exception.BusinessException
 import io.beaniejoy.dongnecafe.domain.cafe.model.request.OptionDetailUpdateRequest
 import io.beaniejoy.dongnecafe.domain.cafe.repository.OptionDetailRepository
 import org.springframework.data.repository.findByIdOrNull
@@ -15,7 +16,7 @@ class OptionDetailService(
     fun bulkUpdate(resources: List<OptionDetailUpdateRequest>) {
         resources.forEach {
             val optionDetail = optionDetailRepository.findByIdOrNull(it.optionDetailId)
-                ?: throw OptionDetailNotFoundException(it.optionDetailId)
+                ?: throw BusinessException(ErrorCode.OPTION_DETAIL_NOT_FOUND)
 
             if (it.isDelete) {
                 optionDetailRepository.delete(optionDetail)
