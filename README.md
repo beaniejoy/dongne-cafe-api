@@ -27,14 +27,14 @@
 
 ## :pushpin: Run Application
 
-### 로컬 환경 내 로컬 DB 따로 구성
+### 💽 로컬 DB 구성 (docker)
 - local에 DB(MySQL)용 docker container run
 - application은 IDE에서 실행 (default profile: `local`)
 ```bash
-$ docker run --name beanie-test-db -e MYSQL_ROOT_PASSWORD=beaniejoy -d -p 3306:3306 mysql:8.0.21
+$ docker run --name mysql-server -e MYSQL_ROOT_PASSWORD=beaniejoy -d -p 3306:3306 mysql:8.0.21
 ```
 
-### DB Migration (flyway)
+### 💽 DB Migration (flyway)
 [flyway doc](https://documentation.red-gate.com/fd/flyway-documentation-138346877.html)
 - **Info**  
 Prints the details and status information about all the migrations
@@ -60,7 +60,7 @@ Drops all objects (tables, views, procedures, triggers, …) in the configured s
 $ ./gradlew :db:flywayClean -i
 ```
 
-### docker compose 실행(수정 작업 진행중)
+### 💽 docker compose 실행(수정 작업 진행중)
 - docker compose를 이용한 nginx, DB(MySQL), application 한꺼번에 실행하는 경우
 ```bash
 $ docker-compose up --build
