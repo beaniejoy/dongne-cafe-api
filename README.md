@@ -35,6 +35,7 @@ $ docker run --name beanie-test-db -e MYSQL_ROOT_PASSWORD=beaniejoy -d -p 3306:3
 ```
 
 ### DB Migration (flyway)
+[flyway doc](https://documentation.red-gate.com/fd/flyway-documentation-138346877.html)
 - **Info**  
 Prints the details and status information about all the migrations
 ```bash
@@ -58,7 +59,6 @@ Drops all objects (tables, views, procedures, triggers, …) in the configured s
 ```bash
 $ ./gradlew :db:flywayClean -i
 ```
-
 
 ### docker compose 실행(수정 작업 진행중)
 - docker compose를 이용한 nginx, DB(MySQL), application 한꺼번에 실행하는 경우
