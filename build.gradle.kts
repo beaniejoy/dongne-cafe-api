@@ -27,7 +27,7 @@ subprojects {
         plugin(Plugins.Spring.dependencyManagement)
         plugin(Plugins.Spring.boot)
 
-        plugin(Plugins.Kotlin.kotlin)
+        plugin(Plugins.Kotlin.KOTLIN)
         plugin(Plugins.Kotlin.kotlinSpring)
         plugin(Plugins.Kotlin.kotlinJpa)
     }
@@ -50,7 +50,6 @@ subprojects {
         // DB
         runtimeOnly("mysql:mysql-connector-java") // MySQL
         runtimeOnly("com.h2database:h2") // H2
-        implementation("org.flywaydb:flyway-core:${Version.Deps.flywayCore}") // flyway
 
         // JWT
         implementation("io.jsonwebtoken:jjwt-api:${Version.Deps.Jwt}")
@@ -58,7 +57,7 @@ subprojects {
         runtimeOnly("io.jsonwebtoken:jjwt-jackson:${Version.Deps.Jwt}")
 
         // Logging
-        implementation("io.github.microutils:kotlin-logging:${Version.Deps.kotlinLogging}")
+        implementation("io.github.microutils:kotlin-logging:${Version.Deps.KOTLIN_LOGGING}")
 
         // Test
         testImplementation("org.springframework.boot:spring-boot-starter-test")

@@ -11,10 +11,6 @@ spring:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         format_sql: true
         show-sql: false
-  flyway:
-    baseline-on-migrate: true
-    baseline-version: "000"
-    locations: classpath:db/migration,classpath:db/seed
   devtools:
     livereload:
       enabled: false # no use devtools' LiveReload Server

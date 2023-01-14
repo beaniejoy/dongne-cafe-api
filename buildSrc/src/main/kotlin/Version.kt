@@ -8,8 +8,11 @@ object Version {
     }
 
     object Deps {
-        const val flywayCore = "7.15.0"
-        const val kotlinLogging = "2.1.21"
+        const val KOTLIN_LOGGING = "3.0.4"
         const val Jwt = "0.11.5"
+    }
+
+    object FlywayDB {
+        const val FLYWAY_CORE = "9.8.1"
     }
 }
