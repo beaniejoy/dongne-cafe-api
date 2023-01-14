@@ -7,12 +7,16 @@ object Plugins {
     }
 
     object Kotlin {
-        const val kotlin = "kotlin"
+        const val KOTLIN = "kotlin"
         const val kotlinSpring = "kotlin-spring"
         const val kotlinJpa = "kotlin-jpa"
 
         const val jvm = "jvm"
         const val pluginSpring = "plugin.spring"
         const val pluginJpa = "plugin.jpa"
+    }
+
+    object FlywayDB {
+        const val FLYWAY = "org.flywaydb.flyway"
     }
 }

@@ -1,5 +1,3 @@
-DROP PROCEDURE IF EXISTS insertOptionDetails;
-
 DELIMITER $$
 CREATE PROCEDURE insertOptionDetails()
 BEGIN

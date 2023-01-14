@@ -1,5 +1,3 @@
-DROP PROCEDURE IF EXISTS insertMenuOptions;
-
 DELIMITER $$
 CREATE PROCEDURE insertMenuOptions()
 BEGIN
