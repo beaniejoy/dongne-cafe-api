@@ -13,7 +13,7 @@ BEGIN
 		                        LIMIT i, 1);
 
         INSERT IGNORE INTO `menu_option` (title, created_at, created_by, updated_at, updated_by, cafe_menu_id)
-        VALUES ('SIZE', now(), 'system', null, null, var_cafe_menu_id);
+        VALUES ('SIZE', now(), 'system', now(), 'system', var_cafe_menu_id);
 
         SET i = i + 1;
     END WHILE;

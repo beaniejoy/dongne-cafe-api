@@ -29,7 +29,6 @@ class JwtTokenUtils(
     }
 
     fun createToken(authentication: Authentication): String {
-        logger.info { "test = ${authentication.name}" }
         val authenticatedMember = (authentication.principal as SecurityUser).member
         val authorities = authentication.authorities.joinToString(",") { it.authority }
 

@@ -13,7 +13,7 @@ BEGIN
 
 		WHILE(j <= 10) DO
 			INSERT IGNORE INTO `cafe_menu` (name, price, created_at, created_by, updated_at, updated_by, cafe_id)
-			VALUES (CONCAT('커피', j), FLOOR(RAND() * 10 + 1) * 1000, now(), 'system', null, null, var_cafe_id);
+			VALUES (CONCAT('커피', j), FLOOR(RAND() * 10 + 1) * 1000, now(), 'system', now(), 'system', var_cafe_id);
 			SET j = j + 1;
         END WHILE;
 

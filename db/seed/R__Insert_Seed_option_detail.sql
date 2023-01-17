@@ -13,11 +13,11 @@ BEGIN
 		                          LIMIT i, 1);
 
         INSERT IGNORE INTO `option_detail` (name, extra_price, created_at, created_by, updated_at, updated_by, menu_option_id)
-        VALUES ('MEDIUM', FLOOR(RAND() * 3 + 1) * 1000, now(), 'system', null, null, var_menu_option_id);
+        VALUES ('MEDIUM', FLOOR(RAND() * 3 + 1) * 1000, now(), 'system', now(), 'system', var_menu_option_id);
         INSERT IGNORE INTO `option_detail` (name, extra_price, created_at, created_by, updated_at, updated_by, menu_option_id)
-        VALUES ('LARGE', FLOOR(RAND() * 3 + 1) * 1000, now(), 'system', null, null, var_menu_option_id);
+        VALUES ('LARGE', FLOOR(RAND() * 3 + 1) * 1000, now(), 'system', now(), 'system', var_menu_option_id);
         INSERT IGNORE INTO `option_detail` (name, extra_price, created_at, created_by, updated_at, updated_by, menu_option_id)
-        VALUES ('VENTI', FLOOR(RAND() * 3 + 1) * 1000, now(), 'system', null, null, var_menu_option_id);
+        VALUES ('VENTI', FLOOR(RAND() * 3 + 1) * 1000, now(), 'system', now(), 'system', var_menu_option_id);
 
         SET i = i + 1;
     END WHILE;

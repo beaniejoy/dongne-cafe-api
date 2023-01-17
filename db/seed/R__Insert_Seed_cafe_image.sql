@@ -15,7 +15,7 @@ BEGIN
 
 		WHILE(j <= 3) DO
 			INSERT IGNORE INTO `cafe_image` (img_url, created_at, created_by, updated_at, updated_by, cafe_id)
-			VALUES (CONCAT('test_img_url_', idx_img), now(), 'system', null, null, var_cafe_id);
+			VALUES (CONCAT('test_img_url_', idx_img), now(), 'system', now(), 'system', var_cafe_id);
 
 			SET j = j + 1;
             SET idx_img = idx_img + 1;
