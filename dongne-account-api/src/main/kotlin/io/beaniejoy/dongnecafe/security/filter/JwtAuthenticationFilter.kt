@@ -18,7 +18,7 @@ class JwtAuthenticationFilter(
     private val log = KotlinLogging.logger {}
 
     /**
-     * JWT access token 인가 처리
+     * JWT access token 인증 처리
      */
     override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
         val httpRequest = request as HttpServletRequest

@@ -1,10 +1,9 @@
 package io.beaniejoy.dongnecafe.security
 
 import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
-import io.beaniejoy.dongnecafe.common.error.exception.BusinessException
-import io.beaniejoy.dongnecafe.security.SecurityUser
 import mu.KLogging
 import org.springframework.security.authentication.AuthenticationProvider
+import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -30,7 +29,7 @@ class ApiAuthenticationProvider(
 
         val user = userDetailsService.loadUserByUsername(email) as SecurityUser
         if (!passwordEncoder.matches(password, user.password)) {
-            throw BusinessException(ErrorCode.AUTH_PASSWORD_NOT_VALID)
+            throw BadCredentialsException(ErrorCode.AUTH_PASSWORD_NOT_VALID.name)
         }
 
         logger.info { "User password ${user.password}" }

@@ -26,7 +26,7 @@ class SecurityConfig {
 
             // FIXME 임시 permitAll 설정
             .authorizeRequests()
-            .anyRequest().permitAll()
+            .anyRequest().authenticated()
 
             .and()
             .sessionManagement()

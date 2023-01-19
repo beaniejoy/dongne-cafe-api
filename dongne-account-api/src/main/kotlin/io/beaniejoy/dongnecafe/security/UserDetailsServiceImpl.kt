@@ -4,10 +4,10 @@ import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
 import io.beaniejoy.dongnecafe.common.error.exception.BusinessException
 import io.beaniejoy.dongnecafe.domain.member.entity.Member
 import io.beaniejoy.dongnecafe.domain.member.repository.MemberRepository
-import io.beaniejoy.dongnecafe.security.SecurityUser
 import mu.KLogging
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -22,7 +22,7 @@ class UserDetailsServiceImpl(
         return memberRepository.findByEmail(email)?.let {
             logger.info { "[LOAD MEMBER] email: ${it.email}, role: ${it.roleType}, activated: ${it.activated}" }
             createSecurityUser(it)
-        } ?: throw BusinessException(ErrorCode.AUTH_MEMBER_NOT_FOUND)
+        } ?: throw UsernameNotFoundException(ErrorCode.AUTH_MEMBER_NOT_FOUND.name)
     }
 
     private fun createSecurityUser(member: Member): SecurityUser {
