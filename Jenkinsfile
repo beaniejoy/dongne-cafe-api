@@ -2,7 +2,13 @@ pipeline {
     agent any
 
     stages {
-        stage('github clone') {
+        stage('Init') {
+            steps {
+                sh 'printenv'
+            }
+        }
+
+        stage('Github clone') {
             steps {
                 git branch: '${BUILD_BRANCH}', url: 'https://github.com/beaniejoy/dongne-cafe-api.git'
             }
