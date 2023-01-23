@@ -96,7 +96,6 @@ internal class CafeServiceTest {
 //        )
         val cafeId = 50L
 
-        throw RuntimeException()
         // TODO 'findByIdOrNull'은 kotlin test 라이브러리 필요한 듯
         val mockCafe = mock(Cafe::class.java)
         `when`(mockCafeRepository.findById(cafeId)).thenReturn(Optional.of(mockCafe))
