@@ -78,15 +78,20 @@ subprojects {
         useJUnitPlatform()
 
         testLogging {
-            exceptionFormat = TestExceptionFormat.FULL
-            events = setOf(TestLogEvent.FAILED, TestLogEvent.STANDARD_ERROR)
+            events = setOf(
+                TestLogEvent.FAILED,
+                TestLogEvent.SKIPPED,
+                TestLogEvent.STANDARD_OUT,
+                TestLogEvent.STANDARD_ERROR
+            )
 
+            exceptionFormat = TestExceptionFormat.FULL
             showExceptions = true
             showCauses = true
             showStackTraces = true
         }
 
-        ignoreFailures = true
+//        ignoreFailures = true
 
         addTestListener(object : TestListener {
             override fun beforeSuite(suite: TestDescriptor?) {}
