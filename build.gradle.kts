@@ -2,6 +2,8 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootJar
+import plugin.BuildLifecyclePlugin
+import plugin.TestSummary
 
 plugins {
     id(Plugins.Spring.boot).version(Version.Spring.boot)
@@ -34,7 +36,10 @@ subprojects {
         plugin(Plugins.Kotlin.kotlinJpa)
     }
 
-    java.sourceCompatibility = JavaVersion.VERSION_17
+    java.apply {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
 
     dependencies {
         // Spring Boot Project
@@ -81,7 +86,6 @@ subprojects {
             events = setOf(
                 TestLogEvent.FAILED,
                 TestLogEvent.SKIPPED,
-                TestLogEvent.STANDARD_OUT,
                 TestLogEvent.STANDARD_ERROR
             )
 
@@ -98,53 +102,56 @@ subprojects {
             override fun afterSuite(desc: TestDescriptor, result: TestResult) {
                 if (desc.parent != null) return
 
-                val summary = TestOutcome().apply {
-                    add("${project.name}:${name} Test result: ${result.resultType}")
-                    add("Test summary: ${result.testCount} tests, ${result.successfulTestCount} succeeded, ${result.failedTestCount} failed, ${result.skippedTestCount} skipped")
-                    add("report file: ${reports.html.entryPoint}")
-                }
+                val summary = TestSummary(
+                    projectName = project.name,
+                    taskName = name,
+                    result = result
+                )
 
-                if (result.resultType == TestResult.ResultType.SUCCESS) {
-                    testResults.add(0, summary)
-                } else {
-                    testResults.add(summary)
-                }
+//                if (result.resultType == TestResult.ResultType.SUCCESS) {
+//                    testResults.add(0, summary)
+//                } else {
+//                    testResults.add(summary)
+//                }
             }
 
             override fun beforeTest(testDescriptor: TestDescriptor?) {}
             override fun afterTest(testDescriptor: TestDescriptor?, result: TestResult?) {}
         })
     }
+
+    // for logging when build finished
+    apply<BuildLifecyclePlugin>()
 }
 
-gradle.buildFinished {
-    if (testResults.isNotEmpty()) {
-        printResults(testResults)
-    }
-}
+//gradle.buildFinished {
+//    if (testResults.isNotEmpty()) {
+//        printResults(testResults)
+//    }
+//}
 
-fun printResults(allResults:List<TestOutcome>) {
-    val maxLength = allResults.maxOfOrNull { it.maxWidth() } ?: 0
+//fun printResults(allResults:List<TestOutcome>) {
+//    val maxLength = allResults.maxOfOrNull { it.maxWidth() } ?: 0
+//
+//    println("┌${"─".repeat(maxLength)}┐")
+//
+//    println(allResults.joinToString("├${"─".repeat(maxLength)}┤\n") { testOutcome ->
+//        testOutcome.lines.joinToString("│\n│", "│", "│") {
+//            it + " ".repeat(maxLength - it.length)
+//        }
+//    })
+//
+//    println("└${"─".repeat(maxLength)}┘")
+//}
+//
+//val testResults by extra(mutableListOf<TestOutcome>()) // Container for tests summaries
 
-    println("┌${"─".repeat(maxLength)}┐")
-
-    println(allResults.joinToString("├${"─".repeat(maxLength)}┤\n") { testOutcome ->
-        testOutcome.lines.joinToString("│\n│", "│", "│") {
-            it + " ".repeat(maxLength - it.length)
-        }
-    })
-
-    println("└${"─".repeat(maxLength)}┘")
-}
-
-val testResults by extra(mutableListOf<TestOutcome>()) // Container for tests summaries
-
-data class TestOutcome(val lines: MutableList<String> = mutableListOf()) {
-    fun add(line: String) {
-        lines.add(line)
-    }
-
-    fun maxWidth(): Int {
-        return lines.maxBy { it.length }?.length ?: 0
-    }
-}
+//data class TestOutcome(val lines: MutableList<String> = mutableListOf()) {
+//    fun add(line: String) {
+//        lines.add(line)
+//    }
+//
+//    fun maxWidth(): Int {
+//        return lines.maxByOrNull { it.length }?.length ?: 0
+//    }
+//}
