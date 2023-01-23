@@ -10,7 +10,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh './gradlew :dongne-service-api:test'
+                sh './gradlew clean :dongne-service-api:test --stacktrace'
             }
         }
 

@@ -67,7 +67,6 @@ subprojects {
     }
 
     tasks.withType<KotlinCompile> {
-        println("### Configuring $name in project ${project.name} ###")
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
             jvmTarget = JavaVersion.VERSION_17.toString()
@@ -79,15 +78,68 @@ subprojects {
         useJUnitPlatform()
 
         testLogging {
-            events(
-                TestLogEvent.FAILED,
-                TestLogEvent.STANDARD_ERROR,
-            )
-
             exceptionFormat = TestExceptionFormat.FULL
+            events = setOf(TestLogEvent.FAILED, TestLogEvent.STANDARD_ERROR)
+
             showExceptions = true
             showCauses = true
             showStackTraces = true
         }
+
+        ignoreFailures = true
+
+        addTestListener(object : TestListener {
+            override fun beforeSuite(suite: TestDescriptor?) {}
+            override fun afterSuite(desc: TestDescriptor, result: TestResult) {
+                if (desc.parent != null) return
+
+                val summary = TestOutcome().apply {
+                    add("${project.name}:${name} Test result: ${result.resultType}")
+                    add("Test summary: ${result.testCount} tests, ${result.successfulTestCount} succeeded, ${result.failedTestCount} failed, ${result.skippedTestCount} skipped")
+                    add("report file: ${reports.html.entryPoint}")
+                }
+
+                if (result.resultType == TestResult.ResultType.SUCCESS) {
+                    testResults.add(0, summary)
+                } else {
+                    testResults.add(summary)
+                }
+            }
+
+            override fun beforeTest(testDescriptor: TestDescriptor?) {}
+            override fun afterTest(testDescriptor: TestDescriptor?, result: TestResult?) {}
+        })
+    }
+}
+
+gradle.buildFinished {
+    if (testResults.isNotEmpty()) {
+        printResults(testResults)
+    }
+}
+
+fun printResults(allResults:List<TestOutcome>) {
+    val maxLength = allResults.maxOfOrNull { it.maxWidth() } ?: 0
+
+    println("┌${"─".repeat(maxLength)}┐")
+
+    println(allResults.joinToString("├${"─".repeat(maxLength)}┤\n") { testOutcome ->
+        testOutcome.lines.joinToString("│\n│", "│", "│") {
+            it + " ".repeat(maxLength - it.length)
+        }
+    })
+
+    println("└${"─".repeat(maxLength)}┘")
+}
+
+val testResults by extra(mutableListOf<TestOutcome>()) // Container for tests summaries
+
+data class TestOutcome(val lines: MutableList<String> = mutableListOf()) {
+    fun add(line: String) {
+        lines.add(line)
+    }
+
+    fun maxWidth(): Int {
+        return lines.maxBy { it.length }?.length ?: 0
     }
 }
