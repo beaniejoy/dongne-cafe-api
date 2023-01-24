@@ -1,15 +1,19 @@
+import org.gradle.api.JavaVersion
+
 object Version {
-    const val projectVersion = "0.0.1-SNAPSHOT"
-    const val kotlin = "1.6.21"
+    const val PROJECT_VERSION = "0.0.1-SNAPSHOT"
+    const val KOTLIN = "1.6.21"
+
+    val JAVA = JavaVersion.VERSION_17
 
     object Spring {
-        const val boot = "2.7.0"
-        const val dependencyManagement = "1.0.11.RELEASE"
+        const val BOOT = "2.7.0"
+        const val DEPENDENCY_MANAGEMENT = "1.0.11.RELEASE"
     }
 
     object Deps {
         const val KOTLIN_LOGGING = "3.0.4"
-        const val Jwt = "0.11.5"
+        const val JWT = "0.11.5"
     }
 
     object FlywayDB {

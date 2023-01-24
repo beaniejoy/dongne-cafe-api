@@ -5,15 +5,10 @@ import org.gradle.api.tasks.testing.TestResult
 data class TestSummary(
     val projectName: String? = null,
     val taskName: String? = null,
-    val result: TestResult,
-    val lines: MutableList<String> = mutableListOf()
+    val result: TestResult
 ) {
-    fun add(line: String) {
-        lines.add(line)
-    }
-
     fun maxWidth(): Int {
-        return lines.maxByOrNull { it.length }?.length ?: 0
+        return toLogList().maxByOrNull { it.length }?.length ?: 0
     }
 
     fun toLogList(): List<String> {
