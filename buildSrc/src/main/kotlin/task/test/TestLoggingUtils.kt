@@ -1,13 +1,10 @@
-package plugin
+package task.test
 
 import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.api.tasks.testing.TestResult
-import org.gradle.api.tasks.testing.TestResult.*
 
-class TestContainer {
+class TestLoggingUtils {
     companion object {
-        var testResults: TestSummary? = null
-
         const val ANSI_RESET = "\u001B[0m"
         const val ANSI_GREEN = "\u001B[32m"
         const val ANSI_RED = "\u001B[31m"
@@ -23,12 +20,11 @@ class TestContainer {
                 |${
                     summary.toLogList().joinToString("│\n│", "│", "│") {
                         val coloredResult = colorResultType(summary.result.resultType)
-                        val str = "$it${" ".repeat(maxLength - it.length)}"
+                        "$it${" ".repeat(maxLength - it.length)}"
                             .replace(
                                 oldValue = coloredResult.first.toString(),
                                 newValue = coloredResult.second
                             )
-                        str
                     }
                 }
                 |└${"─".repeat(maxLength)}┘
@@ -37,18 +33,22 @@ class TestContainer {
         }
 
         fun printEachResult(desc: TestDescriptor, result: TestResult) {
-            println("[${desc.className}] ${desc.displayName} result: ${colorResultType(result.resultType).second}")
+            println("[${desc.className}] ${desc.displayName} >> result: ${colorResultType(result.resultType).second}")
         }
 
-        fun colorResultType(resultType: ResultType): Pair<ResultType, String> {
+        fun colorResultType(resultType: TestResult.ResultType): Pair<TestResult.ResultType, String> {
+            if (TestContainer.colorMode.not()) {
+                return resultType to "${resultType}"
+            }
+
             val color = when (resultType) {
-                ResultType.SUCCESS -> ANSI_GREEN
-                ResultType.FAILURE -> ANSI_RED
+                TestResult.ResultType.SUCCESS -> ANSI_GREEN
+                TestResult.ResultType.FAILURE -> ANSI_RED
                 else -> ""
             }
 
             return resultType to if (color.isNotEmpty()) {
-                "${color}${resultType}${ANSI_RESET}"
+                "${color}${resultType}$ANSI_RESET"
             } else "${resultType}"
         }
     }

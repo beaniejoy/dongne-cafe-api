@@ -5,6 +5,8 @@ import org.gradle.api.services.BuildServiceParameters
 import org.gradle.tooling.events.FinishEvent
 import org.gradle.tooling.events.OperationCompletionListener
 import org.gradle.tooling.events.task.TaskFinishEvent
+import task.test.TestContainer
+import task.test.TestLoggingUtils
 
 abstract class BuildOperationService : BuildService<BuildOperationService.Params>, OperationCompletionListener {
     interface Params : BuildServiceParameters {
@@ -17,7 +19,8 @@ abstract class BuildOperationService : BuildService<BuildOperationService.Params
         }
 
         if (event.descriptor.taskPath == parameters.lastTaskPath) {
-            TestContainer.printTotalResult(TestContainer.testResults)
+            TestLoggingUtils.printTotalResult(TestContainer.testResults)
+            TestContainer.testResults = null
         }
     }
 }

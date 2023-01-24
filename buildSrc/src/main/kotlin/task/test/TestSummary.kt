@@ -1,4 +1,4 @@
-package plugin
+package task.test
 
 import org.gradle.api.tasks.testing.TestResult
 

@@ -3,8 +3,9 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 import plugin.BuildLifecyclePlugin
-import plugin.TestContainer
-import plugin.TestSummary
+import task.test.TestContainer
+import task.test.TestLoggingUtils
+import task.test.TestSummary
 
 val bootJar: BootJar by tasks
 bootJar.enabled = false
@@ -99,7 +100,7 @@ subprojects {
             showStackTraces = true
         }
 
-        ignoreFailures = true
+//        ignoreFailures = true
 
         addTestListener(object : TestListener {
             override fun beforeSuite(desc: TestDescriptor) {}
@@ -119,7 +120,7 @@ subprojects {
             override fun beforeTest(desc: TestDescriptor) {}
             // handling after each test finished
             override fun afterTest(desc: TestDescriptor, result: TestResult) {
-                TestContainer.printEachResult(desc, result)
+                TestLoggingUtils.printEachResult(desc, result)
             }
         })
     }
