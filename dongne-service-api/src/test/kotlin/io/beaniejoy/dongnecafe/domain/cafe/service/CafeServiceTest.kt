@@ -87,13 +87,13 @@ internal class CafeServiceTest {
     fun update_cafe_test() {
         // given
         val (name, address, phoneNumber, description, cafeMenuList) = CafeTestUtils.createCafeRegisterRequest()
-        val cafe = Cafe.createCafe(
-            name = name!!,
-            address = address!!,
-            phoneNumber = phoneNumber!!,
-            description = description!!,
-            cafeMenuRequestList = cafeMenuList
-        )
+//        val cafe = Cafe.createCafe(
+//            name = name!!,
+//            address = address!!,
+//            phoneNumber = phoneNumber!!,
+//            description = description!!,
+//            cafeMenuRequestList = cafeMenuList
+//        )
         val cafeId = 50L
 
         // TODO 'findByIdOrNull'은 kotlin test 라이브러리 필요한 듯

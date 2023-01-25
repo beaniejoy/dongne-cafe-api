@@ -1,6 +1,4 @@
 spring:
-  flyway:
-    enabled: false
   jpa:
     properties:
       hibernate:
@@ -9,7 +7,7 @@ spring:
 
 logging:
   level:
-    org.hibernate.SQL: debug
+    org.hibernate.SQL: info # ionShutdownHook logging issue (in 'DEBUG' level)
     org.hibernate.type: trace # 실제 sql 쿼리의 parameter 값을 확인하고자 함
 
 jwt:

@@ -1,20 +1,26 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootJar
-
-plugins {
-    id(Plugins.Spring.boot).version(Version.Spring.boot)
-    id(Plugins.Spring.dependencyManagement).version(Version.Spring.dependencyManagement).apply(false)
-    kotlin(Plugins.Kotlin.jvm).version(Version.kotlin)
-    kotlin(Plugins.Kotlin.pluginSpring).version(Version.kotlin).apply(false)
-    kotlin(Plugins.Kotlin.pluginJpa).version(Version.kotlin).apply(false)
-}
+import plugin.BuildLifecyclePlugin
+import task.test.TestContainer
+import task.test.TestLoggingUtils
+import task.test.TestSummary
 
 val bootJar: BootJar by tasks
 bootJar.enabled = false
 
+plugins {
+    id(Plugins.Spring.BOOT).version(Version.Spring.BOOT)
+    id(Plugins.Spring.DEPENDENCY_MANAGEMENT).version(Version.Spring.DEPENDENCY_MANAGEMENT).apply(false)
+    kotlin(Plugins.Kotlin.JVM).version(Version.KOTLIN)
+    kotlin(Plugins.Kotlin.PLUGIN_SPRING).version(Version.KOTLIN).apply(false)
+    kotlin(Plugins.Kotlin.PLUGIN_JPA).version(Version.KOTLIN).apply(false)
+}
+
 allprojects {
     group = "io.beaniejoy.dongecafe"
-    version = Version.projectVersion
+    version = Version.PROJECT_VERSION
 
     repositories {
         mavenCentral()
@@ -24,15 +30,18 @@ allprojects {
 subprojects {
     apply {
         plugin(Plugins.java)
-        plugin(Plugins.Spring.dependencyManagement)
-        plugin(Plugins.Spring.boot)
+        plugin(Plugins.Spring.DEPENDENCY_MANAGEMENT)
+        plugin(Plugins.Spring.BOOT)
 
         plugin(Plugins.Kotlin.KOTLIN)
-        plugin(Plugins.Kotlin.kotlinSpring)
-        plugin(Plugins.Kotlin.kotlinJpa)
+        plugin(Plugins.Kotlin.KOTLIN_SPRING)
+        plugin(Plugins.Kotlin.KOTLIN_JPA)
     }
 
-    java.sourceCompatibility = JavaVersion.VERSION_17
+    java.apply {
+        sourceCompatibility = Version.JAVA
+        targetCompatibility = Version.JAVA
+    }
 
     dependencies {
         // Spring Boot Project
@@ -52,9 +61,9 @@ subprojects {
         runtimeOnly("com.h2database:h2") // H2
 
         // JWT
-        implementation("io.jsonwebtoken:jjwt-api:${Version.Deps.Jwt}")
-        runtimeOnly("io.jsonwebtoken:jjwt-impl:${Version.Deps.Jwt}")
-        runtimeOnly("io.jsonwebtoken:jjwt-jackson:${Version.Deps.Jwt}")
+        implementation("io.jsonwebtoken:jjwt-api:${Version.Deps.JWT}")
+        runtimeOnly("io.jsonwebtoken:jjwt-impl:${Version.Deps.JWT}")
+        runtimeOnly("io.jsonwebtoken:jjwt-jackson:${Version.Deps.JWT}")
 
         // Logging
         implementation("io.github.microutils:kotlin-logging:${Version.Deps.KOTLIN_LOGGING}")
@@ -65,14 +74,54 @@ subprojects {
     }
 
     tasks.withType<KotlinCompile> {
-        println("### Configuring $name in project ${project.name} ###")
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
-            jvmTarget = JavaVersion.VERSION_17.toString()
+            jvmTarget = Version.JAVA.toString()
         }
     }
 
+    // for logging when build finished
+    apply<BuildLifecyclePlugin>()
+
+    // gradle test logging
     tasks.withType<Test> {
         useJUnitPlatform()
+
+        testLogging {
+            events = setOf(
+                TestLogEvent.FAILED,
+                TestLogEvent.SKIPPED,
+                TestLogEvent.STANDARD_ERROR
+            )
+
+            exceptionFormat = TestExceptionFormat.FULL
+            showExceptions = true
+            showCauses = true
+            showStackTraces = true
+        }
+
+//        ignoreFailures = true
+
+        addTestListener(object : TestListener {
+            override fun beforeSuite(desc: TestDescriptor) {}
+            // handling after all test finished
+            override fun afterSuite(desc: TestDescriptor, result: TestResult) {
+                if (desc.parent != null) return
+
+                val summary = TestSummary(
+                    projectName = project.name,
+                    taskName = name,
+                    result = result
+                )
+
+                TestContainer.testResults = summary
+            }
+
+            override fun beforeTest(desc: TestDescriptor) {}
+            // handling after each test finished
+            override fun afterTest(desc: TestDescriptor, result: TestResult) {
+                TestLoggingUtils.printEachResult(desc, result)
+            }
+        })
     }
 }
