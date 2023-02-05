@@ -11,11 +11,11 @@ pipeline {
             }
         }
 
-        stage('Github clone') {
-            steps {
-                git branch: '${BUILD_BRANCH}', url: 'https://github.com/beaniejoy/dongne-cafe-api.git'
-            }
-        }
+//        stage('Github clone') {
+//            steps {
+//                git branch: '${BUILD_BRANCH}', url: 'https://github.com/beaniejoy/dongne-cafe-api.git'
+//            }
+//        }
 
         stage('Test') {
             steps {
