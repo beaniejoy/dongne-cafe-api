@@ -8,12 +8,17 @@ pipeline {
         stage('Init') {
             steps {
                 sh 'printenv'
+
+                migration_script = './script/db_migration.sh'
             }
         }
 
         stage('DB Migrate') {
             steps {
-                sh './script/db_migration.sh'
+                sh """
+                    chmod 755 ${migration_script}
+                    /bin/bash ${migration_script}
+                """
             }
         }
 
