@@ -1,6 +1,6 @@
 package io.beaniejoy.dongnecafe.domain.cafe.entity
 
-import io.beaniejoy.dongnecafe.common.BaseTimeEntity
+import io.beaniejoy.dongnecafe.common.entity.BaseEntity
 import io.beaniejoy.dongnecafe.domain.cafe.model.request.OptionDetailRegisterRequest
 import javax.persistence.*
 
@@ -8,7 +8,7 @@ import javax.persistence.*
 @Table(name = "menu_option")
 class MenuOption protected constructor(
     title: String
-) : BaseTimeEntity() {
+) : BaseEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "menu_option_id", nullable = false)

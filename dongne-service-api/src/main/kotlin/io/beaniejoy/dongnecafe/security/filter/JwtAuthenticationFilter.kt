@@ -24,9 +24,11 @@ class JwtAuthenticationFilter(
         val httpRequest = request as HttpServletRequest
         log.info { "[JwtAuthenticationFilter][${request.dispatcherType}] uri: ${request.requestURI}" }
 
+        // 인증 헤더에 토큰값 없는 경우 pass
         getAccessToken(httpRequest)?.let {
             jwtTokenUtils.getAuthentication(it)
         }?.also {
+            // 유효한 인증 토큰 존재하는 경우 SecurityContext 토큰값 저장
             SecurityContextHolder.getContext().authentication = it
             log.info { "Valid Access Token [${it.name}]" }
         }
@@ -34,6 +36,10 @@ class JwtAuthenticationFilter(
         chain.doFilter(request, response)
     }
 
+    /**
+     * 인증 토큰 획득
+     * Authorization : Bearer [AUTH_TOKEN]
+     */
     private fun getAccessToken(request: HttpServletRequest): String? {
         val bearer = request.getHeader(HttpHeaders.AUTHORIZATION)
             ?: return null
