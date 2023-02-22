@@ -21,10 +21,10 @@ class SecurityConfig {
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
+            // only api 방식 인증 & 인가 적용 위해 csrf & formLogin 비활성화
             .csrf().disable()
             .formLogin().disable()
 
-            // FIXME 임시 permitAll 설정
             .authorizeRequests()
             .anyRequest().authenticated()
 
@@ -43,6 +43,7 @@ class SecurityConfig {
             .jwtTokenUtils(jwtTokenUtils)
     }
 
+    // Security Filter 미적용 자원 설정
     @Bean
     fun webSecurityCustomizer(): WebSecurityCustomizer {
         return WebSecurityCustomizer { web ->

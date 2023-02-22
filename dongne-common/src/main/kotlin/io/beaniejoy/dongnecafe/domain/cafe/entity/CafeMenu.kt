@@ -1,6 +1,6 @@
 package io.beaniejoy.dongnecafe.domain.cafe.entity
 
-import io.beaniejoy.dongnecafe.common.BaseTimeEntity
+import io.beaniejoy.dongnecafe.common.entity.BaseEntity
 import io.beaniejoy.dongnecafe.domain.cafe.model.request.MenuOptionRegisterRequest
 import java.math.BigDecimal
 import javax.persistence.*
@@ -10,7 +10,7 @@ import javax.persistence.*
 class CafeMenu protected constructor(
     name: String,
     price: BigDecimal,
-) : BaseTimeEntity() {
+) : BaseEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cafe_menu_id", nullable = false)
@@ -33,7 +33,11 @@ class CafeMenu protected constructor(
     val menuOptionList: MutableList<MenuOption> = arrayListOf()
 
     companion object {
-        fun createCafeMenu(name: String, price: BigDecimal, menuOptionRequestList: List<MenuOptionRegisterRequest>): CafeMenu {
+        fun createCafeMenu(
+            name: String,
+            price: BigDecimal,
+            menuOptionRequestList: List<MenuOptionRegisterRequest>
+        ): CafeMenu {
             val menuOptionEntityList = menuOptionRequestList.map { menuOptionRequestDto ->
                 MenuOption.createMenuOption(
                     title = menuOptionRequestDto.title,

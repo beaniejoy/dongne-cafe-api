@@ -1,7 +1,6 @@
 package io.beaniejoy.dongnecafe.domain.cafe.repository
 
 import io.beaniejoy.dongnecafe.common.config.AuditingConfig
-import io.beaniejoy.dongnecafe.common.entity.BaseEntityAuditorAware
 import io.beaniejoy.dongnecafe.domain.cafe.entity.Cafe
 import io.beaniejoy.dongnecafe.domain.cafe.utils.CafeTestUtils
 import mu.KLogging
@@ -17,7 +16,6 @@ import org.springframework.data.repository.findByIdOrNull
 @DataJpaTest(
     includeFilters = [
         ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = [AuditingConfig::class]),
-        ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = [BaseEntityAuditorAware::class])
     ]
 )
 internal class CafeRepositoryTest {
