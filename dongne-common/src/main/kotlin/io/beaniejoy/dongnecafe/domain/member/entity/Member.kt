@@ -1,6 +1,6 @@
 package io.beaniejoy.dongnecafe.domain.member.entity
 
-import io.beaniejoy.dongnecafe.common.BaseTimeEntity
+import io.beaniejoy.dongnecafe.common.entity.BaseEntity
 import io.beaniejoy.dongnecafe.domain.member.constant.RoleType
 import javax.persistence.*
 
@@ -11,7 +11,7 @@ class Member(
     password: String,
     address: String,
     phoneNumber: String
-): BaseTimeEntity() {
+) : BaseEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id", nullable = false)

@@ -1,6 +1,6 @@
 package io.beaniejoy.dongnecafe.domain.cafe.entity
 
-import io.beaniejoy.dongnecafe.common.BaseTimeEntity
+import io.beaniejoy.dongnecafe.common.entity.BaseEntity
 import java.math.BigDecimal
 import javax.persistence.*
 
@@ -9,7 +9,7 @@ import javax.persistence.*
 class OptionDetail protected constructor(
     name: String,
     extraPrice: BigDecimal
-) : BaseTimeEntity() {
+) : BaseEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "option_detail_id", nullable = false)
