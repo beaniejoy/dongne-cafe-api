@@ -1,8 +1,7 @@
 #!/bin/bash
 
-pwd
+echo "#### Flyway Config File: $1"
 
-echo "param: $1"
-#./gradlew :db:flywayInfo -Dconfig=$1
+./gradlew :db:flywayInfo -Dconfig=$1
 
-#./gradlew :db:flywayValidate -Dconfig=$1
+./gradlew :db:flywayValidate -Dconfig=$1
