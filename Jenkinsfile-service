@@ -7,10 +7,12 @@ pipeline {
     stages {
         stage('Init') {
             steps {
-                sh 'printenv'
+                script {
+                    sh 'printenv'
 
-                FLYWAY_CONFIG = '/home/ec2-user/flyway/flyway.conf'
-                MIGRATION_SCRIPT = './script/db_migration.sh'
+                    FLYWAY_CONFIG = '/home/ec2-user/flyway/flyway.conf'
+                    MIGRATION_SCRIPT = './script/db_migration.sh'
+                }
             }
         }
 
