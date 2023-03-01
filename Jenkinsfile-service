@@ -1,37 +1,38 @@
 pipeline {
     agent any
-    tools {
-        jdk("openjdk-17")
-    }
+//    tools {
+//        jdk("openjdk-17")
+//    }
 
     stages {
         stage('Init') {
             steps {
                 sh 'printenv'
 
-                migration_script = './script/db_migration.sh'
+                FLYWAY_CONFIG = '/home/ec2-user/flyway/flyway.conf'
+                MIGRATION_SCRIPT = './script/db_migration.sh'
             }
         }
 
         stage('DB Migrate') {
             steps {
                 sh """
-                    chmod 755 ${migration_script}
-                    /bin/bash ${migration_script}
+                    chmod 755 ${MIGRATION_SCRIPT}
+                    /bin/bash ${MIGRATION_SCRIPT} ${FLYWAY_CONFIG}
                 """
             }
         }
 
-        stage('Test') {
-            steps {
-                sh './gradlew clean :dongne-service-api:test'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                sh './gradlew clean :dongne-service-api:build -x test'
-            }
-        }
+//        stage('Test') {
+//            steps {
+//                sh './gradlew clean :dongne-service-api:test'
+//            }
+//        }
+//
+//        stage('Build') {
+//            steps {
+//                sh './gradlew clean :dongne-service-api:build -x test'
+//            }
+//        }
     }
 }

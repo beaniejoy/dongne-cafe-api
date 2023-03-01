@@ -19,8 +19,7 @@ flyway {
     baselineDescription = "Start Flyway Migration!"
     baselineOnMigrate = true
     baselineVersion = "000"
-    locations = arrayOf("filesystem:./migration", "filesystem:./seed")
-    configFiles = arrayOf("conf/flyway.conf")
+    configFiles = arrayOf(System.getProperty("config") ?: "flyway.conf")
     cleanDisabled = false   // activate flywayClean
     ignoreMigrationPatterns = arrayOf("*:pending")  // ignore validating pending(대기) state
 }
