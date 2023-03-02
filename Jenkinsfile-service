@@ -17,14 +17,14 @@ pipeline {
             }
         }
 
-//        stage('DB Migrate') {
-//            steps {
-//                sh """
-//                    chmod 755 ${MIGRATION_SCRIPT}
-//                    /bin/bash ${MIGRATION_SCRIPT} ${FLYWAY_CONFIG}
-//                """
-//            }
-//        }
+        stage('DB Migrate') {
+            steps {
+                sh """
+                    chmod 755 ${MIGRATION_SCRIPT}
+                    /bin/bash ${MIGRATION_SCRIPT} ${FLYWAY_CONFIG}
+                """
+            }
+        }
 
 //        stage('Test') {
 //            steps {
