@@ -1,8 +1,5 @@
 pipeline {
     agent any
-//    tools {
-//        jdk("openjdk-17")
-//    }
 
     stages {
         stage('Init') {
@@ -26,16 +23,16 @@ pipeline {
             }
         }
 
-//        stage('Test') {
-//            steps {
-//                sh './gradlew clean :dongne-service-api:test'
-//            }
-//        }
-//
-//        stage('Build') {
-//            steps {
-//                sh './gradlew clean :dongne-service-api:build -x test'
-//            }
-//        }
+        stage('Test') {
+            steps {
+                sh './gradlew clean :dongne-service-api:test'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh './gradlew clean :dongne-service-api:build -x test'
+            }
+        }
     }
 }
