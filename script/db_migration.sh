@@ -6,6 +6,6 @@ echo "================ 1. Flyway Info ================"
 echo "================ 2. Flyway Validate ============"
 ./gradlew :db:flywayValidate -Dconfig=$1
 
-echo "================ 3. Flyway Validate ============"
+echo "================ 3. Flyway Migrate ============="
 ./gradlew :db:flywayMigrate -Dconfig=$1
 
