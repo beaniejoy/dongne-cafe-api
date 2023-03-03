@@ -1,19 +1,25 @@
 pipeline {
     agent any
-    tools {
-        jdk("openjdk-17")
-    }
 
     stages {
         stage('Init') {
             steps {
-                sh 'printenv'
+                script {
+                    sh 'whoami'
+                    sh 'printenv'
+
+                    FLYWAY_CONFIG = '/home/ec2-user/flyway/flyway.conf'
+                    MIGRATION_SCRIPT = './script/db_migration.sh'
+                }
             }
         }
 
-        stage('Github clone') {
+        stage('DB Migrate') {
             steps {
-                git branch: '${BUILD_BRANCH}', url: 'https://github.com/beaniejoy/dongne-cafe-api.git'
+                sh """
+                    chmod 755 ${MIGRATION_SCRIPT}
+                    /bin/bash ${MIGRATION_SCRIPT} ${FLYWAY_CONFIG}
+                """
             }
         }
 
