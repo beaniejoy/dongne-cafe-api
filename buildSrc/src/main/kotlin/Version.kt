@@ -15,8 +15,4 @@ object Version {
         const val KOTLIN_LOGGING = "3.0.4"
         const val JWT = "0.11.5"
     }
-
-    object FlywayDB {
-        const val FLYWAY_CORE = "9.8.1"
-    }
 }
