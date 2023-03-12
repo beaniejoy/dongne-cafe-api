@@ -29,7 +29,7 @@
 - `dongne-common`
   - entity, repository, error, security(jwt util) 등 관리하는 공통모듈
 - `db`
-  - flyway migration(gradle) 적용 모듈
+  - flyway migration 관리 디렉토리
 
 <br>
 
