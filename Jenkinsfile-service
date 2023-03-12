@@ -9,17 +9,17 @@ pipeline {
                     sh 'printenv'
 
                     FLYWAY_CONFIG = '/home/ec2-user/flyway/flyway.conf'
-                    MIGRATION_SCRIPT = './script/db_migration.sh'
                 }
             }
         }
 
         stage('DB Migrate') {
             steps {
-                sh """
-                    chmod 755 ${MIGRATION_SCRIPT}
-                    /bin/bash ${MIGRATION_SCRIPT} ${FLYWAY_CONFIG}
-                """
+                flywayrunner installationName: 'flywaytool-jenkins',
+                        flywayCommand: 'info migrate validate',
+                        commandLineArgs: "-configFiles=${FLYWAY_CONFIG}",
+                        credentialsId: 'ecb29499-7272-4e8b-b3ab-a7a3ab7eafab',
+                        locations: "filesystem:${WORKSPACE}/db/migration"
             }
         }
 

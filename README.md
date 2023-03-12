@@ -6,10 +6,18 @@
 <br>
 
 ## Specification
-- java 17
-- kotlin 1.6.21
-- Spring Boot 2.7.0
-- MySQL 8.0.21
+- Lang
+  - java 17
+  - kotlin 1.6.21
+- Framework
+  - Spring Boot 2.7.0
+- DB
+  - MySQL 8.0.21
+  - Flyway(migration)
+- CI/CD
+  - Jenkins
+- Cloud Server
+  - AWS Lightsail(Amazon Linux2)
 
 <br>
 
