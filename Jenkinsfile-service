@@ -22,7 +22,7 @@ pipeline {
 //                """
                 flywayrunner installationName: 'flywaytool-jenkins',
                         flywayCommand: 'info',
-                        commandLineArgs: 'configFiles=/home/ec2-user/flyway/flyway.conf',
+                        commandLineArgs: "-configFiles=${FLYWAY_CONFIG}",
                         url: '',
                         credentialsId: '',
                         locations: ''
