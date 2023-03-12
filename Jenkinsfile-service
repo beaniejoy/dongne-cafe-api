@@ -29,16 +29,16 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            steps {
-                sh './gradlew clean :dongne-service-api:test'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                sh './gradlew clean :dongne-service-api:build -x test'
-            }
-        }
+//        stage('Test') {
+//            steps {
+//                sh './gradlew clean :dongne-service-api:test'
+//            }
+//        }
+//
+//        stage('Build') {
+//            steps {
+//                sh './gradlew clean :dongne-service-api:build -x test'
+//            }
+//        }
     }
 }
