@@ -13,16 +13,16 @@ pipeline {
             }
         }
 
-        stage('DB Migrate') {
-            steps {
-                flywayrunner installationName: 'flywaytool-jenkins',
-                        flywayCommand: 'info migrate validate',
-                        commandLineArgs: "-configFiles=${FLYWAY_CONFIG}",
-                        credentialsId: 'ecb29499-7272-4e8b-b3ab-a7a3ab7eafab',
-                        url: '',
-                        locations: "filesystem:${WORKSPACE}/db/migration"
-            }
-        }
+//        stage('DB Migrate') {
+//            steps {
+//                flywayrunner installationName: 'flywaytool-jenkins',
+//                        flywayCommand: 'info migrate validate',
+//                        commandLineArgs: "-configFiles=${FLYWAY_CONFIG}",
+//                        credentialsId: 'ecb29499-7272-4e8b-b3ab-a7a3ab7eafab',
+//                        url: '',
+//                        locations: "filesystem:${WORKSPACE}/db/migration"
+//            }
+//        }
 
         stage('Test') {
             steps {
