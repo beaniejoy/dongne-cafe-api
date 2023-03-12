@@ -21,9 +21,11 @@ pipeline {
 //                    /bin/bash ${MIGRATION_SCRIPT} ${FLYWAY_CONFIG}
 //                """
                 flywayrunner installationName: '',
-                        flywayCommand: 'info',
+                        flywayCommand: 'migrate',
                         commandLineArgs: 'configFiles=/home/ec2-user/flyway/flyway.conf',
-                        credentialsId: ''
+                        credentialsId: '',
+                        locations: '',
+                        url: ''
             }
         }
 
