@@ -5,11 +5,19 @@
 
 <br>
 
-## Specification
-- java 17
-- kotlin 1.6.21
-- Spring Boot 2.7.0
-- MySQL 8.0.21
+## :pushpin: Specification
+- Lang
+  - java 17
+  - kotlin 1.6.21
+- Framework
+  - Spring Boot 2.7.0
+- DB
+  - MySQL 8.0.21
+  - Flyway(migration)
+- CI/CD
+  - Jenkins
+- Cloud Server
+  - AWS Lightsail(Amazon Linux2)
 
 <br>
 
@@ -25,7 +33,7 @@
 
 <br>
 
-## :pushpin: Run Application
+## :pushpin: Setting
 
 ### 💽 로컬 DB 구성 (docker)
 - local에 DB(MySQL)용 docker container run
@@ -34,31 +42,8 @@
 $ docker run --name mysql-server -e MYSQL_ROOT_PASSWORD=beaniejoy -d -p 3306:3306 mysql:8.0.21
 ```
 
-### 💽 DB Migration (flyway)
-[flyway doc](https://documentation.red-gate.com/fd/flyway-documentation-138346877.html)
-- **Info**  
-Prints the details and status information about all the migrations
-```bash
-$ ./gradlew :db:flywayInfo
-```
-- **Validate**  
-Validates the applied migrations against the available ones  
-DB에 적용된 migration과 local에 적용된 migration 정보 일치 여부 체크
-```bash
-$ ./gradlew :db:flywayValidate
-```
-- **Migrate**  
-Migrates the schema to the latest version
-migration 설정 내용들 반영
-```bash
-$ ./gradlew :db:flywayMigrate
-```
-- **Clean**  
-Drops all objects (tables, views, procedures, triggers, …) in the configured schemas  
-(prodution 단계에서는 절대 사용 X)
-```bash
-$ ./gradlew :db:flywayClean -i
-```
+### 💽 DB Migration (with flyway)
+- [DB migration directory README](https://github.com/beaniejoy/dongne-cafe-api/blob/main/db/README.md)
 
 ### 💽 docker compose 실행(수정 작업 진행중)
 - docker compose를 이용한 nginx, DB(MySQL), application 한꺼번에 실행하는 경우

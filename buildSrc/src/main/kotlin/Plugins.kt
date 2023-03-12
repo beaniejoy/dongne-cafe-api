@@ -15,8 +15,4 @@ object Plugins {
         const val PLUGIN_SPRING = "plugin.spring"
         const val PLUGIN_JPA = "plugin.jpa"
     }
-
-    object FlywayDB {
-        const val FLYWAY = "org.flywaydb.flyway"
-    }
 }

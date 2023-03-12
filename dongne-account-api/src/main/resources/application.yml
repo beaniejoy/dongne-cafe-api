@@ -5,7 +5,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: none # use [service-api] flyway migration
+      ddl-auto: none # use flyway migration
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
