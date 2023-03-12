@@ -8,4 +8,3 @@ echo "================ 2. Flyway Validate ============"
 
 echo "================ 3. Flyway Migrate ============="
 ./gradlew :db:flywayMigrate -Dconfig=$1
-
