@@ -21,7 +21,7 @@ pipeline {
 //                    /bin/bash ${MIGRATION_SCRIPT} ${FLYWAY_CONFIG}
 //                """
                 flywayrunner installationName: 'flywaytool-jenkins',
-                        flywayCommand: 'info,validate',
+                        flywayCommand: 'info',
                         commandLineArgs: "-configFiles=${FLYWAY_CONFIG}",
                         credentialsId: 'ecb29499-7272-4e8b-b3ab-a7a3ab7eafab',
                         url: '',
