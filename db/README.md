@@ -3,8 +3,10 @@
 - flyway version: `9.15.4`
 - [flyway doc](https://documentation.red-gate.com/fd/flyway-documentation-138346877.html)
 
-## :pushpin: Installation
+<br>
 
+## :pushpin: Installation(Local)
+LOCAL 환경에 해당
 ```shell
 $ brew install flyway
 ```
@@ -40,3 +42,15 @@ $ flyway migrate -configFiles=db/flyway.conf
 ```bash
 $ flyway validate -configFiles=db/flyway.conf
 ```
+
+<br>
+
+## :pushpin: Migration for Local Env
+
+```shell
+$ cd [PROJECT_ROOT_DIR]
+
+$ chmod 755 ./script/migration-local.sh
+$ ./script/migration-local.sh
+```
+project의 root directory로 이동하는 것이 중요
