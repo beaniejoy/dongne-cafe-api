@@ -2,6 +2,8 @@ package io.beaniejoy.dongnecafe.common.config
 
 import io.beaniejoy.dongnecafe.security.JwtAuthenticationConfigurer
 import io.beaniejoy.dongnecafe.security.JwtTokenUtils
+import io.beaniejoy.dongnecafe.security.handler.CustomAccessDeniedHandler
+import io.beaniejoy.dongnecafe.security.handler.CustomAuthenticationEntryPoint
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
@@ -18,6 +20,12 @@ class SecurityConfig {
     @Autowired
     lateinit var jwtTokenUtils: JwtTokenUtils
 
+    @Autowired
+    lateinit var customAccessDeniedHandler: CustomAccessDeniedHandler
+
+    @Autowired
+    lateinit var customAuthenticationEntryPoint: CustomAuthenticationEntryPoint
+
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
@@ -26,7 +34,8 @@ class SecurityConfig {
             .formLogin().disable()
 
             .authorizeRequests()
-            .anyRequest().authenticated()
+//            .anyRequest().authenticated()
+            .anyRequest().permitAll()
 
             .and()
             .sessionManagement()
@@ -34,6 +43,11 @@ class SecurityConfig {
 
             .and()
             .also { jwtAuthenticationConfigurer(it) }
+            .exceptionHandling()
+            .authenticationEntryPoint(customAuthenticationEntryPoint)   // 인증 예외 entryPoint 적용
+            .accessDeniedHandler(customAccessDeniedHandler) // 인가 예외 handler 적용
+
+            .and()
             .build()
     }
 

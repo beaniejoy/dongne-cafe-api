@@ -59,8 +59,8 @@ class CafeService(
         }
     }
 
-    fun searchCafeList(pageable: Pageable): Page<CafeSearchInfo> {
-        val cafeList: Page<Cafe> = cafeRepository.findAll(pageable)
+    fun searchCafeList(name: String?, pageable: Pageable): Page<CafeSearchInfo> {
+        val cafeList: Page<Cafe> = cafeRepository.findByNameContainingIgnoreCase(name, pageable)
 
         return cafeList.map { CafeSearchInfo.of(it) }
     }

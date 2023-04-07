@@ -1,3 +1,5 @@
+DROP PROCEDURE IF EXISTS insertCafeImages;
+
 DELIMITER $$
 CREATE PROCEDURE insertCafeImages()
 BEGIN
@@ -15,10 +17,10 @@ BEGIN
 
 		WHILE(j <= 3) DO
 			INSERT IGNORE INTO `cafe_image` (img_url, created_at, created_by, updated_at, updated_by, cafe_id)
-			VALUES (CONCAT('test_img_url_', idx_img), now(), 'system', now(), 'system', var_cafe_id);
+			VALUES (CONCAT('https://d3qy02qh8hbgxp.cloudfront.net/cafe', idx_img, '.jpg'), now(), 'system', now(), 'system', var_cafe_id);
 
 			SET j = j + 1;
-            SET idx_img = idx_img + 1;
+            SET idx_img = idx_img % 7 + 1;
         END WHILE;
 
         SET i = i + 1;

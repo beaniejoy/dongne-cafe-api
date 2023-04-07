@@ -32,8 +32,8 @@ flyway info -configFiles="$PROJECT_ROOT_DIR/db/$FLYWAY_CONFIG_FILE"
 printf "\n"
 
 echo "2. Flyway Migrate"
-flyway migrate -configFiles="$PROJECT_ROOT_DIR/db/$FLYWAY_CONFIG_FILE"
+flyway migrate -configFiles="$PROJECT_ROOT_DIR/db/$FLYWAY_CONFIG_FILE" -outputType=json
 printf "\n"
 
 echo "3. Flyway Validate"
-flyway validate -configFiles="$PROJECT_ROOT_DIR/db/$FLYWAY_CONFIG_FILE"
+flyway validate -configFiles="$PROJECT_ROOT_DIR/db/$FLYWAY_CONFIG_FILE" -outputType=json
