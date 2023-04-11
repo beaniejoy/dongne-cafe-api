@@ -1,4 +1,4 @@
-package io.beaniejoy.dongnecafe.security
+package io.beaniejoy.dongnecafe.security.utils
 
 import io.beaniejoy.dongnecafe.security.constant.SecurityConstant.ANONYMOUS_USER
 import io.beaniejoy.dongnecafe.security.constant.SecurityConstant.ROLE_ANONYMOUS
