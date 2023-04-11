@@ -40,9 +40,10 @@ class CafeController(
      */
     @GetMapping
     fun searchCafeList(
+        @RequestParam("name") name: String?,
         @PageableDefault(sort = ["name"], direction = Sort.Direction.ASC, page = 0, size = 10) pageable: Pageable
     ): ApplicationResponse<Page<CafeSearchInfo>> {
-        val searchCafes = cafeService.searchCafeList(pageable)
+        val searchCafes = cafeService.searchCafeList(name, pageable)
 
         return ApplicationResponse
             .success()

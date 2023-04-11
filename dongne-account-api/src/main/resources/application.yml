@@ -1,3 +1,6 @@
+server:
+  port: 9090
+
 spring:
   profiles:
     active: local
@@ -5,21 +8,16 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: none # use flyway migration
+      ddl-auto: none
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
         show-sql: false
     open-in-view:
-  flyway:
-    enabled: false
   devtools:
     livereload:
       enabled: false # no use devtools' LiveReload Server
-
-server:
-  port: 9090
 
 logging:
   level:

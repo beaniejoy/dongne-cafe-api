@@ -1,5 +1,7 @@
-package io.beaniejoy.dongnecafe.security
+package io.beaniejoy.dongnecafe.security.utils
 
+import io.beaniejoy.dongnecafe.security.SecurityUser
+import io.beaniejoy.dongnecafe.security.constant.SecurityConstant.JWT_AUTHORITIES_KEY
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
@@ -24,9 +26,7 @@ class JwtTokenUtils(
     private val key: Key = Keys.hmacShaKeyFor(secretKey.toByteArray())
     private val validityTimeMilliSec: Long = validityTimeSec * 1000
 
-    companion object : KLogging() {
-        const val AUTHORITIES_KEY = "authorities"
-    }
+    companion object : KLogging()
 
     fun createToken(authentication: Authentication): String {
         val authenticatedMember = (authentication.principal as SecurityUser).member
@@ -37,7 +37,7 @@ class JwtTokenUtils(
 
         return Jwts.builder()
             .setSubject(authenticatedMember.email)
-            .claim(AUTHORITIES_KEY, authorities)
+            .claim(JWT_AUTHORITIES_KEY, authorities)
             .signWith(key, SignatureAlgorithm.HS256)
             .setExpiration(expirationDate)
             .compact()
@@ -47,7 +47,7 @@ class JwtTokenUtils(
         val claims = getValidTokenBody(accessToken)
             ?: return null
 
-        val authorities = claims[AUTHORITIES_KEY].toString().split(",")
+        val authorities = claims[JWT_AUTHORITIES_KEY].toString().split(",")
             .map { SimpleGrantedAuthority(it) }
 
         return UsernamePasswordAuthenticationToken(claims.subject, accessToken, authorities)
@@ -62,10 +62,10 @@ class JwtTokenUtils(
                 .parseClaimsJws(accessToken)
                 .body
         } catch (e: ExpiredJwtException) {
-            logger.error { "JWT access token expired. > Error: ${e.message}" }
+            logger.info { "JWT access token expired. > Error: ${e.message}" }
             null
         } catch (e: Exception) {
-            logger.error { "JWT access token invalid. > Error: ${e.message}" }
+            logger.info { "JWT access token invalid. > Error: ${e.message}" }
             null
         }
     }
