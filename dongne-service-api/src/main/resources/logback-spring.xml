@@ -3,10 +3,10 @@
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
 
-    <!-- pattern -->
+    <!-- Pattern -->
     <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(%5level) [%15.15t] [%X{request_id}] %clr(%-40.40logger{39}){cyan} : %m%n%wEx"/>
-    <!-- Console Appender -->
-    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+    <!-- Request Thread Console Appender -->
+    <appender name="THREAD_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>${LOG_PATTERN}</pattern>
         </encoder>
@@ -14,9 +14,10 @@
 
     <springProfile name="local">
         <logger additivity="false" level="INFO" name="io.beaniejoy.dongnecafe">
-            <appender-ref ref="stdout"/>
+            <appender-ref ref="THREAD_CONSOLE"/>
         </logger>
 
+        <!-- Bootstrap class file -->
         <logger additivity="false" level="INFO" name="io.beaniejoy.dongnecafe.DongneServiceApiApplicationKt">
             <appender-ref ref="CONSOLE"/>
         </logger>
