@@ -1,7 +1,7 @@
 package io.beaniejoy.dongnecafe.controller
 
 import io.beaniejoy.dongnecafe.common.response.ApplicationResponse
-import io.beaniejoy.dongnecafe.security.utils.JwtTokenUtils
+import io.beaniejoy.dongnecafe.utils.security.JwtTokenUtils
 import io.beaniejoy.dongnecafe.domain.member.model.request.SignInRequest
 import io.beaniejoy.dongnecafe.model.TokenResponse
 import io.beaniejoy.dongnecafe.service.AuthService

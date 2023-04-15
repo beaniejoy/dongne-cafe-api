@@ -1,4 +1,4 @@
-package io.beaniejoy.dongnecafe.security
+package io.beaniejoy.dongnecafe.infra.security
 
 import io.beaniejoy.dongnecafe.domain.member.entity.Member
 import org.springframework.security.core.GrantedAuthority

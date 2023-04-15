@@ -67,6 +67,8 @@ subprojects {
 
         // Logging
         implementation("io.github.microutils:kotlin-logging:${Version.Deps.KOTLIN_LOGGING}")
+        implementation("com.google.code.gson:gson")
+
 
         // Test
         testImplementation("org.springframework.boot:spring-boot-starter-test")

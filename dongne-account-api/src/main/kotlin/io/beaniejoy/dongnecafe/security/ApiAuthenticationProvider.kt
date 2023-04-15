@@ -1,6 +1,7 @@
 package io.beaniejoy.dongnecafe.security
 
 import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
+import io.beaniejoy.dongnecafe.infra.security.SecurityUser
 import mu.KLogging
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.BadCredentialsException

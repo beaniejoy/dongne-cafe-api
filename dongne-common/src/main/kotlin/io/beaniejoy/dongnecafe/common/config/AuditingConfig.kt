@@ -1,6 +1,6 @@
 package io.beaniejoy.dongnecafe.common.config
 
-import io.beaniejoy.dongnecafe.security.utils.getAuthPrincipal
+import io.beaniejoy.dongnecafe.utils.security.getAuthPrincipal
 import mu.KLogging
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
