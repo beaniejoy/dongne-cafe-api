@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.util.ContentCachingRequestWrapper
 import org.springframework.web.util.ContentCachingResponseWrapper
 
-// TODO: clientIP에 대해서 고민해보기
 data class HttpLogMessage(
     val httpMethod: String,
     val requestUri: String,
@@ -41,11 +40,11 @@ data class HttpLogMessage(
         return """
         |
         |[REQUEST] ${this.httpMethod} ${this.requestUri} ${this.httpStatus} (${this.elapsedTime})
-        |CLIENT_IP: ${this.clientIp}
-        |HEADERS: ${this.headers}
-        |REQUEST_PARAM: ${this.requestParam}
-        |REQUEST_BODY: ${this.requestBody}
-        |RESPONSE_BODY: ${this.responseBody}
+        |>> CLIENT_IP: ${this.clientIp}
+        |>> HEADERS: ${this.headers}
+        |>> REQUEST_PARAM: ${this.requestParam}
+        |>> REQUEST_BODY: ${this.requestBody}
+        |>> RESPONSE_BODY: ${this.responseBody}
         """.trimMargin()
     }
 }
