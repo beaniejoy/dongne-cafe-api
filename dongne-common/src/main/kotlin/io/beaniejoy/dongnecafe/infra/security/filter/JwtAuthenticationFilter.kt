@@ -1,8 +1,8 @@
-package io.beaniejoy.dongnecafe.security.filter
+package io.beaniejoy.dongnecafe.infra.security.filter
 
 import io.beaniejoy.dongnecafe.utils.security.JwtTokenUtils
-import io.beaniejoy.dongnecafe.security.constant.SecurityConstant.BEARER
-import io.beaniejoy.dongnecafe.security.constant.SecurityConstant.WHITESPACE
+import io.beaniejoy.dongnecafe.infra.security.constant.SecurityConstant.BEARER
+import io.beaniejoy.dongnecafe.infra.security.constant.SecurityConstant.WHITESPACE
 import mu.KotlinLogging
 import org.springframework.http.HttpHeaders
 import org.springframework.security.core.context.SecurityContextHolder

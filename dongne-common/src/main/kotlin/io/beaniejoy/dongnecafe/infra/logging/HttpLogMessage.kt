@@ -1,9 +1,6 @@
-package io.beaniejoy.dongnecafe.infra
+package io.beaniejoy.dongnecafe.infra.logging
 
-import io.beaniejoy.dongnecafe.utils.logging.getRequestBody
-import io.beaniejoy.dongnecafe.utils.logging.getRequestHeaders
-import io.beaniejoy.dongnecafe.utils.logging.getRequestParams
-import io.beaniejoy.dongnecafe.utils.logging.getResponseBody
+import io.beaniejoy.dongnecafe.utils.logging.*
 import org.springframework.http.HttpStatus
 import org.springframework.web.util.ContentCachingRequestWrapper
 import org.springframework.web.util.ContentCachingResponseWrapper
@@ -30,7 +27,7 @@ data class HttpLogMessage(
                 httpMethod = requestWrapper.method,
                 requestUri = requestWrapper.requestURI,
                 httpStatus = HttpStatus.valueOf(responseWrapper.status),
-                clientIp = requestWrapper.remoteAddr,
+                clientIp = requestWrapper.getClientIp(),
                 elapsedTime = elapsedTime,
                 headers = requestWrapper.getRequestHeaders(),
                 requestParam = requestWrapper.getRequestParams(),

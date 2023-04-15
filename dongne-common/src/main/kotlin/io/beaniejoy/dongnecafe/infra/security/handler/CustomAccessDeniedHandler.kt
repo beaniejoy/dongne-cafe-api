@@ -1,4 +1,4 @@
-package io.beaniejoy.dongnecafe.security.handler
+package io.beaniejoy.dongnecafe.infra.security.handler
 
 import mu.KLogging
 import org.springframework.security.access.AccessDeniedException

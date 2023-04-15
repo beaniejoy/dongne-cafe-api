@@ -1,9 +1,9 @@
 package io.beaniejoy.dongnecafe.common.config
 
-import io.beaniejoy.dongnecafe.security.config.JwtAuthenticationConfigurer
+import io.beaniejoy.dongnecafe.infra.security.config.JwtAuthenticationConfigurer
 import io.beaniejoy.dongnecafe.utils.security.JwtTokenUtils
-import io.beaniejoy.dongnecafe.security.handler.CustomAccessDeniedHandler
-import io.beaniejoy.dongnecafe.security.handler.CustomAuthenticationEntryPoint
+import io.beaniejoy.dongnecafe.infra.security.handler.CustomAccessDeniedHandler
+import io.beaniejoy.dongnecafe.infra.security.handler.CustomAuthenticationEntryPoint
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean

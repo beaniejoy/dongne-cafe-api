@@ -1,4 +1,4 @@
-package io.beaniejoy.dongnecafe.infra
+package io.beaniejoy.dongnecafe.infra.logging
 
 import mu.KotlinLogging
 import org.slf4j.MDC
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-class RequestResponseLoggingFilter : OncePerRequestFilter() {
+class ReqResLoggingFilter : OncePerRequestFilter() {
     private val log = KotlinLogging.logger {}
 
     companion object {
@@ -49,9 +49,9 @@ class RequestResponseLoggingFilter : OncePerRequestFilter() {
 
             cachingResponseWrapper.copyBodyToResponse()
         } catch (e: Exception) {
-            log.error(e) { "[RequestResponseLoggingFilter] logging 실패" }
-        } finally {
-            MDC.remove(REQUEST_ID)
+            log.error(e) { "[${this::class.simpleName}] Logging 실패" }
         }
+
+        MDC.remove(REQUEST_ID)
     }
 }
