@@ -9,8 +9,8 @@ import javax.persistence.*
 class Member(
     email: String,
     password: String,
-    address: String,
-    phoneNumber: String
+    address: String?,
+    phoneNumber: String?
 ) : BaseEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,12 +25,12 @@ class Member(
     var password: String = password
         protected set
 
-    @Column(name = "address", nullable = false)
-    var address: String = address
+    @Column(name = "address")
+    var address: String? = address
         protected set
 
-    @Column(name = "phone_number", nullable = false)
-    var phoneNumber: String = phoneNumber
+    @Column(name = "phone_number")
+    var phoneNumber: String? = phoneNumber
         protected set
 
     @Enumerated(EnumType.STRING)
@@ -46,8 +46,8 @@ class Member(
         fun createMember(
             email: String,
             password: String,
-            address: String,
-            phoneNumber: String
+            address: String?,
+            phoneNumber: String?
         ): Member {
             return Member(
                 email = email,

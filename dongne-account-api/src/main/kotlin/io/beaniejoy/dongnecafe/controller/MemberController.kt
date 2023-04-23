@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController
 class MemberController(
     private val memberService: MemberService
 ) {
-    @PostMapping("/sign-up")
-    fun signUp(@RequestBody resource: MemberRegisterRequest): ApplicationResponse<Long> {
+    @PostMapping("/join")
+    fun joinMember(@RequestBody resource: MemberRegisterRequest): ApplicationResponse<Long> {
         val registerMemberId = memberService.registerMember(resource)
 
         return ApplicationResponse

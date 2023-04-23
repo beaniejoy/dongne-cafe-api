@@ -24,8 +24,8 @@ class MemberService(
             Member.createMember(
                 email = resource.email!!,
                 password = passwordEncoder.encode(resource.password!!),
-                address = resource.address!!,
-                phoneNumber = resource.phoneNumber!!
+                address = resource.address,
+                phoneNumber = resource.phoneNumber
             )
         )
 

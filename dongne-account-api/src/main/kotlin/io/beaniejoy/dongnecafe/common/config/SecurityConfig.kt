@@ -34,7 +34,7 @@ class SecurityConfig {
             .csrf().disable()
 
             .authorizeRequests()
-            .antMatchers("/auth/members/sign-up").permitAll()
+            .antMatchers("/auth/members/join").permitAll()
             .antMatchers("/auth/authenticate").permitAll()
             .anyRequest().authenticated()
 
