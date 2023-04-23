@@ -1,5 +1,7 @@
 #!/bin/bash
 
+COMMAND=$1
+
 PROJECT_NAME="dongne-cafe-api"
 PROJECT_ROOT_DIR=$(pwd)
 FLYWAY_CONFIG_FILE="flyway-local.conf"
@@ -37,6 +39,8 @@ error_check() {
 }
 
 flyway_migration_process() {
+  echo "########### [LOCAL] DB Migration ###########"
+
   STEP_1="1. Flyway Info"
   STEP_2="2. Flyway Migrate"
   STEP_3="3. Flyway Validate"
@@ -54,7 +58,36 @@ flyway_migration_process() {
   error_check "$STEP_3"
 }
 
-echo "########### [LOCAL] DB Migration ###########"
+flyway_repair() {
+  echo "########### [LOCAL] Repair Flyway Migration ###########"
+
+  STEP_1="1. Flyway Repair"
+  flyway repair -configFiles="$PROJECT_ROOT_DIR/db/$FLYWAY_CONFIG_FILE" -outputType=json
+  error_check "$STEP_1"
+}
+
+flyway_clean() {
+  echo "########### [LOCAL] Repair Flyway Clean ###########"
+
+  STEP_1="1. Flyway Clean"
+  flyway clean -configFiles="$PROJECT_ROOT_DIR/db/$FLYWAY_CONFIG_FILE" -outputType=json
+  error_check "$STEP_1"
+}
+
 check_project_root_path
 flyway_version_check
-flyway_migration_process
+
+case "$COMMAND" in
+  migrate)
+    flyway_migration_process
+    ;;
+  repair)
+    flyway_repair
+    ;;
+  clean)
+    flyway_clean
+    ;;
+esac
+
+echo -n "##### "
+date +%Y-%m-%d_%H:%M:%S

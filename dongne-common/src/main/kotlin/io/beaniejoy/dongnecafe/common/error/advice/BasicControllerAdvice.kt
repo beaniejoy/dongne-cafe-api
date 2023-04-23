@@ -22,7 +22,8 @@ class BasicControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception::class)
     fun handleException(e: Exception): ApplicationResponse<Nothing> {
-        logger.error { "[COMMON][${e::class.simpleName}] $e" }
+        logger.error { "[COMMON][${e::class.simpleName}]" }
+        e.printStackTrace()
         return ApplicationResponse.fail(errorCode = ErrorCode.COMMON_SERVER_ERROR).build()
     }
 
@@ -35,6 +36,7 @@ class BasicControllerAdvice {
     @ExceptionHandler(BusinessException::class)
     fun handleBusinessException(e: BusinessException): ApplicationResponse<Nothing> {
         logger.error { "[${BusinessException::class.simpleName}] <ErrorCode>: ${e.errorCode.name}, <ErrorMessage>: ${e.message}" }
+        e.printStackTrace()
         return ApplicationResponse.fail(errorCode = e.errorCode).build()
     }
 
@@ -53,6 +55,7 @@ class BasicControllerAdvice {
         }
 
         logger.error { "[${e::class.simpleName}] <ErrorCode>: ${errorCode.name}, <ErrorMessage>: ${e.message}" }
+        e.printStackTrace()
         return ApplicationResponse.fail(errorCode = errorCode).build()
     }
 }
