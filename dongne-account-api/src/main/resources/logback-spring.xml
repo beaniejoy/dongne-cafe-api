@@ -22,6 +22,11 @@
             <appender-ref ref="CONSOLE"/>
         </logger>
 
+        <!-- Hikari Connection Pool Setting -->
+        <logger additivity="false" level="DEBUG" name="com.zaxxer.hikari.HikariConfig">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
         </root>
