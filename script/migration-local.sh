@@ -2,6 +2,9 @@
 
 COMMAND=$1
 
+# flyway telemetry disabled
+export REDGATE_DISABLE_TELEMETRY=true
+
 PROJECT_NAME="dongne-cafe-api"
 PROJECT_ROOT_DIR=$(pwd)
 FLYWAY_CONFIG_FILE="flyway-local.conf"
@@ -50,11 +53,11 @@ flyway_migration_process() {
   error_check "$STEP_1"
 
   echo $STEP_2
-  flyway migrate -configFiles="$PROJECT_ROOT_DIR/db/$FLYWAY_CONFIG_FILE" -outputType=json
+  flyway migrate -configFiles="$PROJECT_ROOT_DIR/db/$FLYWAY_CONFIG_FILE"
   error_check "$STEP_2"
 
   echo $STEP_3
-  flyway validate -configFiles="$PROJECT_ROOT_DIR/db/$FLYWAY_CONFIG_FILE" -outputType=json
+  flyway validate -configFiles="$PROJECT_ROOT_DIR/db/$FLYWAY_CONFIG_FILE"
   error_check "$STEP_3"
 }
 
@@ -62,7 +65,7 @@ flyway_repair() {
   echo "########### [LOCAL] Repair Flyway Migration ###########"
 
   STEP_1="1. Flyway Repair"
-  flyway repair -configFiles="$PROJECT_ROOT_DIR/db/$FLYWAY_CONFIG_FILE" -outputType=json
+  flyway repair -configFiles="$PROJECT_ROOT_DIR/db/$FLYWAY_CONFIG_FILE"
   error_check "$STEP_1"
 }
 
@@ -70,7 +73,7 @@ flyway_clean() {
   echo "########### [LOCAL] Repair Flyway Clean ###########"
 
   STEP_1="1. Flyway Clean"
-  flyway clean -configFiles="$PROJECT_ROOT_DIR/db/$FLYWAY_CONFIG_FILE" -outputType=json
+  flyway clean -configFiles="$PROJECT_ROOT_DIR/db/$FLYWAY_CONFIG_FILE"
   error_check "$STEP_1"
 }
 

@@ -18,7 +18,7 @@
         </logger>
 
         <!-- Bootstrap class file -->
-        <logger additivity="false" level="INFO" name="io.beaniejoy.dongnecafe.DongneServiceApiApplicationKt">
+        <logger additivity="false" level="INFO" name="io.beaniejoy.dongnecafe.DongneAccountApiApplication">
             <appender-ref ref="CONSOLE"/>
         </logger>
 
