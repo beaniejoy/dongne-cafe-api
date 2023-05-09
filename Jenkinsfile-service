@@ -8,7 +8,7 @@ pipeline {
                     sh 'whoami'
                     sh 'printenv'
 
-                    FLYWAY_CONFIG = '/home/ec2-user/flyway/flyway.conf'
+                    FLYWAY_CONFIG = '/home/admin/flyway/flyway.conf'
                 }
             }
         }
@@ -18,7 +18,7 @@ pipeline {
                 flywayrunner installationName: 'flywaytool-jenkins',
                         flywayCommand: 'info migrate validate',
                         commandLineArgs: "-configFiles=${FLYWAY_CONFIG}",
-                        credentialsId: 'ecb29499-7272-4e8b-b3ab-a7a3ab7eafab',
+                        credentialsId: 'b873f9bf-03cc-4daf-be4f-7e00194aa2a0',
                         url: '',
                         locations: "filesystem:${WORKSPACE}/db/migration"
             }
