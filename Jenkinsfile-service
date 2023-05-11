@@ -1,6 +1,9 @@
 pipeline {
     agent any
 
+    // Disallow concurrent executions of the Pipeline.
+    options { disableConcurrentBuilds() }
+
     stages {
         stage('Init') {
             steps {
