@@ -8,6 +8,7 @@ pipeline {
                     sh 'whoami'
                     sh 'printenv'
 
+                    MODULE_NAME = 'dongne-service-api'
                     FLYWAY_CONFIG = '/home/admin/flyway/flyway.conf'
                 }
             }
@@ -26,13 +27,49 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh './gradlew clean :dongne-service-api:test'
+                sh "./gradlew clean :${MODULE_NAME}:test"
             }
         }
 
         stage('Build') {
             steps {
-                sh './gradlew clean :dongne-service-api:build -x test'
+                sh "./gradlew clean :${MODULE_NAME}:build -x test"
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploy JAR file'
+                sshPublisher(publishers: [
+                        sshPublisherDesc(
+                                configName: 'app-server',
+                                transfers: [
+                                        sshTransfer(
+                                                cleanRemote: false,
+                                                excludes: '',
+                                                execCommand: '',
+                                                execTimeout: 120000,
+                                                flatten: false,
+                                                makeEmptyDirs: false,
+                                                noDefaultExcludes: false,
+                                                patternSeparator: '[, ]+',
+                                                remoteDirectory: 'deploy',
+                                                remoteDirectorySDF: false,
+                                                removePrefix: "${MODULE_NAME}/build/libs",
+                                                sourceFiles: "${MODULE_NAME}/build/libs/${MODULE_NAME}.jar"
+                                        )
+                                ],
+                                usePromotionTimestamp: false,
+                                useWorkspaceInPromotion: false,
+                                verbose: false
+                        )
+                ])
+            }
+        }
+
+        stage('Run Application with Ansible') {
+            steps {
+                echo 'Run Application with Ansible'
             }
         }
     }

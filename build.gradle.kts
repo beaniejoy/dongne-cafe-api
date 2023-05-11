@@ -20,7 +20,7 @@ plugins {
 
 allprojects {
     group = "io.beaniejoy.dongecafe"
-    version = Version.PROJECT_VERSION
+//    version = Version.PROJECT_VERSION
 
     repositories {
         mavenCentral()
