@@ -1,0 +1,27 @@
+---
+- name: Test Playbook
+  hosts: all
+
+  vars:
+    module_name: dongne-service-api
+
+  tasks:
+    - name: Register JAR file existence status
+      ansible.builtin.stat:
+        path: "/home/ec2-user/deploy/{{ module_name }}.jar"
+      register: file_status
+
+    - name: Check if JAR file exists
+      block:
+        - name: Check 'file_status'
+          ansible.builtin.fail:
+            msg: "{{ module_name }}.jar does not exist"
+          when: not file_status.stat.exists
+
+        - name: Print success message
+          ansible.builtin.debug:
+            msg: "{{ module_name }}.jar exists!!"
+
+    - name: Finish
+      ansible.builtin.debug:
+        msg: "All tasks completed!!"
