@@ -21,7 +21,14 @@ pipeline {
                     sh 'printenv'
 
                     MODULE_NAME = 'dongne-service-api'
+
+                    // flyway migration
                     FLYWAY_CONFIG = "${HOME}/flyway/flyway.conf"
+                    FLYWAY_MIGRATION_LOCATION = "${WORKSPACE}/db/migration"
+
+                    // ansible playbook
+                    ANSIBLE_INVENTORY = "${HOME}/ansible/inventory"
+                    ANSIBLE_PLAYBOOK = "${WORKSPACE}/scripts/deploy/playbook/run-app.yml"
                 }
             }
         }
@@ -36,7 +43,7 @@ pipeline {
                         commandLineArgs: "-configFiles=${FLYWAY_CONFIG}",
                         credentialsId: 'b873f9bf-03cc-4daf-be4f-7e00194aa2a0',
                         url: '',
-                        locations: "filesystem:${WORKSPACE}/db/migration"
+                        locations: "filesystem:${FLYWAY_MIGRATION_LOCATION}"
             }
         }
 
@@ -99,8 +106,8 @@ pipeline {
                 }
             }
             steps {
-                ansiblePlaybook inventory: "${HOME}/ansible/inventory",
-                        playbook: "${WORKSPACE}/scripts/deploy/run-app.yml",
+                ansiblePlaybook inventory: "${ANSIBLE_INVENTORY}",
+                        playbook: "${ANSIBLE_PLAYBOOK}",
                         extraVars: [
                                 module_name: "${MODULE_NAME}"
                         ]
