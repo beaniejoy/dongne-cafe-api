@@ -3,7 +3,7 @@
   hosts: ec2
 
   vars_files:
-    - /group_vars/all.yml
+    - ./vars/all.yml
 
   tasks:
     - name: Register JAR file existence status
