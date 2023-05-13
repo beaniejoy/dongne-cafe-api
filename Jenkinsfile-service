@@ -9,7 +9,7 @@ pipeline {
         choice(
                 name: 'PIPELINE_TARGET',
                 choices: ['ALL', 'RUN'],
-                defaultValue: 'ALL',
+                defaultValue: 'RUN',
                 description: 'set target pipeline stages'
         )
     }
