@@ -7,7 +7,7 @@ pipeline {
     parameters {
         // Choice of pipeline target stages
         choice(
-                name: 'PIPELINE_TARGET',
+                name: 'PIPELINE_STAGE_TARGET',
                 choices: ['ALL', 'RUN'],
                 description: 'set target pipeline stages'
         )
@@ -21,7 +21,7 @@ pipeline {
                     sh 'printenv'
 
                     MODULE_NAME = 'dongne-service-api'
-                    FLYWAY_CONFIG = '/home/admin/flyway/flyway.conf'
+                    FLYWAY_CONFIG = "${HOME}/flyway/flyway.conf"
                 }
             }
         }
@@ -99,7 +99,8 @@ pipeline {
                 }
             }
             steps {
-                echo 'Run Application with Ansible'
+                ansiblePlaybook inventory: '/home/admin/ansible/inventory',
+                        playbook: './script/deploy/run-app.yml'
             }
         }
     }
