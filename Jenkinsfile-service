@@ -4,7 +4,7 @@ pipeline {
     // Disallow concurrent executions of the Pipeline.
     options { disableConcurrentBuilds() }
 
-    paramters {
+    parameters {
         // Choice of pipeline target stages
         choice(
                 name: 'PIPELINE_TARGET',
