@@ -8,7 +8,7 @@
   tasks:
     - name: Register JAR file existence status
       ansible.builtin.stat:
-        path: "{{ remote_workspace }}/deplo/{{ module_name }}.jar"
+        path: "{{ remote_workspace }}/deploy/{{ module_name }}.jar"
       register: file_status
 
     - name: Check if JAR file exists
@@ -21,6 +21,19 @@
         - name: Print success message
           ansible.builtin.debug:
             msg: "{{ module_name }}.jar exists!!"
+
+    - name: Copy JAR file for running application
+      ansible.builtin.copy:
+        src: "{{ remote_workspace }}/deploy/{{ module_name }}.jar"
+        remote_src: yes
+        dest: "{{ remote_workspace }}/app/{{ module_name }}.jar"
+        owner: "{{ remote_user }}"
+        group: "{{ remote_group }}"
+
+    - name: Remove deployed JAR file
+      ansible.builtin.file:
+        state: absent
+        path: "{{ remote_workspace }}/deploy/{{ module_name }}.jar"
 
     - name: Finish
       ansible.builtin.debug:
