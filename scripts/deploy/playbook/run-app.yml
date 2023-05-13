@@ -8,7 +8,7 @@
   tasks:
     - name: Register JAR file existence status
       ansible.builtin.stat:
-        path: "{{ remote_workspace }}/deploy/{{ module_name }}.jar"
+        path: "{{ remote_workspace }}/deplo/{{ module_name }}.jar"
       register: file_status
 
     - name: Check if JAR file exists
