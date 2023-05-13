@@ -2,9 +2,6 @@
 - name: Test Playbook
   hosts: ec2
 
-  vars:
-    module_name: dongne-service-api
-
   tasks:
     - name: Register JAR file existence status
       ansible.builtin.stat:

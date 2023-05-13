@@ -99,8 +99,11 @@ pipeline {
                 }
             }
             steps {
-                ansiblePlaybook inventory: '/home/admin/ansible/inventory',
-                        playbook: './script/deploy/run-app.yml'
+                ansiblePlaybook inventory: "${HOME}/ansible/inventory",
+                        playbook: './script/deploy/run-app.yml',
+                        extraVars: [
+                                module_name: "${MODULE_NAME}"
+                        ]
             }
         }
     }
