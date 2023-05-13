@@ -4,6 +4,16 @@ pipeline {
     // Disallow concurrent executions of the Pipeline.
     options { disableConcurrentBuilds() }
 
+    paramters {
+        // Choice of pipeline target stages
+        choice(
+                name: 'PIPELINE_TARGET',
+                choices: ['ALL', 'RUN'],
+                defaultValue: 'ALL',
+                description: 'set target pipeline stages'
+        )
+    }
+
     stages {
         stage('Init') {
             steps {
@@ -18,6 +28,9 @@ pipeline {
         }
 
         stage('DB Migrate') {
+            when {
+                expression { params.PIPELINE_TARGET == 'ALL' }
+            }
             steps {
                 flywayrunner installationName: 'flywaytool-jenkins',
                         flywayCommand: 'info migrate validate',
@@ -29,18 +42,27 @@ pipeline {
         }
 
         stage('Test') {
+            when {
+                expression { params.PIPELINE_TARGET == 'ALL' }
+            }
             steps {
                 sh "./gradlew clean :${MODULE_NAME}:test"
             }
         }
 
         stage('Build') {
+            when {
+                expression { params.PIPELINE_TARGET == 'ALL' }
+            }
             steps {
                 sh "./gradlew clean :${MODULE_NAME}:build -x test"
             }
         }
 
         stage('Deploy') {
+            when {
+                expression { params.PIPELINE_TARGET == 'ALL' }
+            }
             steps {
                 echo 'Deploy JAR file'
                 sshPublisher(publishers: [
@@ -71,6 +93,12 @@ pipeline {
         }
 
         stage('Run Application with Ansible') {
+            when {
+                anyOf {
+                    expression { params.PIPELINE_TARGET == 'ALL' }
+                    expression { params.PIPELINE_TARGET == 'RUN' }
+                }
+            }
             steps {
                 echo 'Run Application with Ansible'
             }
