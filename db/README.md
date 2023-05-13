@@ -50,7 +50,7 @@ $ flyway validate -configFiles=db/flyway.conf
 ```shell
 $ cd [PROJECT_ROOT_DIR]
 
-$ chmod 755 ./script/migration-local.sh
-$ ./script/migration-local.sh
+$ chmod 755 ./scripts/migrate/migration-local.sh
+$ ./scripts/migrate/migration-local.sh
 ```
 project의 root directory로 이동하는 것이 중요

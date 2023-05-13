@@ -2,10 +2,13 @@
 - name: Test Playbook
   hosts: ec2
 
+  vars_files:
+    - /group_vars/all.yml
+
   tasks:
     - name: Register JAR file existence status
       ansible.builtin.stat:
-        path: "/home/ec2-user/deploy/{{ module_name }}.jar"
+        path: "{{ remote_workspace }}/deploy/{{ module_name }}.jar"
       register: file_status
 
     - name: Check if JAR file exists

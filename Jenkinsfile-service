@@ -100,7 +100,7 @@ pipeline {
             }
             steps {
                 ansiblePlaybook inventory: "${HOME}/ansible/inventory",
-                        playbook: './script/deploy/run-app.yml',
+                        playbook: "${WORKSPACE}/scripts/deploy/run-app.yml",
                         extraVars: [
                                 module_name: "${MODULE_NAME}"
                         ]

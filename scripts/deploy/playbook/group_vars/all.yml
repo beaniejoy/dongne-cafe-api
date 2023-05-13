@@ -1,0 +1,2 @@
+user: ec2-user
+remote_workspace: "/home/{{ user }}"
