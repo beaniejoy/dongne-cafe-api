@@ -2,6 +2,7 @@ spring:
   profiles:
     active: local
   datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       connection-timeout: 3000
       validation-timeout: 1000

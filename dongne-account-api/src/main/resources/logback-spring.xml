@@ -26,6 +26,9 @@
         <logger additivity="false" level="DEBUG" name="com.zaxxer.hikari.HikariConfig">
             <appender-ref ref="CONSOLE"/>
         </logger>
+        <logger additivity="false" level="DEBUG" name="com.zaxxer.hikari.pool.HikariPool">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
 
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
