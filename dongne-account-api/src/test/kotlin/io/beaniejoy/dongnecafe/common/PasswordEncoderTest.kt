@@ -19,5 +19,4 @@ class PasswordEncoderTest {
         val encodedPw = passwordEncoder.encode("1111")
         assertEquals("{bcrypt}\$2a$10\$Wb71jZO9Z.1HXozEnmtqdOHSxCJjn9jMcVWNzqCgd7SW.nZj/1kC2", encodedPw)
     }
-
 }

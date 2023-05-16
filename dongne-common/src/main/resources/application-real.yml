@@ -1,0 +1,13 @@
+spring:
+  config:
+    import: optional:file:./env/.env-real
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DATABASE_HOST}/dongne
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    hikari:
+      maximum-pool-size: 5
+jwt:
+  secret_key: ${SECRET_KEY}
+  validity_time_in_sec: ${SECRET_KEY_VALIDITY_TIME}
