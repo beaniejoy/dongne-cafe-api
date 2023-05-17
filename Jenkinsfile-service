@@ -23,8 +23,9 @@ pipeline {
                     MODULE_NAME = 'dongne-service-api'
 
                     // flyway migration
-                    FLYWAY_CONFIG = "${HOME}/flyway/flyway.conf"
-                    FLYWAY_MIGRATION_LOCATION = "${WORKSPACE}/db/migration"
+//                    FLYWAY_CONFIG = "${HOME}/flyway/flyway.conf"
+//                    FLYWAY_MIGRATION_LOCATION = "${WORKSPACE}/db/migration"
+                    FLYWAY_LOCATION = "${WORKSPACE}/db"
 
                     // ansible playbook
                     ANSIBLE_INVENTORY = "${HOME}/ansible/inventory"
@@ -40,10 +41,10 @@ pipeline {
             steps {
                 flywayrunner installationName: 'flywaytool-jenkins',
                         flywayCommand: 'info migrate validate',
-                        commandLineArgs: "-configFiles=${FLYWAY_CONFIG}",
+                        commandLineArgs: "-configFiles=${FLYWAY_LOCATION}/flyway-prod.conf",
                         credentialsId: 'b873f9bf-03cc-4daf-be4f-7e00194aa2a0',
-                        url: '',
-                        locations: "filesystem:${FLYWAY_MIGRATION_LOCATION}"
+                        url: "jdbc:mysql://${DATABASE_HOST}:3306/dongne",
+                        locations: ''
             }
         }
 
@@ -109,7 +110,9 @@ pipeline {
                 ansiblePlaybook inventory: "${ANSIBLE_INVENTORY}",
                         playbook: "${ANSIBLE_PLAYBOOK}",
                         extraVars: [
-                                module_name: "${MODULE_NAME}"
+                                module_name: "${MODULE_NAME}",
+                                jenkins_home: "${HOME}",
+                                database_host: "${DATABASE_HOST}"
                         ]
             }
         }

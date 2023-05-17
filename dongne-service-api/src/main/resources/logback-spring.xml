@@ -12,7 +12,7 @@
         </encoder>
     </appender>
 
-    <springProfile name="local">
+    <springProfile name="local,prod">
         <logger additivity="false" level="INFO" name="io.beaniejoy.dongnecafe">
             <appender-ref ref="THREAD_CONSOLE"/>
         </logger>
