@@ -7,10 +7,6 @@
     - "{{ jenkins_home }}/ansible/vars/app_config.yml"
 
   tasks:
-    - name: DEBUG
-      ansible.builtin.debug:
-        msg: "{{ database_host }} and {{ secret_key }}"
-
     - name: Register JAR file existence status
       ansible.builtin.stat:
         path: "{{ remote_workspace }}/deploy/{{ module_name }}.jar"
@@ -34,6 +30,18 @@
         dest: "{{ remote_workspace }}/app/{{ module_name }}.jar"
         owner: "{{ remote_server_user }}"
         group: "{{ remote_server_group }}"
+        mode: 0644
+
+    - name: Copy env file to remote server
+      ansible.builtin.template:
+        src: templates/.env.j2
+        dest: "{{ remote_workspace }}/app/env/.env"
+        owner: "{{ remote_server_user }}"
+        group: "{{ remote_server_group }}"
+        mode: 0644
+
+    - name: Export env file location variable
+      ansible.builtin.command: "export ENV_LOCATION={{ remote_workspace }}/app"
 
     - name: Remove deployed JAR file
       ansible.builtin.file:
