@@ -20,7 +20,7 @@ plugins {
 
 allprojects {
     group = "io.beaniejoy.dongecafe"
-    version = Version.PROJECT_VERSION
+//    version = Version.PROJECT_VERSION
 
     repositories {
         mavenCentral()
@@ -50,7 +50,6 @@ subprojects {
         implementation("org.springframework.boot:spring-boot-starter-validation")
         implementation("org.springframework.boot:spring-boot-starter-security")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-        developmentOnly("org.springframework.boot:spring-boot-devtools")
 
         //kotlin
         implementation("org.jetbrains.kotlin:kotlin-reflect")

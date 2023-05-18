@@ -1,6 +1,18 @@
 pipeline {
     agent any
 
+    // Disallow concurrent executions of the Pipeline.
+    options { disableConcurrentBuilds() }
+
+    parameters {
+        // Choice of pipeline target stages
+        choice(
+                name: 'PIPELINE_STAGE_TARGET',
+                choices: ['ALL', 'DB_VALIDATE', 'TEST', 'BUILD', 'RUN_APPLICATION'],
+                description: 'set target pipeline stages'
+        )
+    }
+
     stages {
         stage('Init') {
             steps {
@@ -8,31 +20,124 @@ pipeline {
                     sh 'whoami'
                     sh 'printenv'
 
-                    FLYWAY_CONFIG = '/home/admin/flyway/flyway.conf'
+                    SPRING_PROFILE = 'prod'
+                    MODULE_NAME = 'dongne-service-api'
+
+                    // DB Connection Credential
+                    DB_CONNECTION_CREDENTIAL = 'b873f9bf-03cc-4daf-be4f-7e00194aa2a0'
+                    withCredentials([
+                            usernamePassword(
+                                    credentialsId: "${DB_CONNECTION_CREDENTIAL}",
+                                    usernameVariable: 'username',
+                                    passwordVariable: 'password'
+                            )
+                    ]) {
+                        DATABASE_USERNAME = "${username}"
+                        DATABASE_PASSWORD = "${password}"
+                    }
+
+                    // flyway migration
+                    MIGRATION_WORKSPACE = "${WORKSPACE}/db"
+
+                    // ansible playbook
+                    ANSIBLE_INVENTORY = "${HOME}/ansible/inventory"
+                    ANSIBLE_PLAYBOOK = "${WORKSPACE}/scripts/deploy/playbook/run-app.yml"
                 }
             }
         }
 
-        stage('DB Migrate') {
+        stage('DB Validate') {
+            when {
+                anyOf {
+                    expression { params.PIPELINE_STAGE_TARGET == 'ALL' }
+                    expression { params.PIPELINE_STAGE_TARGET == 'DB_VALIDATE' }
+                }
+            }
             steps {
                 flywayrunner installationName: 'flywaytool-jenkins',
-                        flywayCommand: 'info migrate validate',
-                        commandLineArgs: "-configFiles=${FLYWAY_CONFIG}",
-                        credentialsId: 'b873f9bf-03cc-4daf-be4f-7e00194aa2a0',
-                        url: '',
-                        locations: "filesystem:${WORKSPACE}/db/migration"
+                        flywayCommand: 'info validate',
+                        commandLineArgs: "-configFiles=${MIGRATION_WORKSPACE}/flyway-${SPRING_PROFILE}.conf",
+                        credentialsId: "${DB_CONNECTION_CREDENTIAL}",
+                        url: "jdbc:mysql://${DATABASE_HOST}:3306/dongne",
+                        locations: "filesystem:${MIGRATION_WORKSPACE}/migration"
             }
         }
 
         stage('Test') {
+            when {
+                anyOf {
+                    expression { params.PIPELINE_STAGE_TARGET == 'ALL' }
+                    expression { params.PIPELINE_STAGE_TARGET == 'TEST' }
+                }
+            }
             steps {
-                sh './gradlew clean :dongne-service-api:test'
+                sh "./gradlew clean :${MODULE_NAME}:test"
             }
         }
 
         stage('Build') {
+            when {
+                anyOf {
+                    expression { params.PIPELINE_STAGE_TARGET == 'ALL' }
+                    expression { params.PIPELINE_STAGE_TARGET == 'BUILD' }
+                }
+            }
             steps {
-                sh './gradlew clean :dongne-service-api:build -x test'
+                sh "./gradlew clean :${MODULE_NAME}:build -x test"
+            }
+        }
+
+        stage('Deploy') {
+            when {
+                expression { params.PIPELINE_STAGE_TARGET == 'ALL' }
+            }
+            steps {
+                echo 'Deploy JAR file'
+                sshPublisher(publishers: [
+                        sshPublisherDesc(
+                                configName: 'app-server',
+                                transfers: [
+                                        sshTransfer(
+                                                cleanRemote: false,
+                                                excludes: '',
+                                                execCommand: '',
+                                                execTimeout: 120000,
+                                                flatten: false,
+                                                makeEmptyDirs: false,
+                                                noDefaultExcludes: false,
+                                                patternSeparator: '[, ]+',
+                                                remoteDirectory: 'deploy',
+                                                remoteDirectorySDF: false,
+                                                removePrefix: "${MODULE_NAME}/build/libs",
+                                                sourceFiles: "${MODULE_NAME}/build/libs/${MODULE_NAME}.jar"
+                                        )
+                                ],
+                                usePromotionTimestamp: false,
+                                useWorkspaceInPromotion: false,
+                                verbose: false
+                        )
+                ])
+            }
+        }
+
+        stage('Run Application with Ansible') {
+            when {
+                anyOf {
+                    expression { params.PIPELINE_STAGE_TARGET == 'ALL' }
+                    expression { params.PIPELINE_STAGE_TARGET == 'RUN_APPLICATION' }
+                }
+            }
+            steps {
+                ansiblePlaybook inventory: "${ANSIBLE_INVENTORY}",
+                        playbook: "${ANSIBLE_PLAYBOOK}",
+                        extraVars: [
+                                module_name: "${MODULE_NAME}",
+                                jenkins_user_home: "${HOME}",
+                                spring_profile: "${SPRING_PROFILE}",
+                                database_host: "${DATABASE_HOST}",
+                                database_username: "${DATABASE_USERNAME}",
+                                database_password: "${DATABASE_PASSWORD}"
+                        ]
             }
         }
     }

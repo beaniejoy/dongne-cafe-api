@@ -12,7 +12,7 @@
         </encoder>
     </appender>
 
-    <springProfile name="local">
+    <springProfile name="local,prod">
         <logger additivity="false" level="INFO" name="io.beaniejoy.dongnecafe">
             <appender-ref ref="THREAD_CONSOLE"/>
         </logger>
@@ -24,6 +24,9 @@
 
         <!-- Hikari Connection Pool Setting -->
         <logger additivity="false" level="DEBUG" name="com.zaxxer.hikari.HikariConfig">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+        <logger additivity="false" level="DEBUG" name="com.zaxxer.hikari.pool.HikariPool">
             <appender-ref ref="CONSOLE"/>
         </logger>
 

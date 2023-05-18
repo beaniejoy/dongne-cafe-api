@@ -1,11 +1,6 @@
 server:
   port: 9090
 
-spring:
-  devtools:
-    livereload:
-      enabled: false # no use devtools' LiveReload Server
-
 logging:
   level:
     org.hibernate.SQL: debug # logger 통해 로깅
