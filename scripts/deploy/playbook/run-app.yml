@@ -7,9 +7,13 @@
     - "{{ jenkins_user_home }}/ansible/vars/app_config.yml"
 
   tasks:
+    - name: debug
+      ansible.builtin.debug:
+        msg: "{{ inventory_hostname }}"
+
     - name: Register JAR file existence status
       ansible.builtin.stat:
-        path: "{{ remote_deploy_location }}/{{ module_name }}.jar"
+        path: "{{ remote_deploy_path }}/{{ module_name }}.jar"
       register: file_status
 
     - name: Check if JAR file exists
@@ -25,28 +29,36 @@
 
     - name: Copy JAR file for running application
       ansible.builtin.copy:
-        src: "{{ remote_deploy_location }}/{{ module_name }}.jar"
+        src: "{{ remote_deploy_path }}/{{ module_name }}.jar"
         remote_src: yes
-        dest: "{{ remote_app_location }}/{{ module_name }}.jar"
+        dest: "{{ remote_app_path }}/{{ module_name }}.jar"
         owner: "{{ remote_server_user }}"
         group: "{{ remote_server_group }}"
         mode: 0644
-
-    - name: Copy env file to remote server
-      ansible.builtin.template:
-        src: .env.j2
-        dest: "{{ remote_app_location }}/env/.env"
-        owner: "{{ remote_server_user }}"
-        group: "{{ remote_server_group }}"
-        mode: 0644
-
-#    - name: Export env file location variable
-#      ansible.builtin.command: "export ENV_LOCATION={{ remote_workspace }}/app"
 
     - name: Remove deployed JAR file
       ansible.builtin.file:
         state: absent
         path: "{{ remote_deploy_location }}/{{ module_name }}.jar"
+
+    - name: Copy env file to remote server
+      ansible.builtin.template:
+        src: .env.j2
+        dest: "{{ remote_env_path }}/.env"
+        owner: "{{ remote_server_user }}"
+        group: "{{ remote_server_group }}"
+        mode: 0644
+
+    - name: Copy service script file to remote server
+      ansible.builtin.template:
+        src: service.sh.j2
+        dest: "{{ remote_script_path }}/service.sh"
+        owner: "{{ remote_server_user }}"
+        group: "{{ remote_server_group }}"
+        mode: 0755
+
+    - name: Run Application
+      ansible.builtin.command: "{{ remote_script_path }}/service.sh"
 
     - name: Finish
       ansible.builtin.debug:
