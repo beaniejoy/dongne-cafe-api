@@ -7,6 +7,10 @@
     - "{{ jenkins_home }}/ansible/vars/app_config.yml"
 
   tasks:
+    - name: debug
+      ansible.builtin.debug:
+        msg: "{{ database_username }} and {{ database_password }}"
+
     - name: Register JAR file existence status
       ansible.builtin.stat:
         path: "{{ remote_workspace }}/deploy/{{ module_name }}.jar"
