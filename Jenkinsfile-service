@@ -32,15 +32,11 @@ pipeline {
                             passwordVariable: 'password'
                         )
                     ]) {
-                        def decryptedUsername = username.collect { "$it" }
+                        print 'username.collect { it }=' + username.collect { it }.join("")
+                        print 'password.collect { it }=' + password.collect { it }.join("")
 
-                        print 'username=' + username + 'password=' + password
-                        print 'class name' + decryptedUsername.class
-                        print 'username.collect { it }=' + username.collect { "$it" }
-                        print 'password.collect { it }=' + password.collect { "$it" }
-
-                        DATABASE_USERNAME = username.collect { "$it" }.join()
-                        DATABASE_PASSWORD = password.collect { "$it" }.join()
+                        DATABASE_USERNAME = username.collect { it }.join("")
+                        DATABASE_PASSWORD = password.collect { it }.join("")
                     }
 
                     // flyway migration
