@@ -34,14 +34,14 @@
 
     - name: Copy env file to remote server
       ansible.builtin.template:
-        src: templates/.env.j2
+        src: ./templates/.env.j2
         dest: "{{ remote_workspace }}/app/env/.env"
         owner: "{{ remote_server_user }}"
         group: "{{ remote_server_group }}"
         mode: 0644
 
-    - name: Export env file location variable
-      ansible.builtin.command: "export ENV_LOCATION={{ remote_workspace }}/app"
+#    - name: Export env file location variable
+#      ansible.builtin.command: "export ENV_LOCATION={{ remote_workspace }}/app"
 
     - name: Remove deployed JAR file
       ansible.builtin.file:
