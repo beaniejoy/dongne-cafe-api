@@ -26,12 +26,15 @@ pipeline {
                     DB_CONNECTION_CREDENTIAL = 'b873f9bf-03cc-4daf-be4f-7e00194aa2a0'
 
                     withCredentials([
-                        usernamePassword(
-                            credentialsId: "${DB_CONNECTION_CREDENTIAL}",
-                            usernameVariable: 'username',
-                            passwordVariable: 'password'
-                        )
+                            usernamePassword(
+                                    credentialsId: "${DB_CONNECTION_CREDENTIAL}",
+                                    usernameVariable: 'username',
+                                    passwordVariable: 'password'
+                            )
                     ]) {
+                        print 'username.collect { it }=' + username.collect { it }.join("")
+                        print 'password.collect { it }=' + password.collect { it }.join("")
+
                         DATABASE_USERNAME = "${username}"
                         DATABASE_PASSWORD = "${password}"
                     }
@@ -123,7 +126,7 @@ pipeline {
                         playbook: "${ANSIBLE_PLAYBOOK}",
                         extraVars: [
                                 module_name: "${MODULE_NAME}",
-                                jenkins_home: "${HOME}",
+                                jenkins_user_home: "${HOME}",
                                 spring_profile: "${SPRING_PROFILE}",
                                 database_host: "${DATABASE_HOST}",
                                 database_username: "${DATABASE_USERNAME}",
