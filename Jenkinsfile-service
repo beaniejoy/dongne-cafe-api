@@ -8,7 +8,7 @@ pipeline {
         // Choice of pipeline target stages
         choice(
                 name: 'PIPELINE_STAGE_TARGET',
-                choices: ['ALL', 'RUN'],
+                choices: ['ALL', 'DB_VALIDATE', 'TEST', 'BUILD', 'RUN_APPLICATION'],
                 description: 'set target pipeline stages'
         )
     }
@@ -23,8 +23,8 @@ pipeline {
                     SPRING_PROFILE = 'prod'
                     MODULE_NAME = 'dongne-service-api'
 
+                    // DB Connection Credential
                     DB_CONNECTION_CREDENTIAL = 'b873f9bf-03cc-4daf-be4f-7e00194aa2a0'
-
                     withCredentials([
                             usernamePassword(
                                     credentialsId: "${DB_CONNECTION_CREDENTIAL}",
@@ -46,9 +46,12 @@ pipeline {
             }
         }
 
-        stage('DB Migrate') {
+        stage('DB Validate') {
             when {
-                expression { params.PIPELINE_STAGE_TARGET == 'ALL' }
+                anyOf {
+                    expression { params.PIPELINE_STAGE_TARGET == 'ALL' }
+                    expression { params.PIPELINE_STAGE_TARGET == 'DB_VALIDATE' }
+                }
             }
             steps {
                 flywayrunner installationName: 'flywaytool-jenkins',
@@ -62,7 +65,10 @@ pipeline {
 
         stage('Test') {
             when {
-                expression { params.PIPELINE_STAGE_TARGET == 'ALL' }
+                anyOf {
+                    expression { params.PIPELINE_STAGE_TARGET == 'ALL' }
+                    expression { params.PIPELINE_STAGE_TARGET == 'TEST' }
+                }
             }
             steps {
                 sh "./gradlew clean :${MODULE_NAME}:test"
@@ -71,7 +77,10 @@ pipeline {
 
         stage('Build') {
             when {
-                expression { params.PIPELINE_STAGE_TARGET == 'ALL' }
+                anyOf {
+                    expression { params.PIPELINE_STAGE_TARGET == 'ALL' }
+                    expression { params.PIPELINE_STAGE_TARGET == 'BUILD' }
+                }
             }
             steps {
                 sh "./gradlew clean :${MODULE_NAME}:build -x test"
@@ -115,7 +124,7 @@ pipeline {
             when {
                 anyOf {
                     expression { params.PIPELINE_STAGE_TARGET == 'ALL' }
-                    expression { params.PIPELINE_STAGE_TARGET == 'RUN' }
+                    expression { params.PIPELINE_STAGE_TARGET == 'RUN_APPLICATION' }
                 }
             }
             steps {
