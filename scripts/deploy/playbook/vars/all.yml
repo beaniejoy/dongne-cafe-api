@@ -1,3 +1,6 @@
 remote_server_user: ec2-user
 remote_server_group: ec2-user
 remote_workspace: "/home/{{ remote_server_user }}"
+
+remote_deploy_location: "{{ remote_workspace }}/deploy"
+remote_app_location: "{{ remote_workspace }}/app"

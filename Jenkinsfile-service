@@ -32,15 +32,12 @@ pipeline {
                                     passwordVariable: 'password'
                             )
                     ]) {
-                        print 'username.collect { it }=' + username.collect { it }.join("")
-                        print 'password.collect { it }=' + password.collect { it }.join("")
-
                         DATABASE_USERNAME = "${username}"
                         DATABASE_PASSWORD = "${password}"
                     }
 
                     // flyway migration
-                    FLYWAY_LOCATION = "${WORKSPACE}/db"
+                    MIGRATION_WORKSPACE = "${WORKSPACE}/db"
 
                     // ansible playbook
                     ANSIBLE_INVENTORY = "${HOME}/ansible/inventory"
@@ -56,10 +53,10 @@ pipeline {
             steps {
                 flywayrunner installationName: 'flywaytool-jenkins',
                         flywayCommand: 'info migrate validate',
-                        commandLineArgs: "-configFiles=${FLYWAY_LOCATION}/flyway-${SPRING_PROFILE}.conf",
+                        commandLineArgs: "-configFiles=${MIGRATION_WORKSPACE}/flyway-${SPRING_PROFILE}.conf",
                         credentialsId: "${DB_CONNECTION_CREDENTIAL}",
                         url: "jdbc:mysql://${DATABASE_HOST}:3306/dongne",
-                        locations: ''
+                        locations: "${MIGRATION_WORKSPACE}/migration"
             }
         }
 

@@ -9,7 +9,7 @@
   tasks:
     - name: Register JAR file existence status
       ansible.builtin.stat:
-        path: "{{ remote_workspace }}/deploy/{{ module_name }}.jar"
+        path: "{{ remote_deploy_location }}/{{ module_name }}.jar"
       register: file_status
 
     - name: Check if JAR file exists
@@ -25,17 +25,17 @@
 
     - name: Copy JAR file for running application
       ansible.builtin.copy:
-        src: "{{ remote_workspace }}/deploy/{{ module_name }}.jar"
+        src: "{{ remote_deploy_location }}/{{ module_name }}.jar"
         remote_src: yes
-        dest: "{{ remote_workspace }}/app/{{ module_name }}.jar"
+        dest: "{{ remote_app_location }}/{{ module_name }}.jar"
         owner: "{{ remote_server_user }}"
         group: "{{ remote_server_group }}"
         mode: 0644
 
     - name: Copy env file to remote server
       ansible.builtin.template:
-        src: ./templates/.env.j2
-        dest: "{{ remote_workspace }}/app/env/.env"
+        src: .env.j2
+        dest: "{{ remote_app_location }}/env/.env"
         owner: "{{ remote_server_user }}"
         group: "{{ remote_server_group }}"
         mode: 0644
@@ -46,7 +46,7 @@
     - name: Remove deployed JAR file
       ansible.builtin.file:
         state: absent
-        path: "{{ remote_workspace }}/deploy/{{ module_name }}.jar"
+        path: "{{ remote_deploy_location }}/{{ module_name }}.jar"
 
     - name: Finish
       ansible.builtin.debug:
