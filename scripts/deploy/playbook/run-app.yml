@@ -39,7 +39,7 @@
     - name: Remove deployed JAR file
       ansible.builtin.file:
         state: absent
-        path: "{{ remote_deploy_location }}/{{ module_name }}.jar"
+        path: "{{ remote_deploy_path }}/{{ module_name }}.jar"
 
     - name: Copy env file to remote server
       ansible.builtin.template:
