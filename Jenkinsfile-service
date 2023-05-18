@@ -32,7 +32,10 @@ pipeline {
                             passwordVariable: 'password'
                         )
                     ]) {
+                        def decryptedUsername = username.collect { "$it" }
+
                         print 'username=' + username + 'password=' + password
+                        print 'class name' + decryptedUsername.class
                         print 'username.collect { it }=' + username.collect { "$it" }
                         print 'password.collect { it }=' + password.collect { "$it" }
 
