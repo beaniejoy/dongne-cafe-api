@@ -20,7 +20,7 @@ pipeline {
                     sh 'whoami'
                     sh 'printenv'
 
-                    SPRING_PROFILE = 'prod'
+                    PROJECT_PROFILE = 'prod'
                     MODULE_NAME = 'dongne-service-api'
 
                     // DB Connection Credential
@@ -56,7 +56,7 @@ pipeline {
             steps {
                 flywayrunner installationName: 'flywaytool-jenkins',
                         flywayCommand: 'info validate',
-                        commandLineArgs: "-configFiles=${MIGRATION_WORKSPACE}/flyway-${SPRING_PROFILE}.conf",
+                        commandLineArgs: "-configFiles=${MIGRATION_WORKSPACE}/flyway-${PROJECT_PROFILE}.conf",
                         credentialsId: "${DB_CONNECTION_CREDENTIAL}",
                         url: "jdbc:mysql://${DATABASE_HOST}:3306/dongne",
                         locations: "filesystem:${MIGRATION_WORKSPACE}/migration"
@@ -133,7 +133,7 @@ pipeline {
                         extraVars: [
                                 module_name: "${MODULE_NAME}",
                                 jenkins_user_home: "${HOME}",
-                                spring_profile: "${SPRING_PROFILE}",
+                                spring_profile: "${PROJECT_PROFILE}",
                                 database_host: "${DATABASE_HOST}",
                                 database_username: "${DATABASE_USERNAME}",
                                 database_password: "${DATABASE_PASSWORD}"
