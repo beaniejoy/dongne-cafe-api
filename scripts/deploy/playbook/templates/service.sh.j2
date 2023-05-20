@@ -1,3 +1,42 @@
 #!/bin/bash
 
 ENV_LOCATION={{ remote_env_path }}
+APP_WORKSPACE = {{ remote_app_path }}
+MODULE_NAME={{ module_name }}
+PORT=8080
+
+SPRING_PROFILE={{ spring_profile }}
+
+PID_FILE=${APP_WORKSPACE}/${MODULE_NAME}_${PORT}.pid
+STD_OUT=${APP_WORKSPACE}/logs/stdout_${PORT}.log
+STD_ERROR=${APP_WORKSPACE}/logs/stderr_${PORT}.log
+
+echo "## 0. export env file path"
+export ENV_LOCATION
+
+echo "## 1. move to application workspace"
+cd $APP_WORKSPACE
+
+echo "## 2. move to application workspace"
+CURRENT_PID = $(pgrep -f ${MODULE_NAME})
+
+if [ -z "${CURRENT_PID}" ];
+then
+  echo "no current running application >> pass killing process"
+else
+  echo "kill -TERM CURRENT_PID"
+  kill -TERM ${CURRENT_PID}
+fi
+
+echo "## 3. run application"
+java --version
+if [ $? -ne 0 ];
+then
+  echo "no JRE setup > JRE is required!!"
+  exit 1
+fi
+
+nohup java -jar \
+  -Dspring.config.import=optional:file:${ENV_LOCATION}/.env[.properties] \
+  -Dspring.profiles.active=${SPRING_PROFILE} \
+  ${APP_WORKSPACE}/${MODULE_NAME}.jar 1>${STD_OUT} 2>$1 &

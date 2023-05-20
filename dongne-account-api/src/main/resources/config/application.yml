@@ -1,6 +1,3 @@
-server:
-  port: 9090
-
 logging:
   level:
     org.hibernate.SQL: debug # logger 통해 로깅

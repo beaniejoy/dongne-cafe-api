@@ -2,15 +2,12 @@
 - name: Test Playbook
   hosts: ec2
 
+ # "app_config.yml": application config
   vars_files:
     - vars/all.yml
     - "{{ jenkins_user_home }}/ansible/vars/app_config.yml"
 
   tasks:
-    - name: debug
-      ansible.builtin.debug:
-        msg: "{{ inventory_hostname }}"
-
     - name: Register JAR file existence status
       ansible.builtin.stat:
         path: "{{ remote_deploy_path }}/{{ module_name }}.jar"
@@ -59,6 +56,10 @@
 
     - name: Run Application
       ansible.builtin.command: "{{ remote_script_path }}/service.sh"
+      register: result
+
+    - ansible.builtin.debug:
+        msg: {{ result.stdout_lines }}
 
     - name: Finish
       ansible.builtin.debug:
