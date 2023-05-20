@@ -1,11 +1,20 @@
-def ALL = 'all'
-def INFO = 'info'
-def MIGRATE = 'migrate'
-def VALIDATE = 'validate'
+enum FlywayCommand {
+    ALL, INFO, MIGRATE, VALIDATE;
+    FlywayCommand() {}
+}
 
-def executeFlywayRunner(command) {
+def executeConditionAllOr(choice) {
+    return params.FLYWAY_COMMAND == FlywayCommand.ALL.name() || params.FLYWAY_COMMAND == choice.name()
+}
+
+// Run flyway runner Jenkins Plugin
+def executeFlywayRunner(flywayCmd) {
+    if (flywayCmd == FlywayCommand.ALL) {
+        return
+    }
+
     flywayrunner installationName: 'flywaytool-jenkins',
-            flywayCommand: "$command",
+            flywayCommand: "$flywayCmd".toLowerCase(),
             commandLineArgs: "-configFiles=${MIGRATION_WORKSPACE}/flyway-${PROJECT_PROFILE}.conf",
             credentialsId: "${DB_CONNECTION_CREDENTIAL}",
             url: "jdbc:mysql://${DATABASE_HOST}:3306/dongne",
@@ -22,7 +31,7 @@ pipeline {
         // Choice of flyway target command
         choice(
                 name: 'FLYWAY_COMMAND',
-                choices: ["$ALL", "$INFO", "$VALIDATE", "$MIGRATE"],
+                choices: ["${FlywayCommand.ALL}", "${FlywayCommand.INFO}", "${FlywayCommand.VALIDATE}", "${FlywayCommand.MIGRATE}"],
                 description: 'target flyway command'
         )
     }
@@ -57,34 +66,23 @@ pipeline {
 
         stage('DB Version Info') {
             when {
-                anyOf {
-                    expression { params.FLYWAY_COMMAND == ALL }
-                    expression { params.FLYWAY_COMMAND == INFO }
-                }
+                expression { executeConditionAllOr(FlywayCommand.INFO) }
             }
-            steps {
-                script { executeFlywayRunner(INFO) }
-            }
+            steps { executeFlywayRunner(FlywayCommand.INFO) }
         }
 
         stage('DB Migrate') {
             when {
-                anyOf {
-                    expression { params.FLYWAY_COMMAND == ALL }
-                    expression { params.FLYWAY_COMMAND == MIGRATE }
-                }
+                expression { executeConditionAllOr(FlywayCommand.MIGRATE) }
             }
-            script { executeFlywayRunner(MIGRATE) }
+            steps { executeFlywayRunner(FlywayCommand.MIGRATE) }
         }
 
         stage('DB Validate') {
             when {
-                anyOf {
-                    expression { params.FLYWAY_COMMAND == ALL }
-                    expression { params.FLYWAY_COMMAND == VALIDATE }
-                }
+                expression { executeConditionAllOr(FlywayCommand.VALIDATE) }
             }
-            script { executeFlywayRunner(VALIDATE) }
+            steps { executeFlywayRunner(FlywayCommand.VALIDATE) }
         }
     }
 }
