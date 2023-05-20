@@ -1,3 +1,12 @@
+enum Stage {
+    ALL, DB_VALIDATE, TEST, BUILD, RUN_APP;
+    Stage() {}
+}
+
+def executeConditionAllOr(stage) {
+    return params.PIPELINE_STAGE_TARGET == Stage.ALL.name() || params.PIPELINE_STAGE_TARGET == stage.name()
+}
+
 pipeline {
     agent any
 
@@ -8,7 +17,7 @@ pipeline {
         // Choice of pipeline target stages
         choice(
                 name: 'PIPELINE_STAGE_TARGET',
-                choices: ['ALL', 'DB_VALIDATE', 'TEST', 'BUILD', 'RUN_APPLICATION'],
+                choices: ["${Stage.ALL}", "${Stage.DB_VALIDATE}", "${Stage.TEST}", "${Stage.BUILD}", "${Stage.RUN_APP}"],
                 description: 'set target pipeline stages'
         )
     }
@@ -48,10 +57,7 @@ pipeline {
 
         stage('DB Validate') {
             when {
-                anyOf {
-                    expression { params.PIPELINE_STAGE_TARGET == 'ALL' }
-                    expression { params.PIPELINE_STAGE_TARGET == 'DB_VALIDATE' }
-                }
+                expression { executeConditionAllOr(Stage.DB_VALIDATE) }
             }
             steps {
                 flywayrunner installationName: 'flywaytool-jenkins',
@@ -65,10 +71,7 @@ pipeline {
 
         stage('Test') {
             when {
-                anyOf {
-                    expression { params.PIPELINE_STAGE_TARGET == 'ALL' }
-                    expression { params.PIPELINE_STAGE_TARGET == 'TEST' }
-                }
+                expression { executeConditionAllOr(Stage.TEST) }
             }
             steps {
                 sh "./gradlew clean :${MODULE_NAME}:test"
@@ -77,10 +80,7 @@ pipeline {
 
         stage('Build') {
             when {
-                anyOf {
-                    expression { params.PIPELINE_STAGE_TARGET == 'ALL' }
-                    expression { params.PIPELINE_STAGE_TARGET == 'BUILD' }
-                }
+                expression { executeConditionAllOr(Stage.BUILD) }
             }
             steps {
                 sh "./gradlew clean :${MODULE_NAME}:build -x test"
@@ -89,7 +89,7 @@ pipeline {
 
         stage('Deploy') {
             when {
-                expression { params.PIPELINE_STAGE_TARGET == 'ALL' }
+                expression { executeConditionAllOr(Stage.ALL) }
             }
             steps {
                 echo 'Deploy JAR file'
@@ -122,10 +122,7 @@ pipeline {
 
         stage('Run Application with Ansible') {
             when {
-                anyOf {
-                    expression { params.PIPELINE_STAGE_TARGET == 'ALL' }
-                    expression { params.PIPELINE_STAGE_TARGET == 'RUN_APPLICATION' }
-                }
+                expression { executeConditionAllOr(Stage.RUN_APP) }
             }
             steps {
                 ansiblePlaybook inventory: "${ANSIBLE_INVENTORY}",
