@@ -39,4 +39,4 @@ fi
 nohup java -jar \
   -Dspring.config.import=optional:file:${ENV_LOCATION}/.env[.properties] \
   -Dspring.profiles.active=${SPRING_PROFILE} \
-  ${APP_WORKSPACE}/${MODULE_NAME}.jar 1>${STD_OUT} 2>$1 &
+  ${APP_WORKSPACE}/${MODULE_NAME}.jar 1>${STD_OUT} 2>${STD_ERROR} &
