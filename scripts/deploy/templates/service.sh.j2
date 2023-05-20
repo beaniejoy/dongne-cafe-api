@@ -25,6 +25,7 @@ then
 else
   echo "kill -TERM CURRENT_PID"
   kill -TERM ${CURRENT_PID}
+  sleep 2
 fi
 
 echo "## run java application"

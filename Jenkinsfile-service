@@ -50,7 +50,7 @@ pipeline {
 
                     // ansible playbook
                     ANSIBLE_INVENTORY = "${HOME}/ansible/inventory"
-                    ANSIBLE_PLAYBOOK = "${WORKSPACE}/scripts/deploy/playbook/run-app.yml"
+                    ANSIBLE_PLAYBOOK = "${WORKSPACE}/scripts/deploy/run-app.yml"
                 }
             }
         }
