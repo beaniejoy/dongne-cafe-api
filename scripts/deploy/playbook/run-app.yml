@@ -1,5 +1,5 @@
 ---
-- name: Test Playbook
+- name: Run java application
   hosts: ec2
 
  # "app_config.yml": application config
@@ -58,7 +58,8 @@
       ansible.builtin.command: "{{ remote_script_path }}/service.sh"
       register: result
 
-    - ansible.builtin.debug:
+    - name: Show all prints while running service script
+      ansible.builtin.debug:
         msg: "{{ result.stdout_lines }}"
 
     - name: Finish
