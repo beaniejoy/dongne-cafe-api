@@ -5,5 +5,5 @@ import java.math.BigDecimal
 data class CafeMenuRegisterRequest(
     val name: String? = null,
     val price: BigDecimal = BigDecimal.ZERO,
-    val menuOptionList: List<MenuOptionRegisterRequest> = arrayListOf()
+    val menuOptions: List<MenuOptionRegisterRequest> = arrayListOf()
 )

@@ -34,7 +34,7 @@ internal class CafeRepositoryTest {
                 address = it.address!!,
                 phoneNumber = it.phoneNumber!!,
                 description = it.description!!,
-                cafeMenuRequestList = it.cafeMenuList
+                cafeMenuRequests = it.cafeMenus
             )
         }
 
@@ -55,7 +55,7 @@ internal class CafeRepositoryTest {
                 address = it.address!!,
                 phoneNumber = it.phoneNumber!!,
                 description = it.description!!,
-                cafeMenuRequestList = it.cafeMenuList
+                cafeMenuRequests = it.cafeMenus
             )
         }
 

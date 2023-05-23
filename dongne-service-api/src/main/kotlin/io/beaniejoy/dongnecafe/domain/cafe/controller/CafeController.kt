@@ -27,7 +27,7 @@ class CafeController(
             address = resource.address!!,
             phoneNumber = resource.phoneNumber!!,
             description = resource.description!!,
-            cafeMenuRequestList = resource.cafeMenuList
+            cafeMenuRequests = resource.cafeMenus
         )
 
         return ApplicationResponse
@@ -39,11 +39,11 @@ class CafeController(
      * 카페 리스트 조회(검색 기능)
      */
     @GetMapping
-    fun searchCafeList(
+    fun searchCafes(
         @RequestParam("name") name: String?,
         @PageableDefault(sort = ["name"], direction = Sort.Direction.ASC, page = 0, size = 10) pageable: Pageable
     ): ApplicationResponse<Page<CafeSearchInfo>> {
-        val searchCafes = cafeService.searchCafeList(name, pageable)
+        val searchCafes = cafeService.searchCafes(name, pageable)
 
         return ApplicationResponse
             .success()
@@ -53,9 +53,9 @@ class CafeController(
     /**
      * 단일 카페 상세 조회
      */
-    @GetMapping("/{id}")
-    fun getDetailedInfo(@PathVariable("id") id: Long): ApplicationResponse<CafeDetailedInfo> {
-        val cafeDetailedInfo = cafeService.getDetailedInfoByCafeId(id)
+    @GetMapping("/{name}")
+    fun getDetailedInfo(@PathVariable("name") name: String): ApplicationResponse<CafeDetailedInfo> {
+        val cafeDetailedInfo = cafeService.getDetailedInfoByName(name)
 
         return ApplicationResponse
             .success()

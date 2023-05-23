@@ -26,23 +26,23 @@ class CafeMenuServiceIntegratedTest {
             address = cafeRegisterRequest.address!!,
             phoneNumber = cafeRegisterRequest.phoneNumber!!,
             description = cafeRegisterRequest.description!!,
-            cafeMenuRequestList = cafeRegisterRequest.cafeMenuList
+            cafeMenuRequests = cafeRegisterRequest.cafeMenus
         )
 
-        val cafeDetailedInfo = cafeService.getDetailedInfoByCafeId(savedCafeId)
+        val cafeDetailedInfo = cafeService.getDetailedInfoByName(cafeRegisterRequest.name!!)
 
         val cafeMenuUpdateRequest = cafeMenuService.getDetailedInfoByMenuId(
-            menuId = cafeDetailedInfo.menuList[0].cafeMenuId,
+            menuId = cafeDetailedInfo.menus[0].cafeMenuId,
             cafeId = cafeDetailedInfo.cafeId
         ).let {
             CafeMenuUpdateRequest(
                 name = "menu2 update",
                 price = it.price,
-                menuOptionList = listOf(it.optionList[1].let { menuOption ->
+                menuOptions = listOf(it.menuOptions[1].let { menuOption ->
                     MenuOptionUpdateRequest(
                         menuOptionId = menuOption.menuOptionId,
                         title = "샷 update",
-                        optionDetailList = menuOption.optionDetailList.mapIndexed { index, optionDetail ->
+                        optionDetails = menuOption.optionDetails.mapIndexed { index, optionDetail ->
                             OptionDetailUpdateRequest(
                                 optionDetailId = optionDetail.optionDetailId,
                                 name = optionDetail.name!!,
@@ -56,7 +56,7 @@ class CafeMenuServiceIntegratedTest {
         }
 
         cafeMenuService.updateInfoAndBulkUpdate(
-            menuId = cafeDetailedInfo.menuList[1].cafeMenuId,
+            menuId = cafeDetailedInfo.menus[1].cafeMenuId,
             cafeId = cafeDetailedInfo.cafeId,
             resource = cafeMenuUpdateRequest
         )

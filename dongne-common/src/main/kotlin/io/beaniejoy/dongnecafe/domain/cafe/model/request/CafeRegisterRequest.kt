@@ -5,5 +5,5 @@ data class CafeRegisterRequest(
     val address: String? = null,
     val phoneNumber: String? = null,
     val description: String? = null,
-    val cafeMenuList: List<CafeMenuRegisterRequest> = arrayListOf()
+    val cafeMenus: List<CafeMenuRegisterRequest> = arrayListOf()
 )

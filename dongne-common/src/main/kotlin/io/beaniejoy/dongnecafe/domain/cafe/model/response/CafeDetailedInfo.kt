@@ -7,10 +7,10 @@ data class CafeDetailedInfo(
     val name: String? = null,
     val address: String? = null,
     val phoneNumber: String? = null,
-    val totalRate: Double? = null,
+    val totalRate: Float? = null,
     val description: String? = null,
-    val menuList: List<CafeMenuInfo> = emptyList(),
-    val imageList: List<CafeImageInfo> = emptyList()
+    val menus: List<CafeMenuInfo> = emptyList(),
+    val images: List<CafeImageInfo> = emptyList()
 ) {
     companion object {
         fun of(cafe: Cafe): CafeDetailedInfo {
@@ -19,10 +19,10 @@ data class CafeDetailedInfo(
                 name = cafe.name,
                 address = cafe.address,
                 phoneNumber = cafe.phoneNumber,
-                totalRate = cafe.totalRate,
+                totalRate = cafe.totalRate.toFloat(),
                 description = cafe.description,
-                menuList = cafe.cafeMenuList.map { CafeMenuInfo.of(it) },
-                imageList = cafe.cafeImageList.map { CafeImageInfo.of(it) }
+                menus = cafe.cafeMenus.map { CafeMenuInfo.of(it) },
+                images = cafe.cafeImages.map { CafeImageInfo.of(it) }
             )
         }
     }

@@ -7,7 +7,7 @@ data class CafeMenuDetailedInfo(
     val cafeMenuId: Long = 0L,
     val name: String? = null,
     val price: BigDecimal = BigDecimal.ZERO,
-    val optionList: List<MenuOptionInfo> = emptyList()
+    val menuOptions: List<MenuOptionInfo> = emptyList()
 ) {
     companion object {
         fun of(cafeMenu: CafeMenu): CafeMenuDetailedInfo {
@@ -15,7 +15,7 @@ data class CafeMenuDetailedInfo(
                 cafeMenuId = cafeMenu.id,
                 name = cafeMenu.name,
                 price = cafeMenu.price,
-                optionList = cafeMenu.menuOptionList.map { MenuOptionInfo.of(it) }
+                menuOptions = cafeMenu.menuOptions.map { MenuOptionInfo.of(it) }
             )
         }
     }

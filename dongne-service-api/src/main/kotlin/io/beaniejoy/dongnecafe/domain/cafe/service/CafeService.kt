@@ -35,7 +35,7 @@ class CafeService(
         address: String,
         phoneNumber: String,
         description: String,
-        cafeMenuRequestList: List<CafeMenuRegisterRequest>,
+        cafeMenuRequests: List<CafeMenuRegisterRequest>,
     ): Long {
         checkCafeExistedByName(name)
 
@@ -44,7 +44,7 @@ class CafeService(
             address = address,
             phoneNumber = phoneNumber,
             description = description,
-            cafeMenuRequestList = cafeMenuRequestList
+            cafeMenuRequests = cafeMenuRequests
         )
 
         val savedCafe = cafeRepository.save(cafe)
@@ -59,14 +59,14 @@ class CafeService(
         }
     }
 
-    fun searchCafeList(name: String?, pageable: Pageable): Page<CafeSearchInfo> {
-        val cafeList: Page<Cafe> = cafeRepository.findByNameContainingIgnoreCase(name, pageable)
+    fun searchCafes(name: String?, pageable: Pageable): Page<CafeSearchInfo> {
+        val cafes: Page<Cafe> = cafeRepository.findByNameContainingIgnoreCase(name, pageable)
 
-        return cafeList.map { CafeSearchInfo.of(it) }
+        return cafes.map { CafeSearchInfo.of(it) }
     }
 
-    fun getDetailedInfoByCafeId(id: Long): CafeDetailedInfo {
-        val cafe = cafeRepository.findByIdOrNull(id)
+    fun getDetailedInfoByName(name: String): CafeDetailedInfo {
+        val cafe = cafeRepository.findByName(name)
             ?: throw BusinessException(ErrorCode.CAFE_NOT_FOUND)
 
         return CafeDetailedInfo.of(cafe)

@@ -13,7 +13,7 @@ class CafeTestUtils {
             assertEquals(request.phoneNumber, entity.phoneNumber)
             assertEquals(request.description, entity.description)
 
-            CafeMenuTestUtils.assertCafeMenuListEquals(request.cafeMenuList, entity.cafeMenuList)
+            CafeMenuTestUtils.assertCafeMenusEquals(request.cafeMenus, entity.cafeMenus)
         }
 
         fun createCafeRegisterRequest(): CafeRegisterRequest {
@@ -27,7 +27,7 @@ class CafeTestUtils {
                 address = cafeAddress,
                 phoneNumber = phoneNumber,
                 description = description,
-                cafeMenuList = CafeMenuTestUtils.createCafeMenuRegisterRequestList()
+                cafeMenus = CafeMenuTestUtils.createCafeMenuRegisterRequests()
             )
         }
 

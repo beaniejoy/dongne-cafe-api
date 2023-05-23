@@ -79,7 +79,7 @@ class CafeMenuController(
         @PathVariable("cafeId") cafeId: Long,
         @RequestBody resource: CafeMenuBulkDeleteRequest
     ): ApplicationResponse<Nothing> {
-        cafeMenuService.bulkDelete(cafeId, resource.cafeMenuIdList)
+        cafeMenuService.bulkDelete(cafeId, resource.cafeMenuIds)
 
         return ApplicationResponse
             .success("Success Delete Cafe[$cafeId]'s CafeMenu List")

@@ -26,7 +26,7 @@ class MenuOptionService(
 
             menuOption.updateInfo(it.title)
 
-            optionDetailService.bulkUpdate(it.optionDetailList)
+            optionDetailService.bulkUpdate(it.optionDetails)
         }
     }
 }

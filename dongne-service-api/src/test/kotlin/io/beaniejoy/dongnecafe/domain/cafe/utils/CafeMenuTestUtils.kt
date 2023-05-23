@@ -13,16 +13,16 @@ import javax.persistence.GeneratedValue
 class CafeMenuTestUtils {
     companion object {
         fun createCafeMenuRegisterRequest(): CafeMenuRegisterRequest {
-            return createCafeMenuRegisterRequestList()[0]
+            return createCafeMenuRegisterRequests()[0]
         }
 
-        fun createCafeMenuRegisterRequestList(): List<CafeMenuRegisterRequest> {
-            val sizeOptionDetailList = listOf(
+        fun createCafeMenuRegisterRequests(): List<CafeMenuRegisterRequest> {
+            val sizeOptionDetails = listOf(
                 OptionDetailRegisterRequest(name = "medium", extraPrice = BigDecimal.ZERO),
                 OptionDetailRegisterRequest(name = "large", extraPrice = BigDecimal("200")),
                 OptionDetailRegisterRequest(name = "venti", extraPrice = BigDecimal("700"))
             )
-            val shotOptionDetailList = listOf(
+            val shotOptionDetails = listOf(
                 OptionDetailRegisterRequest(name = "기본", extraPrice = BigDecimal.ZERO),
                 OptionDetailRegisterRequest(name = "샷 1 추가", extraPrice = BigDecimal("500")),
                 OptionDetailRegisterRequest(name = "샷 2 추가", extraPrice = BigDecimal("1000")),
@@ -30,63 +30,63 @@ class CafeMenuTestUtils {
 
             val sizeMenuOption = MenuOptionRegisterRequest(
                 title = "사이즈",
-                optionDetailList = sizeOptionDetailList
+                optionDetails = sizeOptionDetails
             )
             val shotMenuOption = MenuOptionRegisterRequest(
                 title = "샷",
-                optionDetailList = shotOptionDetailList
+                optionDetails = shotOptionDetails
             )
 
             return listOf(
                 CafeMenuRegisterRequest(
                     name = "menu1",
                     price = BigDecimal("2800"),
-                    menuOptionList = listOf(sizeMenuOption, shotMenuOption)
+                    menuOptions = listOf(sizeMenuOption, shotMenuOption)
                 ),
                 CafeMenuRegisterRequest(
                     name = "menu2",
                     price = BigDecimal("3500"),
-                    menuOptionList = listOf(sizeMenuOption)
+                    menuOptions = listOf(sizeMenuOption)
                 ),
             )
         }
 
-        fun assertCafeMenuListEquals(
-            cafeMenuRequestList: List<CafeMenuRegisterRequest>,
-            cafeMenuList: List<CafeMenu>,
+        fun assertCafeMenusEquals(
+            cafeMenuRequests: List<CafeMenuRegisterRequest>,
+            cafeMenus: List<CafeMenu>,
         ) {
-            for (index in cafeMenuRequestList.indices) {
-                Assertions.assertEquals(cafeMenuRequestList[index].name, cafeMenuList[index].name)
-                Assertions.assertEquals(cafeMenuRequestList[index].price, cafeMenuList[index].price)
+            for (index in cafeMenuRequests.indices) {
+                Assertions.assertEquals(cafeMenuRequests[index].name, cafeMenus[index].name)
+                Assertions.assertEquals(cafeMenuRequests[index].price, cafeMenus[index].price)
 
-                assertMenuOptionListEquals(
-                    cafeMenuRequestList[index].menuOptionList,
-                    cafeMenuList[index].menuOptionList
+                assertMenuOptionsEquals(
+                    cafeMenuRequests[index].menuOptions,
+                    cafeMenus[index].menuOptions
                 )
             }
         }
 
-        private fun assertMenuOptionListEquals(
-            menuOptionRequestList: List<MenuOptionRegisterRequest>,
-            menuOptionList: List<MenuOption>,
+        private fun assertMenuOptionsEquals(
+            menuOptionRequests: List<MenuOptionRegisterRequest>,
+            menuOptions: List<MenuOption>,
         ) {
-            for (index in menuOptionRequestList.indices) {
-                Assertions.assertEquals(menuOptionRequestList[index].title, menuOptionList[index].title)
+            for (index in menuOptionRequests.indices) {
+                Assertions.assertEquals(menuOptionRequests[index].title, menuOptions[index].title)
 
-                assertOptionDetailListEquals(
-                    menuOptionRequestList[index].optionDetailList,
-                    menuOptionList[index].optionDetailList
+                assertOptionDetailsEquals(
+                    menuOptionRequests[index].optionDetails,
+                    menuOptions[index].optionDetails
                 )
             }
         }
 
-        private fun assertOptionDetailListEquals(
-            optionDetailRequestList: List<OptionDetailRegisterRequest>,
-            optionDetailList: MutableList<OptionDetail>,
+        private fun assertOptionDetailsEquals(
+            optionDetailRequests: List<OptionDetailRegisterRequest>,
+            optionDetails: MutableList<OptionDetail>,
         ) {
-            for (index in optionDetailRequestList.indices) {
-                Assertions.assertEquals(optionDetailRequestList[index].name, optionDetailList[index].name)
-                Assertions.assertEquals(optionDetailRequestList[index].extraPrice, optionDetailList[index].extraPrice)
+            for (index in optionDetailRequests.indices) {
+                Assertions.assertEquals(optionDetailRequests[index].name, optionDetails[index].name)
+                Assertions.assertEquals(optionDetailRequests[index].extraPrice, optionDetails[index].extraPrice)
             }
         }
 

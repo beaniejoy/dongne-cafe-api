@@ -32,7 +32,7 @@ class CafeMenuService(
 
         cafeMenu.updateInfo(name = resource.name!!, price = resource.price)
 
-        menuOptionService.bulkUpdate(resource.menuOptionList)
+        menuOptionService.bulkUpdate(resource.menuOptions)
     }
 
     fun deleteByCafeMenuId(menuId: Long, cafeId: Long) {
@@ -42,8 +42,8 @@ class CafeMenuService(
         cafeMenuRepository.delete(cafeMenu)
     }
 
-    fun bulkDelete(cafeId: Long, cafeMenuIdList: List<Long>) {
-        cafeMenuIdList.forEach {
+    fun bulkDelete(cafeId: Long, cafeMenuIds: List<Long>) {
+        cafeMenuIds.forEach {
             deleteByCafeMenuId(menuId = it, cafeId = cafeId)
         }
     }

@@ -13,7 +13,7 @@ internal class CafeTest {
             address = cafeRequestDto.address!!,
             phoneNumber = cafeRequestDto.phoneNumber!!,
             description = cafeRequestDto.description!!,
-            cafeMenuRequestList = cafeRequestDto.cafeMenuList
+            cafeMenuRequests = cafeRequestDto.cafeMenus
         )
 
         CafeTestUtils.assertCafeEquals(request = cafeRequestDto, entity = cafe)

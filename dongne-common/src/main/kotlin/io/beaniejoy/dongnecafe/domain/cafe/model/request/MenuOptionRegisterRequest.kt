@@ -4,7 +4,7 @@ import java.math.BigDecimal
 
 data class MenuOptionRegisterRequest(
     val title: String,
-    val optionDetailList: List<OptionDetailRegisterRequest> = arrayListOf()
+    val optionDetails: List<OptionDetailRegisterRequest> = arrayListOf()
 )
 
 data class OptionDetailRegisterRequest(

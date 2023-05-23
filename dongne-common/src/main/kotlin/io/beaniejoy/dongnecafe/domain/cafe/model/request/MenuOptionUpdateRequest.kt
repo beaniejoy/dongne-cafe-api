@@ -6,7 +6,7 @@ data class MenuOptionUpdateRequest(
     val menuOptionId: Long,
     val title: String,
     val isDelete: Boolean = false,
-    val optionDetailList: List<OptionDetailUpdateRequest> = arrayListOf()
+    val optionDetails: List<OptionDetailUpdateRequest> = arrayListOf()
 )
 
 data class OptionDetailUpdateRequest(

@@ -30,18 +30,18 @@ class CafeMenu protected constructor(
         protected set
 
     @OneToMany(mappedBy = "cafeMenu", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
-    val menuOptionList: MutableList<MenuOption> = arrayListOf()
+    val menuOptions: MutableList<MenuOption> = arrayListOf()
 
     companion object {
         fun createCafeMenu(
             name: String,
             price: BigDecimal,
-            menuOptionRequestList: List<MenuOptionRegisterRequest>
+            menuOptionRequests: List<MenuOptionRegisterRequest>
         ): CafeMenu {
-            val menuOptionEntityList = menuOptionRequestList.map { menuOptionRequestDto ->
+            val menuOptionEntities = menuOptionRequests.map { menuOptionRequestDto ->
                 MenuOption.createMenuOption(
                     title = menuOptionRequestDto.title,
-                    optionDetailRequestList = menuOptionRequestDto.optionDetailList
+                    optionDetailRequests = menuOptionRequestDto.optionDetails
                 )
             }
 
@@ -49,7 +49,7 @@ class CafeMenu protected constructor(
                 name = name,
                 price = price
             ).apply {
-                menuOptionEntityList.forEach { this.addMenuOption(it) }
+                menuOptionEntities.forEach { this.addMenuOption(it) }
             }
         }
     }
@@ -59,7 +59,7 @@ class CafeMenu protected constructor(
     }
 
     fun addMenuOption(menuOption: MenuOption) {
-        this.menuOptionList.add(menuOption)
+        this.menuOptions.add(menuOption)
         menuOption.updateCafeMenu(this)
     }
 

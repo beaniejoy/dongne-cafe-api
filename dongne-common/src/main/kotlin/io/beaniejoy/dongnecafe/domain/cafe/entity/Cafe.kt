@@ -37,10 +37,10 @@ class Cafe protected constructor(
         protected set
 
     @OneToMany(mappedBy = "cafe", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
-    val cafeMenuList: MutableList<CafeMenu> = arrayListOf()
+    val cafeMenus: MutableList<CafeMenu> = arrayListOf()
 
     @OneToMany(mappedBy = "cafe", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
-    val cafeImageList: MutableList<CafeImage> = arrayListOf()
+    val cafeImages: MutableList<CafeImage> = arrayListOf()
 
     companion object {
         fun createCafe(
@@ -48,13 +48,13 @@ class Cafe protected constructor(
             address: String,
             phoneNumber: String,
             description: String,
-            cafeMenuRequestList: List<CafeMenuRegisterRequest>,
+            cafeMenuRequests: List<CafeMenuRegisterRequest>,
         ): Cafe {
-            val cafeMenuEntityList = cafeMenuRequestList.map { cafeMenuRequestDto ->
+            val cafeMenuEntities = cafeMenuRequests.map { cafeMenuRequestDto ->
                 CafeMenu.createCafeMenu(
                     name = cafeMenuRequestDto.name!!,
                     price = cafeMenuRequestDto.price,
-                    menuOptionRequestList = cafeMenuRequestDto.menuOptionList
+                    menuOptionRequests = cafeMenuRequestDto.menuOptions
                 )
             }
 
@@ -64,13 +64,13 @@ class Cafe protected constructor(
                 phoneNumber = phoneNumber,
                 description = description
             ).apply {
-                cafeMenuEntityList.forEach { this.addCafeMenu(it) }
+                cafeMenuEntities.forEach { this.addCafeMenu(it) }
             }
         }
     }
 
     fun addCafeMenu(cafeMenu: CafeMenu) {
-        this.cafeMenuList.add(cafeMenu)
+        this.cafeMenus.add(cafeMenu)
         cafeMenu.updateCafe(this)
     }
 

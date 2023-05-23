@@ -6,8 +6,8 @@ data class CafeSearchInfo(
     val cafeId: Long = 0L,
     val name: String? = null,
     val address: String? = null,
-    val totalRate: Double? = null,
-    val imageList: List<CafeImageInfo> = emptyList()
+    val totalRate: Float? = null,
+    val images: List<CafeImageInfo> = emptyList()
 ) {
     companion object {
         fun of(cafe: Cafe): CafeSearchInfo {
@@ -15,8 +15,8 @@ data class CafeSearchInfo(
                 cafeId = cafe.id,
                 name = cafe.name,
                 address = cafe.address,
-                totalRate = cafe.totalRate,
-                imageList = cafe.cafeImageList.map { CafeImageInfo.of(it) }
+                totalRate = cafe.totalRate.toFloat(),
+                images = cafe.cafeImages.map { CafeImageInfo.of(it) }
             )
         }
     }

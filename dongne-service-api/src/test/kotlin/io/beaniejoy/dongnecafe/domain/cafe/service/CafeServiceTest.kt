@@ -28,7 +28,7 @@ internal class CafeServiceTest {
     @DisplayName("카페 신규 생성 테스트")
     fun create_cafe_test() {
         // given
-        val (name, address, phoneNumber, description, cafeMenuList) = CafeTestUtils.createCafeRegisterRequest()
+        val (name, address, phoneNumber, description, cafeMenus) = CafeTestUtils.createCafeRegisterRequest()
         val savedMockCafeId = 100L
 
         `when`(mockCafeRepository.findByName(name!!)).thenReturn(null)
@@ -42,7 +42,7 @@ internal class CafeServiceTest {
             address = address!!,
             phoneNumber = phoneNumber!!,
             description = description!!,
-            cafeMenuRequestList = cafeMenuList
+            cafeMenuRequests = cafeMenus
         )
 
         // then
@@ -56,13 +56,13 @@ internal class CafeServiceTest {
     @DisplayName("카페 신규 생성시 이미 존재하는 카페 예외 발생 테스트")
     fun fail_create_cafe_when_existed() {
         // given
-        val (name, address, phoneNumber, description, cafeMenuList) = CafeTestUtils.createCafeRegisterRequest()
+        val (name, address, phoneNumber, description, cafeMenus) = CafeTestUtils.createCafeRegisterRequest()
         val cafe = Cafe.createCafe(
             name = name!!,
             address = address!!,
             phoneNumber = phoneNumber!!,
             description = description!!,
-            cafeMenuRequestList = cafeMenuList
+            cafeMenuRequests = cafeMenus
         )
 
         `when`(mockCafeRepository.findByName(name)).thenReturn(cafe)
@@ -75,7 +75,7 @@ internal class CafeServiceTest {
                 address = address,
                 phoneNumber = phoneNumber,
                 description = description,
-                cafeMenuRequestList = cafeMenuList
+                cafeMenuRequests = cafeMenus
             )
         }
         verify(mockCafeRepository).findByName(name)
@@ -86,13 +86,13 @@ internal class CafeServiceTest {
     @DisplayName("카페 정보 변경 테스트")
     fun update_cafe_test() {
         // given
-        val (name, address, phoneNumber, description, cafeMenuList) = CafeTestUtils.createCafeRegisterRequest()
+        val (name, address, phoneNumber, description, cafeMenus) = CafeTestUtils.createCafeRegisterRequest()
 //        val cafe = Cafe.createCafe(
 //            name = name!!,
 //            address = address!!,
 //            phoneNumber = phoneNumber!!,
 //            description = description!!,
-//            cafeMenuRequestList = cafeMenuList
+//            cafeMenuRequests = cafeMenus
 //        )
         val cafeId = 50L
 
