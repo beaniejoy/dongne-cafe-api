@@ -16,6 +16,7 @@
   - Flyway(migration)
 - CI/CD
   - Jenkins
+  - Ansible
 - Cloud Server
   - AWS Lightsail(Amazon Linux2)
 
