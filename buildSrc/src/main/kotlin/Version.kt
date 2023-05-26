@@ -14,5 +14,7 @@ object Version {
     object Deps {
         const val KOTLIN_LOGGING = "3.0.4"
         const val JWT = "0.11.5"
+
+        const val MYSQL = "8.0.32"
     }
 }

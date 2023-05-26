@@ -56,7 +56,7 @@ subprojects {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
         // DB
-        runtimeOnly("mysql:mysql-connector-java") // MySQL
+        runtimeOnly("mysql:mysql-connector-java:${Version.Deps.MYSQL}") // MySQL
         runtimeOnly("com.h2database:h2") // H2
 
         // JWT
