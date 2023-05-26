@@ -2,7 +2,7 @@ spring:
   profiles:
     active: local
   lifecycle:
-    timeout-per-shutdown-phase: 30s # default 30s
+    timeout-per-shutdown-phase: 30s # default 30s (graceful shutdown)
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:

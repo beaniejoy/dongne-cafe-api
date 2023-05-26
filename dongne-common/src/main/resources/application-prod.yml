@@ -1,6 +1,4 @@
 spring:
-#  config:
-#    import: optional:file:${ENV_LOCATION}/.env[.properties]
   datasource:
     hikari:
       jdbc-url: jdbc:mysql://${DATABASE_HOST}/dongne
