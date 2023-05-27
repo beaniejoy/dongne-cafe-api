@@ -1,5 +1,8 @@
 #!/bin/bash
 
+trap "echo -e '\nThe script is terminated'; exit" SIGINT
+
+# get flyway command from first argument
 COMMAND=$1
 
 # flyway telemetry disabled
@@ -8,6 +11,19 @@ export REDGATE_DISABLE_TELEMETRY=true
 PROJECT_NAME="dongne-cafe-api"
 PROJECT_ROOT_DIR=$(pwd)
 FLYWAY_CONFIG_FILE="flyway-local.conf"
+
+repeat() {
+  local start=1
+  local end=$2
+  local range=$(seq $start $end)
+	for i in $range; do echo -n "$1"; done
+}
+
+print_func_delimiter() {
+  repeat '#' 50; echo;
+  repeat '#' 14; echo -n " [LOCAL] flyway ${COMMAND} "; repeat '#' `expr 19 - ${#COMMAND}`
+  echo
+}
 
 check_project_root_path() {
   if [[ ${PROJECT_ROOT_DIR} != *"/${PROJECT_NAME}" ]];
@@ -20,29 +36,31 @@ check_project_root_path() {
 }
 
 flyway_version_check() {
-  echo "###################################"
+  echo "${FUNC_DELIMITER}"
   echo "Using Flyway Version"
 
   if ! flyway --version 2> /dev/null;
   then
     echo "Error >> Flyway Not Supported"
-    exit 1
+    exit 127
   fi
-  echo -e "###################################\n"
+  echo -e "${FUNC_DELIMITER}\n"
 }
 
 error_check() {
   if [ $? -ne 0 ];
   then
-    echo "Error >> $1 & Exit"
-    exit 1
+    echo "Error >> line: $1"
   fi
 
   printf "\n"
 }
 
+# flyway migrate
 flyway_migration_process() {
-  echo "########### [LOCAL] DB Migration ###########"
+  trap "error_check $LINENO; after_process; exit" ERR
+
+  print_func_delimiter
 
   STEP_1="1. Flyway Info"
   STEP_2="2. Flyway Migrate"
@@ -50,31 +68,43 @@ flyway_migration_process() {
 
   echo ${STEP_1}
   flyway info -configFiles="${PROJECT_ROOT_DIR}/db/${FLYWAY_CONFIG_FILE}"
-#  error_check "${STEP_1}"
+
+  echo
 
   echo ${STEP_2}
   flyway migrate -configFiles="${PROJECT_ROOT_DIR}/db/${FLYWAY_CONFIG_FILE}"
-#  error_check "${STEP_2}"
+
+  echo
 
   echo ${STEP_3}
   flyway validate -configFiles="${PROJECT_ROOT_DIR}/db/${FLYWAY_CONFIG_FILE}"
-#  error_check "${STEP_3}"
 }
 
+# flyway repair
 flyway_repair() {
-  echo "########### [LOCAL] Repair Flyway Migration ###########"
+  trap "error_check $LINENO; after_process; exit" ERR
+
+  print_func_delimiter
 
   STEP_1="1. Flyway Repair"
   flyway repair -configFiles="${PROJECT_ROOT_DIR}/db/${FLYWAY_CONFIG_FILE}"
-  error_check "${STEP_1}"
 }
 
+# flyway clean
 flyway_clean() {
-  echo "########### [LOCAL] Repair Flyway Clean ###########"
+  trap "error_check $LINENO; after_process; exit" ERR
+
+  print_func_delimiter
 
   STEP_1="1. Flyway Clean"
   flyway clean -configFiles="${PROJECT_ROOT_DIR}/db/${FLYWAY_CONFIG_FILE}"
-  error_check "${STEP_1}"
+}
+
+# help
+help() {
+  HELP_FILE="${PROJECT_ROOT_DIR}/scripts/migrate/migration-local.help"
+
+  cat ${HELP_FILE}
 }
 
 # delete flyway report files
@@ -84,7 +114,7 @@ remove_report_files() {
   if [ ${RETRY_COUNT} -gt ${RETRY_COUNT_MAX} ];
   then
     echo "No report files. but you have to check."
-    exit 0
+    return
   fi
 
   sleep 1
@@ -93,7 +123,7 @@ remove_report_files() {
   REPORT_JSON=${PROJECT_ROOT_DIR}/report.json
   if [[ -e ${REPORT_HTML} || -e ${REPORT_JSON} ]];
   then
-    echo
+    echo "report files found! now remove them"
     rm ${REPORT_HTML} ${REPORT_JSON}
   else
     echo "[${RETRY_COUNT}] No report files"
@@ -102,11 +132,29 @@ remove_report_files() {
   fi
 }
 
-# main block
+after_process() {
+  echo "${FUNC_DELIMITER}"
 
-{
+  remove_report_files
+
+  echo "${FUNC_DELIMITER}"
+  date +%Y-%m-%d_%H:%M:%S
+}
+
+# main block
+main() {
+  if [[ ${COMMAND} == "help" ]];
+  then
+    help
+    exit 0
+  fi
+
   check_project_root_path
+
   flyway_version_check
+
+  trap "error_check $LINENO; after_process; exit" ERR
+
   case "${COMMAND}" in
     migrate)
       flyway_migration_process
@@ -118,11 +166,8 @@ remove_report_files() {
       flyway_clean
       ;;
   esac
-} || {
-  echo "error"
+
+  after_process
 }
 
-remove_report_files
-
-echo -n "##### "
-date +%Y-%m-%d_%H:%M:%S
+main
