@@ -59,7 +59,7 @@ pipeline {
                     }
 
                     // flyway migration directory
-                    MIGRATION_WORKSPACE = "${WORKSPACE}/db"
+                    MIGRATION_WORKSPACE = "${WORKSPACE}/flyway"
                 }
             }
         }

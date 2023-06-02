@@ -46,7 +46,7 @@ pipeline {
                     }
 
                     // flyway migration
-                    MIGRATION_WORKSPACE = "${WORKSPACE}/db"
+                    MIGRATION_WORKSPACE = "${WORKSPACE}/flyway"
 
                     // ansible playbook
                     ANSIBLE_INVENTORY = "${HOME}/ansible/inventory"

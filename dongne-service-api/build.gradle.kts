@@ -1,5 +1,5 @@
 dependencies {
-    implementation(project(":dongne-common"))
+    implementation(project(":domain"))
 
-    testImplementation(testFixtures(project(":dongne-common")))
+    testImplementation(testFixtures(project(":domain")))
 }
