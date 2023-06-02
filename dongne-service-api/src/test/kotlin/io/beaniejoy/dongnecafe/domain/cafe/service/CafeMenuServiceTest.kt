@@ -6,7 +6,7 @@ import io.beaniejoy.dongnecafe.domain.cafe.entity.CafeMenu
 import io.beaniejoy.dongnecafe.domain.cafe.repository.CafeMenuRepository
 import io.beaniejoy.dongnecafe.domain.cafe.repository.MenuOptionRepository
 import io.beaniejoy.dongnecafe.domain.cafe.repository.OptionDetailRepository
-import io.beaniejoy.dongnecafe.domain.cafe.utils.CafeMenuTestUtils
+import io.beaniejoy.dongnecafe.utils.CafeMenuTestUtils
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -44,10 +44,9 @@ internal class CafeMenuServiceTest {
     fun find_cafe_menu_by_cafe_menu_id() {
         // given
         val (name, price, menuOptions) = CafeMenuTestUtils.createCafeMenuRegisterRequest()
-        val cafeMenu = CafeMenu.createCafeMenu(
+        val cafeMenu = CafeMenu.createEntity(
             name = name!!,
-            price = price,
-            menuOptionRequests = menuOptions
+            price = price
         )
 
         val findCafeId = 100L

@@ -1,12 +1,12 @@
 package io.beaniejoy.dongnecafe.domain.cafe.service
 
+import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
+import io.beaniejoy.dongnecafe.common.error.exception.BusinessException
 import io.beaniejoy.dongnecafe.domain.cafe.entity.Cafe
-import io.beaniejoy.dongnecafe.domain.cafe.model.request.CafeMenuRegisterRequest
+import io.beaniejoy.dongnecafe.domain.cafe.model.request.CafeMenuCategoryRegisterRequest
 import io.beaniejoy.dongnecafe.domain.cafe.model.response.CafeDetailedInfo
 import io.beaniejoy.dongnecafe.domain.cafe.model.response.CafeSearchInfo
 import io.beaniejoy.dongnecafe.domain.cafe.repository.CafeRepository
-import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
-import io.beaniejoy.dongnecafe.common.error.exception.BusinessException
 import mu.KLogging
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 class CafeService(
     private val cafeRepository: CafeRepository,
+    private val cafeMenuCategoryService: CafeMenuCategoryService
 ) {
     companion object : KLogging()
 
@@ -25,6 +26,7 @@ class CafeService(
      * 카페 생성 로직
      * - 카페 생성시 카페정보 뿐만 아니라 하위 메뉴정보, 옵션, 옵션상세 같이 생성
      * - 카페 정보(이름, 주소, 전화번호, 소개글)
+     * - 카페 카테고리(이름, 설명)
      * - 카페 메뉴정보 (메뉴 이름, 가격 /ex. 아메리카노, 2,800)
      * - 메뉴 옵션 (옵션 이름 /ex. 사이즈)
      * - 옵션 상세 (상세 이름, 추가 금액 /ex. [(medium, 0), (large, 200), (venti, 700)])
@@ -35,21 +37,29 @@ class CafeService(
         address: String,
         phoneNumber: String,
         description: String,
-        cafeMenuRequests: List<CafeMenuRegisterRequest>,
-    ): Long {
+        cafeMenuCategoryRegisterRequests: List<CafeMenuCategoryRegisterRequest>,
+    ): Cafe {
         checkCafeExistedByName(name)
 
-        val cafe = Cafe.createCafe(
+        val cafe = Cafe.createEntity(
             name = name,
             address = address,
             phoneNumber = phoneNumber,
-            description = description,
-            cafeMenuRequests = cafeMenuRequests
+            description = description
         )
 
         val savedCafe = cafeRepository.save(cafe)
 
-        return savedCafe.id
+        cafeMenuCategoryRegisterRequests.forEach {
+            cafeMenuCategoryService.createNewOfCafe(
+                name = it.name,
+                description = it.description,
+                cafeMenuRegisterRequests = it.cafeMenus,
+                cafe = savedCafe
+            )
+        }
+
+        return savedCafe
     }
 
     private fun checkCafeExistedByName(name: String) {
@@ -65,8 +75,8 @@ class CafeService(
         return cafes.map { CafeSearchInfo.of(it) }
     }
 
-    fun getDetailedInfoByName(name: String): CafeDetailedInfo {
-        val cafe = cafeRepository.findByName(name)
+    fun getDetailedInfoById(id: Long): CafeDetailedInfo {
+        val cafe = cafeRepository.findByIdOrNull(id)
             ?: throw BusinessException(ErrorCode.CAFE_NOT_FOUND)
 
         return CafeDetailedInfo.of(cafe)

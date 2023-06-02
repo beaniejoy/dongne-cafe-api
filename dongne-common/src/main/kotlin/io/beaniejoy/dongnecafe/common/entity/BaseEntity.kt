@@ -16,6 +16,6 @@ abstract class BaseEntity protected constructor() : BaseTimeEntity() {
         protected set
 
     @LastModifiedBy
-    lateinit var updatedBy: String
+    var updatedBy: String? = null
         protected set
 }

@@ -1,10 +1,10 @@
 package io.beaniejoy.dongnecafe.domain.cafe.service
 
-import io.beaniejoy.dongnecafe.domain.cafe.entity.Cafe
-import io.beaniejoy.dongnecafe.domain.cafe.repository.CafeRepository
-import io.beaniejoy.dongnecafe.domain.cafe.utils.CafeTestUtils
 import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
 import io.beaniejoy.dongnecafe.common.error.exception.BusinessException
+import io.beaniejoy.dongnecafe.domain.cafe.entity.Cafe
+import io.beaniejoy.dongnecafe.domain.cafe.repository.CafeRepository
+import io.beaniejoy.dongnecafe.utils.CafeTestUtils
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.extension.ExtendWith
@@ -37,19 +37,19 @@ internal class CafeServiceTest {
         }
 
         // when
-        val savedCafeId = mockCafeService.createNew(
+        val savedCafe = mockCafeService.createNew(
             name = name,
             address = address!!,
             phoneNumber = phoneNumber!!,
             description = description!!,
-            cafeMenuRequests = cafeMenus
+            cafeMenuCategoryRegisterRequests = cafeMenus
         )
 
         // then
         verify(mockCafeRepository).findByName(name) // TODO eq 에러 발생 이유
         verify(mockCafeRepository).save(any(Cafe::class.java))
 
-        assertEquals(savedCafeId, savedMockCafeId)
+        assertEquals(savedCafe, savedMockCafeId)
     }
 
     @Test
@@ -57,12 +57,11 @@ internal class CafeServiceTest {
     fun fail_create_cafe_when_existed() {
         // given
         val (name, address, phoneNumber, description, cafeMenus) = CafeTestUtils.createCafeRegisterRequest()
-        val cafe = Cafe.createCafe(
+        val cafe = Cafe.createEntity(
             name = name!!,
             address = address!!,
             phoneNumber = phoneNumber!!,
-            description = description!!,
-            cafeMenuRequests = cafeMenus
+            description = description!!
         )
 
         `when`(mockCafeRepository.findByName(name)).thenReturn(cafe)
@@ -75,7 +74,7 @@ internal class CafeServiceTest {
                 address = address,
                 phoneNumber = phoneNumber,
                 description = description,
-                cafeMenuRequests = cafeMenus
+                cafeMenuCategoryRegisterRequests = cafeMenus
             )
         }
         verify(mockCafeRepository).findByName(name)

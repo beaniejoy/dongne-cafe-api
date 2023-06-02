@@ -17,6 +17,6 @@ abstract class BaseTimeEntity protected constructor() {
         protected set
 
     @LastModifiedDate
-    lateinit var updatedAt: LocalDateTime
+    var updatedAt: LocalDateTime? = null
         protected set
 }

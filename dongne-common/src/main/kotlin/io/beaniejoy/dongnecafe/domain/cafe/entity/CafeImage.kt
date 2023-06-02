@@ -4,7 +4,7 @@ import io.beaniejoy.dongnecafe.common.entity.BaseEntity
 import javax.persistence.*
 
 @Entity
-@Table(name = "cafe_image")
+@Table(name = "cafe_images")
 class CafeImage protected constructor(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,7 +14,7 @@ class CafeImage protected constructor(
     @Column(name = "img_url", nullable = false)
     val imgUrl: String,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_id", nullable = false)
     val cafe: Cafe
 ) : BaseEntity()

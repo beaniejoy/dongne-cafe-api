@@ -1,6 +1,7 @@
 package io.beaniejoy.dongnecafe.domain.cafe.controller
 
 import io.beaniejoy.dongnecafe.common.response.ApplicationResponse
+import io.beaniejoy.dongnecafe.domain.cafe.entity.Cafe
 import io.beaniejoy.dongnecafe.domain.cafe.model.request.CafeRegisterRequest
 import io.beaniejoy.dongnecafe.domain.cafe.model.request.CafeUpdateRequest
 import io.beaniejoy.dongnecafe.domain.cafe.model.response.CafeDetailedInfo
@@ -27,12 +28,12 @@ class CafeController(
             address = resource.address!!,
             phoneNumber = resource.phoneNumber!!,
             description = resource.description!!,
-            cafeMenuRequests = resource.cafeMenus
+            cafeMenuCategoryRegisterRequests = resource.cafeMenuCategories
         )
 
         return ApplicationResponse
             .success("OK")
-            .data(newCafeId)
+            .data(newCafeId.id)
     }
 
     /**
@@ -40,7 +41,7 @@ class CafeController(
      */
     @GetMapping
     fun searchCafes(
-        @RequestParam("name") name: String?,
+        @RequestParam(name = "name", required = false) name: String?,
         @PageableDefault(sort = ["name"], direction = Sort.Direction.ASC, page = 0, size = 10) pageable: Pageable
     ): ApplicationResponse<Page<CafeSearchInfo>> {
         val searchCafes = cafeService.searchCafes(name, pageable)
@@ -53,9 +54,9 @@ class CafeController(
     /**
      * 단일 카페 상세 조회
      */
-    @GetMapping("/{name}")
-    fun getDetailedInfo(@PathVariable("name") name: String): ApplicationResponse<CafeDetailedInfo> {
-        val cafeDetailedInfo = cafeService.getDetailedInfoByName(name)
+    @GetMapping("/{id}")
+    fun getDetailedInfo(@PathVariable("id") id: Long): ApplicationResponse<CafeDetailedInfo> {
+        val cafeDetailedInfo = cafeService.getDetailedInfoById(id)
 
         return ApplicationResponse
             .success()

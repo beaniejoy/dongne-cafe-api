@@ -1,16 +1,15 @@
 package io.beaniejoy.dongnecafe.domain.cafe.entity
 
 import io.beaniejoy.dongnecafe.common.entity.BaseEntity
-import io.beaniejoy.dongnecafe.domain.cafe.model.request.CafeMenuRegisterRequest
 import javax.persistence.*
 
 @Entity
-@Table(name = "cafe")
+@Table(name = "cafes")
 class Cafe protected constructor(
     name: String,
     address: String,
     phoneNumber: String,
-    description: String,
+    description: String
 ) : BaseEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,41 +36,25 @@ class Cafe protected constructor(
         protected set
 
     @OneToMany(mappedBy = "cafe", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
-    val cafeMenus: MutableList<CafeMenu> = arrayListOf()
+    val cafeMenuCategories: MutableList<CafeMenuCategory> = arrayListOf()
 
     @OneToMany(mappedBy = "cafe", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     val cafeImages: MutableList<CafeImage> = arrayListOf()
 
     companion object {
-        fun createCafe(
+        fun createEntity(
             name: String,
             address: String,
             phoneNumber: String,
-            description: String,
-            cafeMenuRequests: List<CafeMenuRegisterRequest>,
+            description: String
         ): Cafe {
-            val cafeMenuEntities = cafeMenuRequests.map { cafeMenuRequestDto ->
-                CafeMenu.createCafeMenu(
-                    name = cafeMenuRequestDto.name!!,
-                    price = cafeMenuRequestDto.price,
-                    menuOptionRequests = cafeMenuRequestDto.menuOptions
-                )
-            }
-
             return Cafe(
                 name = name,
                 address = address,
                 phoneNumber = phoneNumber,
                 description = description
-            ).apply {
-                cafeMenuEntities.forEach { this.addCafeMenu(it) }
-            }
+            )
         }
-    }
-
-    fun addCafeMenu(cafeMenu: CafeMenu) {
-        this.cafeMenus.add(cafeMenu)
-        cafeMenu.updateCafe(this)
     }
 
     fun updateInfo(

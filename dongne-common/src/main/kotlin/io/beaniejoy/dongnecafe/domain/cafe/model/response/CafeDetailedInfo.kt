@@ -9,7 +9,7 @@ data class CafeDetailedInfo(
     val phoneNumber: String? = null,
     val totalRate: Float? = null,
     val description: String? = null,
-    val menus: List<CafeMenuInfo> = emptyList(),
+    val cafeMenuCategories: List<CafeMenuCategoryInfo> = emptyList(),
     val images: List<CafeImageInfo> = emptyList()
 ) {
     companion object {
@@ -21,7 +21,7 @@ data class CafeDetailedInfo(
                 phoneNumber = cafe.phoneNumber,
                 totalRate = cafe.totalRate.toFloat(),
                 description = cafe.description,
-                menus = cafe.cafeMenus.map { CafeMenuInfo.of(it) },
+                cafeMenuCategories = cafe.cafeMenuCategories.map { CafeMenuCategoryInfo.of(it) },
                 images = cafe.cafeImages.map { CafeImageInfo.of(it) }
             )
         }

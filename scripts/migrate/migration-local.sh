@@ -10,7 +10,8 @@ export REDGATE_DISABLE_TELEMETRY=true
 
 PROJECT_NAME="dongne-cafe-api"
 PROJECT_ROOT_DIR=$(pwd)
-FLYWAY_CONFIG_FILE="flyway-local.conf"
+FLYWAY_CONFIG_FILE="${PROJECT_ROOT_DIR}/db/flyway-local.conf"
+HELP_FILE="${PROJECT_ROOT_DIR}/scripts/migrate/migration-local.help"
 
 repeat() {
   local start=1
@@ -56,6 +57,18 @@ error_check() {
   printf "\n"
 }
 
+# flyway info
+flyway_info() {
+  trap "error_check $LINENO; after_process; exit" ERR
+
+  print_func_delimiter
+
+  STEP_1="1. Flyway Info"
+
+  echo ${STEP_1}
+  flyway info -configFiles="${FLYWAY_CONFIG_FILE}"
+}
+
 # flyway migrate
 flyway_migration_process() {
   trap "error_check $LINENO; after_process; exit" ERR
@@ -67,17 +80,17 @@ flyway_migration_process() {
   STEP_3="3. Flyway Validate"
 
   echo ${STEP_1}
-  flyway info -configFiles="${PROJECT_ROOT_DIR}/db/${FLYWAY_CONFIG_FILE}"
+  flyway info -configFiles="${FLYWAY_CONFIG_FILE}"
 
   echo
 
   echo ${STEP_2}
-  flyway migrate -configFiles="${PROJECT_ROOT_DIR}/db/${FLYWAY_CONFIG_FILE}"
+  flyway migrate -configFiles="${FLYWAY_CONFIG_FILE}"
 
   echo
 
   echo ${STEP_3}
-  flyway validate -configFiles="${PROJECT_ROOT_DIR}/db/${FLYWAY_CONFIG_FILE}"
+  flyway validate -configFiles="${FLYWAY_CONFIG_FILE}"
 }
 
 # flyway repair
@@ -87,7 +100,7 @@ flyway_repair() {
   print_func_delimiter
 
   STEP_1="1. Flyway Repair"
-  flyway repair -configFiles="${PROJECT_ROOT_DIR}/db/${FLYWAY_CONFIG_FILE}"
+  flyway repair -configFiles="${FLYWAY_CONFIG_FILE}"
 }
 
 # flyway clean
@@ -97,14 +110,7 @@ flyway_clean() {
   print_func_delimiter
 
   STEP_1="1. Flyway Clean"
-  flyway clean -configFiles="${PROJECT_ROOT_DIR}/db/${FLYWAY_CONFIG_FILE}"
-}
-
-# help
-help() {
-  HELP_FILE="${PROJECT_ROOT_DIR}/scripts/migrate/migration-local.help"
-
-  cat ${HELP_FILE}
+  flyway clean -configFiles="${FLYWAY_CONFIG_FILE}"
 }
 
 # delete flyway report files
@@ -143,9 +149,10 @@ after_process() {
 
 # main block
 main() {
+  # print help file
   if [[ ${COMMAND} == "help" ]];
   then
-    help
+    cat ${HELP_FILE}
     exit 0
   fi
 
@@ -164,6 +171,9 @@ main() {
       ;;
     clean)
       flyway_clean
+      ;;
+    info)
+      flyway_info
       ;;
   esac
 

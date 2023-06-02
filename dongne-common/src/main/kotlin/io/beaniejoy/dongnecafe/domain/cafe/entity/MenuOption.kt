@@ -5,7 +5,7 @@ import io.beaniejoy.dongnecafe.domain.cafe.model.request.OptionDetailRegisterReq
 import javax.persistence.*
 
 @Entity
-@Table(name = "menu_option")
+@Table(name = "menu_options")
 class MenuOption protected constructor(
     title: String
 ) : BaseEntity() {
@@ -27,29 +27,20 @@ class MenuOption protected constructor(
     val optionDetails: MutableList<OptionDetail> = arrayListOf()
 
     companion object {
-        fun createMenuOption(title: String, optionDetailRequests: List<OptionDetailRegisterRequest>): MenuOption {
-            val optionDetailEntities = optionDetailRequests.map { optionDetailRequestDto ->
-                OptionDetail.createOptionDetail(
-                    name = optionDetailRequestDto.name,
-                    extraPrice = optionDetailRequestDto.extraPrice
-                )
-            }
-
+        fun createEntity(title: String): MenuOption {
             return MenuOption(
                 title = title
-            ).apply {
-                optionDetailEntities.forEach { this.addOptionDetail(it) }
-            }
+            )
         }
     }
 
     fun updateCafeMenu(cafeMenu: CafeMenu) {
-        this.cafeMenu = cafeMenu
-    }
+        this.cafeMenu?.run {
+            this@run.menuOptions.remove(this@MenuOption)
+        }
 
-    fun addOptionDetail(optionDetail: OptionDetail) {
-        this.optionDetails.add(optionDetail)
-        optionDetail.updateMenuOption(this)
+        this.cafeMenu = cafeMenu
+        cafeMenu.menuOptions.add(this)
     }
 
     fun updateInfo(title: String) {

@@ -6,6 +6,10 @@ val bootJar: BootJar by tasks
 bootJar.enabled = false
 jar.enabled = true
 
+plugins {
+    `java-test-fixtures`
+}
+
 allOpen {
     annotation("javax.persistence.Entity")
     annotation("javax.persistence.Embeddable")
