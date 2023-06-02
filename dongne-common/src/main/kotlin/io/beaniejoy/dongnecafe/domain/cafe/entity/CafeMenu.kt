@@ -1,15 +1,14 @@
 package io.beaniejoy.dongnecafe.domain.cafe.entity
 
 import io.beaniejoy.dongnecafe.common.entity.BaseEntity
-import io.beaniejoy.dongnecafe.domain.cafe.model.request.MenuOptionRegisterRequest
 import java.math.BigDecimal
 import javax.persistence.*
 
 @Entity
-@Table(name = "cafe_menu")
+@Table(name = "cafe_menus")
 class CafeMenu protected constructor(
     name: String,
-    price: BigDecimal,
+    price: BigDecimal
 ) : BaseEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,42 +24,32 @@ class CafeMenu protected constructor(
         protected set
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cafe_id", nullable = false)
-    var cafe: Cafe? = null
+    @JoinColumn(name = "menu_category_id", nullable = false)
+    var cafeMenuCategory: CafeMenuCategory? = null
         protected set
 
     @OneToMany(mappedBy = "cafeMenu", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     val menuOptions: MutableList<MenuOption> = arrayListOf()
 
     companion object {
-        fun createCafeMenu(
+        fun createEntity(
             name: String,
-            price: BigDecimal,
-            menuOptionRequests: List<MenuOptionRegisterRequest>
+            price: BigDecimal
         ): CafeMenu {
-            val menuOptionEntities = menuOptionRequests.map { menuOptionRequestDto ->
-                MenuOption.createMenuOption(
-                    title = menuOptionRequestDto.title,
-                    optionDetailRequests = menuOptionRequestDto.optionDetails
-                )
-            }
-
             return CafeMenu(
                 name = name,
                 price = price
-            ).apply {
-                menuOptionEntities.forEach { this.addMenuOption(it) }
-            }
+            )
         }
     }
 
-    fun updateCafe(cafe: Cafe) {
-        this.cafe = cafe
-    }
+    fun updateCafeMenuCategory(cafeMenuCategory: CafeMenuCategory) {
+        this.cafeMenuCategory?.run {
+            this@run.cafeMenus.remove(this@CafeMenu)
+        }
 
-    fun addMenuOption(menuOption: MenuOption) {
-        this.menuOptions.add(menuOption)
-        menuOption.updateCafeMenu(this)
+        this.cafeMenuCategory = cafeMenuCategory
+        cafeMenuCategory.cafeMenus.add(this)
     }
 
     fun updateInfo(

@@ -5,7 +5,7 @@ import io.beaniejoy.dongnecafe.domain.member.constant.RoleType
 import javax.persistence.*
 
 @Entity
-@Table(name = "member")
+@Table(name = "members")
 class Member(
     email: String,
     password: String,

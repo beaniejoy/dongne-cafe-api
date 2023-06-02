@@ -11,5 +11,3 @@ DROP PROCEDURE IF EXISTS insertCafeImages;
 DROP PROCEDURE IF EXISTS insertCafeMenus;
 DROP PROCEDURE IF EXISTS insertMenuOptions;
 DROP PROCEDURE IF EXISTS insertOptionDetails;
-
--- SET sql_notes = 0;

@@ -9,14 +9,14 @@ BEGIN
     DECLARE var_cafe_id INT;
     DECLARE count_cafe INT;
 
-    SET count_cafe = (SELECT COUNT(*) FROM `cafe`);
+    SET count_cafe = (SELECT COUNT(*) FROM `cafes`);
 
     WHILE(i < count_cafe) DO
 		SET j = 1;
-		SET var_cafe_id = (SELECT cafe_id FROM `cafe` LIMIT i, 1);
+		SET var_cafe_id = (SELECT cafe_id FROM `cafes` LIMIT i, 1);
 
 		WHILE(j <= 3) DO
-			INSERT IGNORE INTO `cafe_image` (img_url, created_at, created_by, updated_at, updated_by, cafe_id)
+			INSERT IGNORE INTO `cafe_images` (img_url, created_at, created_by, updated_at, updated_by, cafe_id)
 			VALUES (CONCAT('https://d3qy02qh8hbgxp.cloudfront.net/cafe', idx_img, '.jpg'), now(), 'system', now(), 'system', var_cafe_id);
 
 			SET j = j + 1;

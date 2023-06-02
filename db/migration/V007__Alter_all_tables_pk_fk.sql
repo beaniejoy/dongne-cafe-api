@@ -26,6 +26,7 @@ ALTER TABLE `cafe_image` DROP PRIMARY KEY;
 ALTER TABLE `menu_option` DROP PRIMARY KEY;
 ALTER TABLE `option_detail` DROP PRIMARY KEY;
 
+-- ## 여기가 중요(식별자 변경 지점이기에 flyway migration 작성시 여기를 항상 참조할 것 ##
 -- 3. change 'id' column name and modify to primary key
 ALTER TABLE `cafe`
     CHANGE `id` `cafe_id` bigint unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '카페 ID';
