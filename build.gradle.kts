@@ -1,14 +1,10 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.springframework.boot.gradle.tasks.bundling.BootJar
 import plugin.BuildLifecyclePlugin
 import task.test.TestContainer
 import task.test.TestLoggingUtils
 import task.test.TestSummary
-
-val bootJar: BootJar by tasks
-bootJar.enabled = false
 
 plugins {
     id(Plugins.Spring.BOOT).version(Version.Spring.BOOT)
@@ -46,9 +42,7 @@ subprojects {
     dependencies {
         // Spring Boot Project
         implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-        implementation("org.springframework.boot:spring-boot-starter-web")
         implementation("org.springframework.boot:spring-boot-starter-validation")
-        implementation("org.springframework.boot:spring-boot-starter-security")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
         //kotlin
@@ -58,11 +52,6 @@ subprojects {
         // DB
         runtimeOnly("mysql:mysql-connector-java:${Version.Deps.MYSQL}") // MySQL
         runtimeOnly("com.h2database:h2") // H2
-
-        // JWT
-        implementation("io.jsonwebtoken:jjwt-api:${Version.Deps.JWT}")
-        runtimeOnly("io.jsonwebtoken:jjwt-impl:${Version.Deps.JWT}")
-        runtimeOnly("io.jsonwebtoken:jjwt-jackson:${Version.Deps.JWT}")
 
         // Logging
         implementation("io.github.microutils:kotlin-logging:${Version.Deps.KOTLIN_LOGGING}")

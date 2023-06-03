@@ -1,7 +1,6 @@
-package io.beaniejoy.dongnecafe.utils.security
+package io.beaniejoy.dongnecafe.security
 
-import io.beaniejoy.dongnecafe.infra.security.SecurityUser
-import io.beaniejoy.dongnecafe.infra.security.constant.SecurityConstant.JWT_AUTHORITIES_KEY
+import io.beaniejoy.dongnecafe.utils.security.SecurityConstant.JWT_AUTHORITIES_KEY
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts

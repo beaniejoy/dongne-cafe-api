@@ -1,6 +1,5 @@
-package io.beaniejoy.dongnecafe.infra.logging
+package io.beaniejoy.dongnecafe.logging
 
-import io.beaniejoy.dongnecafe.utils.logging.*
 import org.springframework.http.HttpStatus
 import org.springframework.web.util.ContentCachingRequestWrapper
 import org.springframework.web.util.ContentCachingResponseWrapper

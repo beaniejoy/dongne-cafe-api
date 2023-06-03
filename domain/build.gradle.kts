@@ -21,3 +21,7 @@ noArg {
     annotation("javax.persistence.Embeddable")
     annotation("javax.persistence.MappedSuperclass")
 }
+
+dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-security")
+}

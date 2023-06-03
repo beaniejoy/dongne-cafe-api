@@ -4,7 +4,7 @@ import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
 import io.beaniejoy.dongnecafe.common.error.exception.BusinessException
 import io.beaniejoy.dongnecafe.domain.member.entity.Member
 import io.beaniejoy.dongnecafe.domain.member.repository.MemberRepository
-import io.beaniejoy.dongnecafe.infra.security.SecurityUser
+import io.beaniejoy.dongnecafe.security.SecurityUser
 import mu.KLogging
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetailsService

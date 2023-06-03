@@ -1,4 +1,4 @@
-package io.beaniejoy.dongnecafe.infra.security.handler
+package io.beaniejoy.dongnecafe.security.handler
 
 import mu.KLogging
 import org.springframework.security.core.AuthenticationException

@@ -1,4 +1,4 @@
-package io.beaniejoy.dongnecafe.infra.logging
+package io.beaniejoy.dongnecafe.logging
 
 import mu.KotlinLogging
 import org.slf4j.MDC

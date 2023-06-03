@@ -1,7 +1,7 @@
-package io.beaniejoy.dongnecafe.utils.logging
+package io.beaniejoy.dongnecafe.logging
 
 import com.google.gson.Gson
-import io.beaniejoy.dongnecafe.infra.logging.constant.HttpClientIp
+import io.beaniejoy.dongnecafe.logging.constant.HttpClientIp
 import org.springframework.web.util.ContentCachingRequestWrapper
 import org.springframework.web.util.ContentCachingResponseWrapper
 import javax.servlet.http.HttpServletRequest

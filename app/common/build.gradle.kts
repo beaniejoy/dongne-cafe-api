@@ -1,5 +1,4 @@
 dependencies {
-    implementation(project(":app:common"))
     implementation(project(":domain"))
     testImplementation(testFixtures(project(":domain")))
 

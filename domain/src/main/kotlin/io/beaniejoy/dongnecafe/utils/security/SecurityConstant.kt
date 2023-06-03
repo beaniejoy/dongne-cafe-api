@@ -1,4 +1,4 @@
-package io.beaniejoy.dongnecafe.infra.security.constant
+package io.beaniejoy.dongnecafe.utils.security
 
 object SecurityConstant {
     const val BEARER = "Bearer"

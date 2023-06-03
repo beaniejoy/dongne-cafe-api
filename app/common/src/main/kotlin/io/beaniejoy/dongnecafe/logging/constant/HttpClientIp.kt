@@ -1,4 +1,4 @@
-package io.beaniejoy.dongnecafe.infra.logging.constant
+package io.beaniejoy.dongnecafe.logging.constant
 
 /**
  * http request client ip possible enum list
