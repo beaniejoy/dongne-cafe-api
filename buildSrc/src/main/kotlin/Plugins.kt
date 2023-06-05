@@ -1,5 +1,5 @@
 object Plugins {
-    const val java = "java"
+    const val JAVA = "java"
 
     object Spring {
         const val BOOT = "org.springframework.boot"

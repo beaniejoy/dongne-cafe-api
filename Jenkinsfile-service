@@ -30,7 +30,7 @@ pipeline {
                     sh 'printenv'
 
                     PROJECT_PROFILE = 'prod'
-                    MODULE_NAME = 'dongne-service-api'
+                    MODULE_NAME = 'app:service-api'
 
                     // DB Connection Credential
                     DB_CONNECTION_CREDENTIAL = 'b873f9bf-03cc-4daf-be4f-7e00194aa2a0'

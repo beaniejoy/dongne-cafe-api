@@ -14,7 +14,7 @@ plugins {
     kotlin(Plugins.Kotlin.PLUGIN_JPA).version(Version.KOTLIN).apply(false)
 }
 
-java.apply {
+java {
     sourceCompatibility = Version.JAVA
     targetCompatibility = Version.JAVA
 }
@@ -30,7 +30,7 @@ allprojects {
 
 subprojects {
     apply {
-        plugin(Plugins.java)
+        plugin(Plugins.JAVA)
         plugin(Plugins.Spring.DEPENDENCY_MANAGEMENT)
         plugin(Plugins.Spring.BOOT)
 

@@ -4,5 +4,5 @@ object SubModule {
     const val APP_COMMON = ":app:common"
 
     const val DOMAIN = ":domain"
-    const val INFRA = ":infra"
+    const val DB = ":db"
 }
