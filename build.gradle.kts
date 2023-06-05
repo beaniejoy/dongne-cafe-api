@@ -14,6 +14,11 @@ plugins {
     kotlin(Plugins.Kotlin.PLUGIN_JPA).version(Version.KOTLIN).apply(false)
 }
 
+java.apply {
+    sourceCompatibility = Version.JAVA
+    targetCompatibility = Version.JAVA
+}
+
 allprojects {
     group = "io.beaniejoy.dongecafe"
 //    version = Version.PROJECT_VERSION
@@ -32,11 +37,6 @@ subprojects {
         plugin(Plugins.Kotlin.KOTLIN)
         plugin(Plugins.Kotlin.KOTLIN_SPRING)
         plugin(Plugins.Kotlin.KOTLIN_JPA)
-    }
-
-    java.apply {
-        sourceCompatibility = Version.JAVA
-        targetCompatibility = Version.JAVA
     }
 
     dependencies {
@@ -68,9 +68,6 @@ subprojects {
             jvmTarget = Version.JAVA.toString()
         }
     }
-
-    // for logging when build finished
-    apply<BuildLifecyclePlugin>()
 
     // gradle test logging
     tasks.withType<Test> {
@@ -113,4 +110,7 @@ subprojects {
             }
         })
     }
+
+    // for logging when build finished
+    apply<BuildLifecyclePlugin>()
 }

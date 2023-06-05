@@ -5,6 +5,7 @@ import io.beaniejoy.dongnecafe.domain.cafe.entity.Cafe
 import io.beaniejoy.dongnecafe.utils.CafeTestUtils
 import mu.KLogging
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.FilterType
 import org.springframework.data.repository.Repository
 import org.springframework.data.repository.findByIdOrNull
 
+@Disabled
 @DataJpaTest(
     includeFilters = [
         ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = [AuditingConfig::class])

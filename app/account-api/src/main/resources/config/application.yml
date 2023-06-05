@@ -1,4 +1,2 @@
-logging:
-  level:
-    org.hibernate.SQL: debug # logger 통해 로깅
-    #    org.hibernate.type: trace
+server:
+  port: 9090

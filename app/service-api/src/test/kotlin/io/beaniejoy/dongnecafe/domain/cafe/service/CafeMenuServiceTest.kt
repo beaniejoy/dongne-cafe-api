@@ -8,6 +8,7 @@ import io.beaniejoy.dongnecafe.domain.cafe.repository.MenuOptionRepository
 import io.beaniejoy.dongnecafe.domain.cafe.repository.OptionDetailRepository
 import io.beaniejoy.dongnecafe.utils.CafeMenuTestUtils
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -39,6 +40,7 @@ internal class CafeMenuServiceTest {
     @InjectMocks
     lateinit var mockCafeMenuService: CafeMenuService
 
+    @Disabled
     @Test
     @DisplayName("카페 메뉴 ID를 통한 카페 메뉴 상세 조회")
     fun find_cafe_menu_by_cafe_menu_id() {

@@ -6,3 +6,8 @@ spring:
       password: ${DATABASE_PASSWORD}
       maximum-pool-size: 5
       minimum-idle: 5
+
+logging:
+  level:
+    org.hibernate.SQL: info # logger 통해 로깅
+    org.hibernate.type: trace

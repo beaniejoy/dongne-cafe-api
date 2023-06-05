@@ -1,6 +1,20 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
+val jar: Jar by tasks
+val bootJar: BootJar by tasks
+
+bootJar.enabled = false
+jar.enabled = true
+
+afterEvaluate {
+    project.tasks.withType<Test> {
+        dependsOn("${SubModule.DOMAIN}:test")
+    }
+}
+
 dependencies {
-    implementation(project(":domain"))
-    testImplementation(testFixtures(project(":domain")))
+    implementation(project(SubModule.DOMAIN))
+    testImplementation(testFixtures(project(SubModule.DOMAIN)))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-security")

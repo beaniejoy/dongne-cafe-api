@@ -10,7 +10,7 @@ import task.test.TestLoggingUtils
 
 abstract class BuildOperationService : BuildService<BuildOperationService.Params>, OperationCompletionListener {
     interface Params : BuildServiceParameters {
-        var lastTaskPath: String
+        var targetTaskPaths: List<String>
     }
 
     override fun onFinish(event: FinishEvent?) {
@@ -18,7 +18,7 @@ abstract class BuildOperationService : BuildService<BuildOperationService.Params
             return
         }
 
-        if (event.descriptor.taskPath == parameters.lastTaskPath) {
+        if (parameters.targetTaskPaths.contains(event.descriptor.taskPath)) {
             TestLoggingUtils.printTotalResult(TestContainer.testResults)
             TestContainer.testResults = null
         }

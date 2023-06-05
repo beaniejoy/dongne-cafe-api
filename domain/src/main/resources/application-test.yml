@@ -9,7 +9,3 @@ logging:
   level:
     org.hibernate.SQL: info # ionShutdownHook logging issue (in 'DEBUG' level)
     org.hibernate.type: trace # 실제 sql 쿼리의 parameter 값을 확인하고자 함
-
-jwt:
-  secret_key: ZG9uZ25lLWNhZmUtcHJvamVjdC1rZXktZm9yLXRlc3QtY29kZQo
-  validity_time_in_sec: 60
