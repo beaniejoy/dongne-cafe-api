@@ -10,9 +10,11 @@ object Plugins {
         const val KOTLIN = "kotlin"
         const val KOTLIN_SPRING = "kotlin-spring"
         const val KOTLIN_JPA = "kotlin-jpa"
+        const val KOTLIN_KAPT = "kotlin-kapt"
 
         const val JVM = "jvm"
         const val PLUGIN_SPRING = "plugin.spring"
         const val PLUGIN_JPA = "plugin.jpa"
+        const val KAPT = "kapt" // Kotlin Annotation Processing Tool
     }
 }

@@ -16,5 +16,7 @@ object Version {
         const val JWT = "0.11.5"
 
         const val MYSQL = "8.0.32"
+
+        const val MAPSTRUCT = "1.5.5.Final"
     }
 }

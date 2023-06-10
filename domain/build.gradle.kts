@@ -7,6 +7,7 @@ bootJar.enabled = false
 jar.enabled = true
 
 plugins {
+    kotlin(Plugins.Kotlin.PLUGIN_JPA).version(Version.KOTLIN)
     `java-test-fixtures`
 }
 
