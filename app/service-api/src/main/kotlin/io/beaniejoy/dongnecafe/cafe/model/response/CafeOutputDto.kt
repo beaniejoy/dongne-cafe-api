@@ -1,69 +1,69 @@
-package io.beaniejoy.dongnecafe.cafe.model
+package io.beaniejoy.dongnecafe.cafe.model.response
 
 import java.math.BigDecimal
 
-class CafeInfo {
-    data class RegisteredCafe(
+class CafeOutputDto {
+    data class RegisteredCafeResponse(
         val cafeId: Long,
         val name: String
     )
 
-    data class RegisteredCafeMenuCategory(
+    data class RegisteredCafeMenuCategoryResponse(
         val menuCategoryId: Long,
         val name: String
     )
 
-    data class RegisteredCafeMenu(
+    data class RegisteredCafeMenuResponse(
         val cafeMenuId: Long,
         val name: String
     )
 
-    data class CafeSearchInfo(
+    data class CafeSearchResponse(
         val cafeId: Long,
         val name: String,
         val address: String,
         val totalRate: Float,
-        val cafeImages: List<CafeImageInfo> = emptyList()
+        val cafeImages: List<CafeImageResponse>
     )
 
-    data class CafeDetailedInfo(
+    data class CafeImageResponse(
+        val cafeImageId: Long,
+        val imgUrl: String
+    )
+
+    data class CafeDetailedResponse(
         val cafeId: Long,
         val name: String,
         val address: String,
         val phoneNumber: String,
         val totalRate: Float,
         val description: String?,
-        val cafeMenuCategories: List<CafeMenuCategoryInfo> = emptyList(),
-        val cafeImages: List<CafeImageInfo> = emptyList()
+        val cafeMenuCategories: List<CafeMenuCategoryResponse> = emptyList(),
+        val cafeImages: List<CafeImageResponse> = emptyList()
     )
 
-    data class CafeImageInfo(
-        val cafeImageId: Long,
-        val imgUrl: String
-    )
-
-    data class CafeMenuCategoryInfo(
+    data class CafeMenuCategoryResponse(
         val menuCategoryId: Long,
         val name: String,
         val description: String?,
-        val cafeMenus: List<CafeMenuInfo> = emptyList(),
+        val cafeMenus: List<CafeMenuResponse> = emptyList(),
     )
 
-    data class CafeMenuInfo(
+    data class CafeMenuResponse(
         val cafeMenuId: Long,
         val name: String,
         val price: BigDecimal,
         val description: String?,
-        val menuOptions: List<MenuOptionInfo> = emptyList()
+        val menuOptions: List<MenuOptionResponse> = emptyList()
     )
 
-    data class MenuOptionInfo(
+    data class MenuOptionResponse(
         val menuOptionId: Long,
         val title: String,
-        val optionDetails: List<OptionDetailInfo> = emptyList()
+        val optionDetails: List<OptionDetailResponse> = emptyList()
     )
 
-    data class OptionDetailInfo(
+    data class OptionDetailResponse(
         val optionDetailId: Long,
         val name: String,
         val extraPrice: BigDecimal

@@ -11,6 +11,14 @@ class ApplicationResponse<T>(
     val data: T? = null
 ) {
     companion object {
+        fun created(): ApplicationResponseBuilder {
+            return success("Successfully created")
+        }
+
+        fun updated(): ApplicationResponseBuilder {
+            return success("Successfully updated")
+        }
+
         fun success(message: String? = null): ApplicationResponseBuilder {
             return ApplicationResponseBuilder(
                 result = ResultCode.SUCCESS,
@@ -29,9 +37,9 @@ class ApplicationResponse<T>(
 }
 
 class ApplicationResponseBuilder(
-    var result: ResultCode,
-    var message: String? = null,
-    var errorCode: String? = null
+    private val result: ResultCode,
+    private val message: String? = null,
+    private val errorCode: String? = null
 ) {
     fun build(): ApplicationResponse<Nothing> {
         return data(null)

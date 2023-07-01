@@ -2,6 +2,8 @@ package io.beaniejoy.dongnecafe.cafe.entity
 
 import io.beaniejoy.dongnecafe.cafe.model.CafeCommand
 import io.beaniejoy.dongnecafe.common.entity.BaseEntity
+import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
+import io.beaniejoy.dongnecafe.common.error.exception.BusinessException
 import javax.persistence.*
 
 @Entity
@@ -45,5 +47,24 @@ class MenuOption protected constructor(
 
     fun updateInfo(title: String) {
         this.title = title
+    }
+
+    fun updateWithSeries(command: CafeCommand.UpdateMenuOption) {
+        if (command.delete) {
+            throw BusinessException(ErrorCode.MENU_OPTION_INVALID_REQUEST)
+        }
+
+        this.title = command.title
+
+        this.updateSeries(command.optionDetails)
+    }
+
+    private fun updateSeries(commands: List<CafeCommand.UpdateOptionDetail>) {
+        commands
+            .filter { it.delete.not() }
+            .forEach { command ->
+                val optionDetail = this.optionDetails.find { it.id == command.optionDetailId }
+                optionDetail?.update(command)
+            }
     }
 }

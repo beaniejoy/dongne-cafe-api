@@ -1,9 +1,10 @@
 package io.beaniejoy.dongnecafe.cafe.controller
 
-import io.beaniejoy.dongnecafe.cafe.model.CafeInputDto
-import io.beaniejoy.dongnecafe.cafe.model.CafeInputDtoMapper
-import io.beaniejoy.dongnecafe.cafe.model.CafeOutputDto
-import io.beaniejoy.dongnecafe.cafe.model.CafeOutputDtoMapper
+import io.beaniejoy.dongnecafe.cafe.model.*
+import io.beaniejoy.dongnecafe.cafe.model.request.CafeInputDto
+import io.beaniejoy.dongnecafe.cafe.model.request.CafeInputDtoMapper
+import io.beaniejoy.dongnecafe.cafe.model.response.CafeOutputDto
+import io.beaniejoy.dongnecafe.cafe.model.response.CafeOutputDtoMapper
 import io.beaniejoy.dongnecafe.cafe.service.CafeService
 import io.beaniejoy.dongnecafe.common.response.ApplicationResponse
 import org.springframework.data.domain.Page
@@ -23,16 +24,16 @@ class CafeController(
      * 신규 카페 생성
      */
     @PostMapping
-    fun registerNewCafe(@RequestBody resource: CafeInputDto.RegisterCafeRequest): ApplicationResponse<CafeOutputDto.RegisteredCafe> {
-        val registerCafeCommand = cafeInputDtoMapper.of(resource)
+    fun registerNewCafe(
+        @RequestBody resource: CafeInputDto.RegisterCafeRequest
+    ): ApplicationResponse<CafeOutputDto.RegisteredCafeResponse> {
+        val registerCommand = cafeInputDtoMapper.of(resource)
 
-        val newCafe = cafeService.registerCafe(registerCafeCommand)
+        val newCafe = cafeService.registerCafe(registerCommand)
 
         val response = cafeOutputDtoMapper.of(newCafe)
 
-        return ApplicationResponse
-            .success("OK")
-            .data(response)
+        return ApplicationResponse.created().data(response)
     }
 
     /**
@@ -43,10 +44,10 @@ class CafeController(
         @ModelAttribute param: CafeInputDto.SearchCafesParam,
         @PageableDefault(sort = ["name"], direction = Sort.Direction.ASC, page = 0, size = 10) pageable: Pageable
     ): ApplicationResponse<Page<CafeOutputDto.CafeSearchResponse>> {
-        val searchCafesQuery = cafeInputDtoMapper.of(param)
+        val searchQueryParam = cafeInputDtoMapper.of(param)
 
         val searchCafes = cafeService.searchCafes(
-            param = searchCafesQuery,
+            param = searchQueryParam,
             pageable = pageable
         )
 
@@ -80,15 +81,13 @@ class CafeController(
         @PathVariable("id") id: Long,
         @RequestBody resource: CafeInputDto.UpdateCafeRequest
     ): ApplicationResponse<Nothing> {
-        val updateCafeCommand = cafeInputDtoMapper.of(resource)
+        val updateCommand = cafeInputDtoMapper.of(resource)
 
         cafeService.updateCafe(
             id = id,
-            command = updateCafeCommand
+            command = updateCommand
         )
 
-        return ApplicationResponse
-            .success("Successfully Cafe[$id] Info Updated")
-            .build()
+        return ApplicationResponse.updated().build()
     }
 }

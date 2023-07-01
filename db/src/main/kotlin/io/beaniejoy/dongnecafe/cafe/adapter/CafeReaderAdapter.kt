@@ -3,6 +3,8 @@ package io.beaniejoy.dongnecafe.cafe.adapter
 import io.beaniejoy.dongnecafe.cafe.entity.Cafe
 import io.beaniejoy.dongnecafe.cafe.persistence.CafeReaderPort
 import io.beaniejoy.dongnecafe.cafe.repository.CafeRepository
+import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
+import io.beaniejoy.dongnecafe.common.error.exception.BusinessException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
@@ -25,5 +27,10 @@ class CafeReaderAdapter(
 
     override fun getCafe(id: Long): Cafe? {
         return cafeRepository.findByIdOrNull(id)
+    }
+
+    override fun getCafeNotNull(id: Long): Cafe {
+        return cafeRepository.findByIdOrNull(id)
+            ?: throw BusinessException(ErrorCode.CAFE_NOT_FOUND)
     }
 }

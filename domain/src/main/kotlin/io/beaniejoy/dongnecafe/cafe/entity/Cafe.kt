@@ -2,6 +2,8 @@ package io.beaniejoy.dongnecafe.cafe.entity
 
 import io.beaniejoy.dongnecafe.cafe.model.CafeCommand
 import io.beaniejoy.dongnecafe.common.entity.BaseEntity
+import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
+import io.beaniejoy.dongnecafe.common.error.exception.BusinessException
 import javax.persistence.*
 
 @Entity
@@ -10,7 +12,7 @@ class Cafe protected constructor(
     name: String,
     address: String,
     phoneNumber: String,
-    description: String
+    description: String?
 ) : BaseEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,31 +34,37 @@ class Cafe protected constructor(
     @Column(name = "total_rate", nullable = false)
     val totalRate: Double = 0.0
 
-    @Column(name = "description", nullable = false)
-    var description: String = description
+    @Column(name = "description", length = 255)
+    var description: String? = description
         protected set
 
-    @OneToMany(mappedBy = "cafe", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "cafe", fetch = FetchType.LAZY)
     val cafeMenuCategories: MutableList<CafeMenuCategory> = arrayListOf()
 
-    @OneToMany(mappedBy = "cafe", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "cafe", fetch = FetchType.LAZY)
     val cafeImages: MutableList<CafeImage> = arrayListOf()
 
     companion object {
-        fun createEntity(registerCommand: CafeCommand.RegisterCafe): Cafe {
+        fun createEntity(command: CafeCommand.RegisterCafe): Cafe {
             return Cafe(
-                name = registerCommand.name,
-                address = registerCommand.address,
-                phoneNumber = registerCommand.phoneNumber,
-                description = registerCommand.description
+                name = command.name,
+                address = command.address,
+                phoneNumber = command.phoneNumber,
+                description = command.description
             )
         }
     }
 
-    fun updateEntity(updateCommand: CafeCommand.UpdateCafe) {
-        this.name = updateCommand.name
-        this.address = updateCommand.address
-        this.phoneNumber = updateCommand.phoneNumber
-        this.description = updateCommand.description
+    fun update(command: CafeCommand.UpdateCafe) {
+        this.name = command.name
+        this.address = command.address
+        this.phoneNumber = command.phoneNumber
+        this.description = command.description
+    }
+
+    fun checkTheSameAs(other: Cafe?) {
+        if (other == null || this !== other) {
+            throw BusinessException(ErrorCode.CAFE_INVALID_REQUEST)
+        }
     }
 }

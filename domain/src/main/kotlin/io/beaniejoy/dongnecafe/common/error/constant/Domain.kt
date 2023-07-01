@@ -7,6 +7,7 @@ enum class Domain {
     MEMBER,
 
     CAFE,
+    CAFE_MENU_CATEGORY,
     CAFE_MENU,
     MENU_OPTION,
     OPTION_DETAIL

@@ -10,4 +10,6 @@ interface CafeReaderPort {
     fun getCafesPageByParams(name: String?, pageable: Pageable): Page<Cafe>
 
     fun getCafe(id: Long): Cafe?
+
+    fun getCafeNotNull(id: Long): Cafe
 }

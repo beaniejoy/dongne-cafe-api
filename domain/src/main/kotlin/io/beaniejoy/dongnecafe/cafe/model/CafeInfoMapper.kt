@@ -11,6 +11,10 @@ import org.mapstruct.*
 interface CafeInfoMapper {
     @Mapping(source = "cafe.id", target = "cafeId")
     fun of(cafe: Cafe): CafeInfo.RegisteredCafe
+    @Mapping(source = "cafeMenuCategory.id", target = "menuCategoryId")
+    fun of(cafeMenuCategory: CafeMenuCategory): CafeInfo.RegisteredCafeMenuCategory
+    @Mapping(source = "cafeMenu.id", target = "cafeMenuId")
+    fun of(cafeMenu: CafeMenu): CafeInfo.RegisteredCafeMenu
 
     @Mapping(source = "cafe.id", target = "cafeId")
     fun cafeSearchInfoOf(cafe: Cafe, cafeImages: List<CafeImage>): CafeInfo.CafeSearchInfo
