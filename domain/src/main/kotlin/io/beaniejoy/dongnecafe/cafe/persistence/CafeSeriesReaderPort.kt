@@ -9,9 +9,10 @@ interface CafeSeriesReaderPort {
     fun getCafeMenuCategoryNotNull(id: Long): CafeMenuCategory
     fun getCafeMenuCategories(ids: List<Long>): List<CafeMenuCategory>
     fun existsCafeMenuCategoryByName(name: String, cafeId: Long): Boolean
+    fun getCafeMenuCategoriesByCafeId(cafeId: Long): List<CafeMenuCategory>
 
     // CafeMenu
     fun getCafeMenuNotNull(id: Long): CafeMenu
     fun getCafeMenus(ids: List<Long>): List<CafeMenu>
-    fun existsCafeMenuByName(name: String, menuCategoryId: Long): Boolean
+    fun existsCafeMenuByName(name: String, menuCategoryIds: List<Long>): Boolean
 }

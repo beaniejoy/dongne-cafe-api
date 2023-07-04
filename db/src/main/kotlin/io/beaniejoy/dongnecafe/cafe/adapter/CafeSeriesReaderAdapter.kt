@@ -29,10 +29,14 @@ class CafeSeriesReaderAdapter(
     }
 
     override fun existsCafeMenuCategoryByName(name: String, cafeId: Long): Boolean {
-        return cafeMenuCategoryRepository.findByNameAndCafe_Id(
+        return cafeMenuCategoryRepository.findByNameAndCafeId(
             name = name,
             cafeId = cafeId
         ) != null
+    }
+
+    override fun getCafeMenuCategoriesByCafeId(cafeId: Long): List<CafeMenuCategory> {
+        return cafeMenuCategoryRepository.findAllByCafeId(cafeId)
     }
 
     override fun getCafeMenuNotNull(id: Long): CafeMenu {
@@ -44,10 +48,10 @@ class CafeSeriesReaderAdapter(
         return cafeMenuRepository.findAllById(ids)
     }
 
-    override fun existsCafeMenuByName(name: String, menuCategoryId: Long): Boolean {
-        return cafeMenuRepository.findByNameAndCafeMenuCategory_Id(
+    override fun existsCafeMenuByName(name: String, menuCategoryIds: List<Long>): Boolean {
+        return cafeMenuRepository.findByNameAndCafeMenuCategoryId(
             name = name,
-            menuCategoryId = menuCategoryId
-        ) != null
+            menuCategoryIds = menuCategoryIds
+        ).isNotEmpty()
     }
 }

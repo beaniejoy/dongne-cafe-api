@@ -10,8 +10,15 @@ import org.springframework.stereotype.Component
 class CafeMenuCrudValidator(
     private val cafeSeriesReaderPort: CafeSeriesReaderPort
 ) : CafeMenuValidator {
-    override fun validateNotExisted(name: String, menuCategoryId: Long) {
-        if (cafeSeriesReaderPort.existsCafeMenuByName(name = name, menuCategoryId = menuCategoryId)) {
+    override fun validateNotExisted(name: String, cafeId: Long) {
+        val cafeMenuCategories = cafeSeriesReaderPort.getCafeMenuCategoriesByCafeId(cafeId)
+
+        val checkExistedMenu = cafeSeriesReaderPort.existsCafeMenuByName(
+            name = name,
+            menuCategoryIds = cafeMenuCategories.map { it.id }
+        )
+
+        if (checkExistedMenu) {
             throw BusinessException(ErrorCode.CAFE_MENU_EXISTED)
         }
     }

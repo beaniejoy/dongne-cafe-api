@@ -39,10 +39,13 @@ class CafeMenuServiceImpl(
 
         cafeMenuValidator.validateNotExisted(
             name = command.name,
-            menuCategoryId = menuCategoryId
+            cafeId = cafeId
         )
 
-        // 2. save new CafeMenu
+        // 2. select target CafeMenuCategory
+        val cafeMenuCategory = cafeSeriesReaderPort.getCafeMenuCategoryNotNull(menuCategoryId)
+
+        // 3. save new CafeMenu
         val savedCafeMenu = cafeStorePort.store(
             CafeMenu.createEntity(command).apply {
                 this.updateCafeMenuCategory(cafeMenuCategory)
