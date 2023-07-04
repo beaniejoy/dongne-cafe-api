@@ -19,6 +19,10 @@ class ApplicationResponse<T>(
             return success("Successfully updated")
         }
 
+        fun deleted(): ApplicationResponseBuilder {
+            return success("Successfully deleted")
+        }
+
         fun success(message: String? = null): ApplicationResponseBuilder {
             return ApplicationResponseBuilder(
                 result = ResultCode.SUCCESS,

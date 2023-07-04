@@ -53,7 +53,9 @@ class CafeMenuCategoryController(
     fun delete(
         @PathVariable("cafeId") cafeId: Long,
         @PathVariable("menuCategoryId") menuCategoryId: Long
-    ) {
+    ): ApplicationResponse<Nothing> {
         cafeMenuCategoryService.deleteMenuCategory(cafeId, menuCategoryId)
+
+        return ApplicationResponse.deleted().build()
     }
 }

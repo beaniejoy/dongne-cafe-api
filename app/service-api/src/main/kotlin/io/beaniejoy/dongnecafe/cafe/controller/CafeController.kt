@@ -38,6 +38,7 @@ class CafeController(
 
     /**
      * 카페 리스트 조회(검색 기능)
+     * TODO: 추후 검색 기준 변경 필요
      */
     @GetMapping
     fun searchCafes(
