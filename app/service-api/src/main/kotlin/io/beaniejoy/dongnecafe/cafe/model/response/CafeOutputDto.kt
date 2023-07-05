@@ -15,7 +15,22 @@ class CafeOutputDto {
 
     data class RegisteredCafeMenuResponse(
         val cafeMenuId: Long,
-        val name: String
+        val name: String,
+        val price: BigDecimal,
+        val description: String,
+        val menuOptions: List<RegisteredMenuOptionResponse> = emptyList()
+    )
+
+    data class RegisteredMenuOptionResponse(
+        val menuOptionId: Long,
+        val title: String,
+        val optionDetails: List<RegisteredOptionDetailResponse> = emptyList()
+    )
+
+    data class RegisteredOptionDetailResponse(
+        val optionDetailId: Long,
+        val name: String,
+        val extraPrice: BigDecimal
     )
 
     data class CafeSearchResponse(

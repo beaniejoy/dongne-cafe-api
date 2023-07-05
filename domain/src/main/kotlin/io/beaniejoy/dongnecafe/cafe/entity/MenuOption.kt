@@ -29,9 +29,9 @@ class MenuOption protected constructor(
     val optionDetails: MutableList<OptionDetail> = arrayListOf()
 
     companion object {
-        fun createEntity(registerMenuOption: CafeCommand.RegisterMenuOption): MenuOption {
+        fun createEntity(command: CafeCommand.RegisterMenuOption): MenuOption {
             return MenuOption(
-                title = registerMenuOption.title
+                title = command.title
             )
         }
     }

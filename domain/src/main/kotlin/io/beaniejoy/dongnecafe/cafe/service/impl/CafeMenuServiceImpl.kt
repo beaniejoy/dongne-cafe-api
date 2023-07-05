@@ -51,9 +51,15 @@ class CafeMenuServiceImpl(
         )
 
         // 4. bulk save new CafeMenu's series (MenuOptions, OptionDetails)
-        cafeSeriesProcessor.bulkSaveCafeMenuSeries(savedCafeMenu, command.menuOptions)
+        val savedMenuOptions = cafeSeriesProcessor.bulkSaveCafeMenuSeries(
+            cafeMenu = savedCafeMenu,
+            commands = command.menuOptions
+        )
 
-        return cafeInfoMapper.of(savedCafeMenu)
+        return cafeInfoMapper.of(
+            cafeMenu = savedCafeMenu,
+            menuOptions = savedMenuOptions
+        )
     }
 
     @Transactional

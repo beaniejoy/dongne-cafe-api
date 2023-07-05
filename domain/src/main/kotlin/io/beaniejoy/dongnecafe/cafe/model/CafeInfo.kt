@@ -15,7 +15,22 @@ class CafeInfo {
 
     data class RegisteredCafeMenu(
         val cafeMenuId: Long,
-        val name: String
+        val name: String,
+        val price: BigDecimal,
+        val description: String,
+        val menuOptions: List<RegisteredMenuOption> = emptyList()
+    )
+
+    data class RegisteredMenuOption(
+        val menuOptionId: Long,
+        val title: String,
+        val optionDetails: List<RegisteredOptionDetail> = emptyList()
+    )
+
+    data class RegisteredOptionDetail(
+        val optionDetailId: Long,
+        val name: String,
+        val extraPrice: BigDecimal
     )
 
     data class CafeSearchInfo(

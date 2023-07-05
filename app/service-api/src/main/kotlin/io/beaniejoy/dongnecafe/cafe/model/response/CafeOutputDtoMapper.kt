@@ -12,9 +12,11 @@ import org.mapstruct.ReportingPolicy
     unmappedTargetPolicy = ReportingPolicy.ERROR
 )
 interface CafeOutputDtoMapper {
+    // #### [START] response of registered info ####
     fun of(registeredInfo: CafeInfo.RegisteredCafe): CafeOutputDto.RegisteredCafeResponse
     fun of(registeredInfo: CafeInfo.RegisteredCafeMenuCategory): CafeOutputDto.RegisteredCafeMenuCategoryResponse
     fun of(registeredInfo: CafeInfo.RegisteredCafeMenu): CafeOutputDto.RegisteredCafeMenuResponse
+    // #### [END] response of registered info ####
 
     fun of(cafeSearchInfo: CafeInfo.CafeSearchInfo): CafeOutputDto.CafeSearchResponse
 

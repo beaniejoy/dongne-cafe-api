@@ -1,21 +1,48 @@
 package io.beaniejoy.dongnecafe.cafe.service.impl
 
 import io.beaniejoy.dongnecafe.cafe.entity.CafeMenu
+import io.beaniejoy.dongnecafe.cafe.entity.MenuOption
+import io.beaniejoy.dongnecafe.cafe.entity.OptionDetail
 import io.beaniejoy.dongnecafe.cafe.model.CafeCommand
 import io.beaniejoy.dongnecafe.cafe.persistence.CafeSeriesReaderPort
 import io.beaniejoy.dongnecafe.cafe.persistence.CafeSeriesRemoverPort
+import io.beaniejoy.dongnecafe.cafe.persistence.CafeStorePort
 import io.beaniejoy.dongnecafe.cafe.service.CafeSeriesProcessor
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CafeSeriesProcessorImpl(
+    private val cafeStorePort: CafeStorePort,
     private val cafeSeriesReaderPort: CafeSeriesReaderPort,
     private val cafeSeriesRemoverPort: CafeSeriesRemoverPort
 ) : CafeSeriesProcessor {
     @Transactional
-    override fun bulkSaveCafeMenuSeries(cafeMenu: CafeMenu, commands: List<CafeCommand.RegisterMenuOption>) {
-        TODO("cafe menu 관련 series 저장하는 로직 개발 필요")
+    override fun bulkSaveCafeMenuSeries(
+        cafeMenu: CafeMenu,
+        commands: List<CafeCommand.RegisterMenuOption>
+    ): List<MenuOption> {
+        return commands.map { command ->
+            // 1. bulk save MenuOptions with saved CafeMenu
+            cafeStorePort.store(
+                MenuOption.createEntity(command).apply {
+                    this.updateCafeMenu(cafeMenu)
+                }
+            ).also { savedMenuOption ->
+                // 2. bulk save OptionDetails with saved MenuOption
+                bulkSaveOptionDetails(savedMenuOption, command.optionDetails)
+            }
+        }
+    }
+
+    private fun bulkSaveOptionDetails(menuOption: MenuOption, commands: List<CafeCommand.RegisterOptionDetail>) {
+        commands.forEach { command ->
+            cafeStorePort.store(
+                OptionDetail.createEntity(command).apply {
+                    this.updateMenuOption(menuOption)
+                }
+            )
+        }
     }
 
     @Transactional

@@ -34,10 +34,10 @@ class CafeMenuCategory(
     val cafeMenus: MutableList<CafeMenu> = arrayListOf()
 
     companion object {
-        fun createEntity(registerCafeMenuCategory: CafeCommand.RegisterCafeMenuCategory): CafeMenuCategory {
+        fun createEntity(command: CafeCommand.RegisterCafeMenuCategory): CafeMenuCategory {
             return CafeMenuCategory(
-                name = registerCafeMenuCategory.name,
-                description = registerCafeMenuCategory.description
+                name = command.name,
+                description = command.description
             )
         }
     }

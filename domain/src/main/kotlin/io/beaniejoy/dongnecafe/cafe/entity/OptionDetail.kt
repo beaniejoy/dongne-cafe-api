@@ -32,10 +32,10 @@ class OptionDetail protected constructor(
         protected set
 
     companion object {
-        fun createEntity(registerOptionDetail: CafeCommand.RegisterOptionDetail): OptionDetail {
+        fun createEntity(command: CafeCommand.RegisterOptionDetail): OptionDetail {
             return OptionDetail(
-                name = registerOptionDetail.name,
-                extraPrice = registerOptionDetail.extraPrice
+                name = command.name,
+                extraPrice = command.extraPrice
             )
         }
     }
