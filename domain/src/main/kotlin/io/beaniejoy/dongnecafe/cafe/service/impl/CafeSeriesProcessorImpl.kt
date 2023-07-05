@@ -1,5 +1,6 @@
 package io.beaniejoy.dongnecafe.cafe.service.impl
 
+import io.beaniejoy.dongnecafe.cafe.entity.CafeMenu
 import io.beaniejoy.dongnecafe.cafe.model.CafeCommand
 import io.beaniejoy.dongnecafe.cafe.persistence.CafeSeriesReaderPort
 import io.beaniejoy.dongnecafe.cafe.persistence.CafeSeriesRemoverPort
@@ -12,6 +13,11 @@ class CafeSeriesProcessorImpl(
     private val cafeSeriesReaderPort: CafeSeriesReaderPort,
     private val cafeSeriesRemoverPort: CafeSeriesRemoverPort
 ) : CafeSeriesProcessor {
+    @Transactional
+    override fun bulkSaveCafeMenuSeries(cafeMenu: CafeMenu, commands: List<CafeCommand.RegisterMenuOption>) {
+        TODO("cafe menu 관련 series 저장하는 로직 개발 필요")
+    }
+
     @Transactional
     override fun bulkDeleteCafeMenuSeries(commands: List<CafeCommand.UpdateMenuOption>) {
         // 1. bulk delete OptionDetails

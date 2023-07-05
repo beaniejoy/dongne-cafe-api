@@ -10,8 +10,6 @@ import io.beaniejoy.dongnecafe.cafe.service.CafeMenuService
 import io.beaniejoy.dongnecafe.cafe.service.CafeSeriesProcessor
 import io.beaniejoy.dongnecafe.cafe.service.validator.CafeMenuCategoryValidator
 import io.beaniejoy.dongnecafe.cafe.service.validator.CafeMenuValidator
-import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
-import io.beaniejoy.dongnecafe.common.error.exception.BusinessException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -51,6 +49,9 @@ class CafeMenuServiceImpl(
                 this.updateCafeMenuCategory(cafeMenuCategory)
             }
         )
+
+        // 4. bulk save new CafeMenu's series (MenuOptions, OptionDetails)
+        cafeSeriesProcessor.bulkSaveCafeMenuSeries(savedCafeMenu, command.menuOptions)
 
         return cafeInfoMapper.of(savedCafeMenu)
     }
