@@ -19,7 +19,7 @@ class CafeMenu protected constructor(
     @Column(name = "cafe_menu_id", nullable = false)
     val id: Long = 0L
 
-    @Column(name = "name", nullable = false)us
+    @Column(name = "name", nullable = false)
     var name: String = name
         protected set
 
