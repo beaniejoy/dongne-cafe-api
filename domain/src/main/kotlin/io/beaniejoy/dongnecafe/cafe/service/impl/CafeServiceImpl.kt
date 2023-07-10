@@ -9,7 +9,6 @@ import io.beaniejoy.dongnecafe.cafe.persistence.CafeReaderPort
 import io.beaniejoy.dongnecafe.cafe.persistence.CafeStorePort
 import io.beaniejoy.dongnecafe.cafe.service.CafeService
 import io.beaniejoy.dongnecafe.cafe.service.validator.CafeValidator
-import mu.KLogging
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -22,9 +21,6 @@ class CafeServiceImpl(
     private val cafeInfoMapper: CafeInfoMapper,
     private val cafeValidator: CafeValidator
 ) : CafeService {
-
-    companion object : KLogging()
-
     @Transactional
     override fun registerCafe(command: CafeCommand.RegisterCafe): CafeInfo.RegisteredCafe {
         cafeValidator.validateNotExisted(command.name)

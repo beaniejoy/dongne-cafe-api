@@ -2,7 +2,7 @@ import org.gradle.api.JavaVersion
 
 object Version {
     const val PROJECT_VERSION = "0.0.1-SNAPSHOT"
-    const val KOTLIN = "1.7.21"
+    const val KOTLIN = "1.8.21"
 
     val JAVA = JavaVersion.VERSION_17
 

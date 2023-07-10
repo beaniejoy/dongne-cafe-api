@@ -91,7 +91,7 @@ class CafeMenuServiceImpl(
         cafeMenu.updateWithSeries(command)
 
         // 3. bulk delete CafeMenu's Series(MenuOptions, OptionDetails)
-        cafeSeriesProcessor.bulkDeleteCafeMenuSeries(command.menuOptions)
+        cafeSeriesProcessor.bulkDeleteCafeMenuSeriesWithFiltered(command.menuOptions)
     }
 
     @Transactional
@@ -112,6 +112,6 @@ class CafeMenuServiceImpl(
         )
 
         // 2. bulk delete CafeMenus
-        cafeSeriesProcessor.bulkDeleteCafeMenus(deleteMenuIds)
+        cafeSeriesProcessor.bulkDeleteCafeMenusWithSeries(deleteMenuIds)
     }
 }

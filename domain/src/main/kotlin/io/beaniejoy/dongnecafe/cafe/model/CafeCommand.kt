@@ -1,7 +1,5 @@
 package io.beaniejoy.dongnecafe.cafe.model
 
-import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
-import io.beaniejoy.dongnecafe.common.error.exception.BusinessException
 import java.math.BigDecimal
 
 class CafeCommand {
@@ -22,21 +20,7 @@ class CafeCommand {
         val price: BigDecimal,
         val description: String?,
         val menuOptions: List<RegisterMenuOption> = arrayListOf()
-    ) {
-        companion object {
-            fun of(resource: CafeSeriesCommand.BulkUpdateCafeMenu): RegisterCafeMenu {
-                require(resource.name != null && resource.price != null) {
-                    throw BusinessException(ErrorCode.CAFE_MENU_INVALID_REQUEST)
-                }
-
-                return RegisterCafeMenu(
-                    name = resource.name,
-                    price = resource.price,
-                    description = null
-                )
-            }
-        }
-    }
+    )
 
     data class RegisterMenuOption(
         val title: String,
@@ -70,7 +54,7 @@ class CafeCommand {
     data class UpdateMenuOption(
         val menuOptionId: Long,
         val title: String,
-        val optionDetails: List<UpdateOptionDetail> = emptyList(),
+        val optionDetails: List<UpdateOptionDetail> = arrayListOf(),
         val delete: Boolean = false
     )
 

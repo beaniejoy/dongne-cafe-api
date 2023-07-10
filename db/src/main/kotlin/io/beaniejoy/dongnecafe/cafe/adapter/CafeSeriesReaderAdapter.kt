@@ -2,9 +2,11 @@ package io.beaniejoy.dongnecafe.cafe.adapter
 
 import io.beaniejoy.dongnecafe.cafe.entity.CafeMenu
 import io.beaniejoy.dongnecafe.cafe.entity.CafeMenuCategory
+import io.beaniejoy.dongnecafe.cafe.entity.OptionDetail
 import io.beaniejoy.dongnecafe.cafe.persistence.CafeSeriesReaderPort
 import io.beaniejoy.dongnecafe.cafe.repository.CafeMenuCategoryRepository
 import io.beaniejoy.dongnecafe.cafe.repository.CafeMenuRepository
+import io.beaniejoy.dongnecafe.cafe.repository.OptionDetailRepository
 import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
 import io.beaniejoy.dongnecafe.common.error.exception.BusinessException
 import org.springframework.data.repository.findByIdOrNull
@@ -13,7 +15,8 @@ import org.springframework.stereotype.Component
 @Component
 class CafeSeriesReaderAdapter(
     private val cafeMenuCategoryRepository: CafeMenuCategoryRepository,
-    private val cafeMenuRepository: CafeMenuRepository
+    private val cafeMenuRepository: CafeMenuRepository,
+    private val optionDetailRepository: OptionDetailRepository
 ) : CafeSeriesReaderPort {
     override fun getCafeMenuCategory(id: Long): CafeMenuCategory? {
         return cafeMenuCategoryRepository.findByIdOrNull(id)
@@ -53,5 +56,9 @@ class CafeSeriesReaderAdapter(
             name = name,
             menuCategoryIds = menuCategoryIds
         ).isNotEmpty()
+    }
+
+    override fun getOptionDetails(ids: List<Long>): List<OptionDetail> {
+        return optionDetailRepository.findAllById(ids)
     }
 }

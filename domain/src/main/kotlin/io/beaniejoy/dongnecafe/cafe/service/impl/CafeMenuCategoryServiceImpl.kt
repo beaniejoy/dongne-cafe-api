@@ -10,8 +10,6 @@ import io.beaniejoy.dongnecafe.cafe.persistence.CafeSeriesReaderPort
 import io.beaniejoy.dongnecafe.cafe.persistence.CafeStorePort
 import io.beaniejoy.dongnecafe.cafe.service.CafeMenuCategoryService
 import io.beaniejoy.dongnecafe.cafe.service.validator.CafeMenuCategoryValidator
-import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
-import io.beaniejoy.dongnecafe.common.error.exception.BusinessException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

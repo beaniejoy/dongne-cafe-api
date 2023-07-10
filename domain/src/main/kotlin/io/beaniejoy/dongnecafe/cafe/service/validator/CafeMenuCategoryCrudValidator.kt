@@ -12,7 +12,7 @@ class CafeMenuCategoryCrudValidator(
     private val cafeSeriesReaderPort: CafeSeriesReaderPort
 ): CafeMenuCategoryValidator {
     override fun validateNotExisted(name: String, cafeId: Long) {
-        if (cafeSeriesReaderPort.existsCafeMenuCategoryByName(name = name, cafeId = cafeId)) {
+        check(cafeSeriesReaderPort.existsCafeMenuCategoryByName(name = name, cafeId = cafeId).not()) {
             throw BusinessException(ErrorCode.CAFE_MENU_CATEGORY_EXISTED)
         }
     }
@@ -25,8 +25,10 @@ class CafeMenuCategoryCrudValidator(
 
     override fun validateContainingAllMenus(menuCategoryId: Long, cafeMenuIds: List<Long>) {
         val cafeMenuCategory = cafeSeriesReaderPort.getCafeMenuCategoryNotNull(menuCategoryId)
+        val originCafeMenuIds = cafeMenuCategory.cafeMenus.map { it.id }
 
-        if (cafeMenuCategory.cafeMenus.map { it.id }.containsAll(cafeMenuIds).not()) {
+        // Category에 속한 CafeMenu 목록에 모두 포함하는지 check
+        check(originCafeMenuIds.containsAll(cafeMenuIds)) {
             throw BusinessException(ErrorCode.CAFE_MENU_INVALID_REQUEST)
         }
     }

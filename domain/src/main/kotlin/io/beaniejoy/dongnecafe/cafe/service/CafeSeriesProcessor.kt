@@ -10,7 +10,7 @@ interface CafeSeriesProcessor {
         commands: List<CafeCommand.RegisterMenuOption>
     ): List<MenuOption>
 
-    fun bulkDeleteCafeMenuSeries(commands: List<CafeCommand.UpdateMenuOption>)
+    fun bulkDeleteCafeMenuSeriesWithFiltered(commands: List<CafeCommand.UpdateMenuOption>)
 
-    fun bulkDeleteCafeMenus(menuIds: List<Long>)
+    fun bulkDeleteCafeMenusWithSeries(menuIds: List<Long>)
 }

@@ -2,6 +2,7 @@ package io.beaniejoy.dongnecafe.cafe.persistence
 
 import io.beaniejoy.dongnecafe.cafe.entity.CafeMenu
 import io.beaniejoy.dongnecafe.cafe.entity.CafeMenuCategory
+import io.beaniejoy.dongnecafe.cafe.entity.OptionDetail
 
 interface CafeSeriesReaderPort {
     // CafeMenuCategory
@@ -15,4 +16,7 @@ interface CafeSeriesReaderPort {
     fun getCafeMenuNotNull(id: Long): CafeMenu
     fun getCafeMenus(ids: List<Long>): List<CafeMenu>
     fun existsCafeMenuByName(name: String, menuCategoryIds: List<Long>): Boolean
+
+    // OptionDetail
+    fun getOptionDetails(ids: List<Long>): List<OptionDetail>
 }

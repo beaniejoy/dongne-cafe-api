@@ -8,6 +8,8 @@ import io.beaniejoy.dongnecafe.cafe.persistence.CafeSeriesReaderPort
 import io.beaniejoy.dongnecafe.cafe.persistence.CafeSeriesRemoverPort
 import io.beaniejoy.dongnecafe.cafe.persistence.CafeStorePort
 import io.beaniejoy.dongnecafe.cafe.service.CafeSeriesProcessor
+import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
+import io.beaniejoy.dongnecafe.common.error.exception.BusinessException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -46,35 +48,47 @@ class CafeSeriesProcessorImpl(
     }
 
     @Transactional
-    override fun bulkDeleteCafeMenuSeries(commands: List<CafeCommand.UpdateMenuOption>) {
-        // 1. bulk delete OptionDetails
+    override fun bulkDeleteCafeMenuSeriesWithFiltered(commands: List<CafeCommand.UpdateMenuOption>) {
+        // 1. bulk delete OptionDetails (immediately run query)
         val deleteOptionDetailIds = commands.flatMap { command ->
             command.optionDetails
                 .filter { it.delete }
                 .map { it.optionDetailId }
         }
 
-        cafeSeriesRemoverPort.bulkDeleteOptionDetails(optionDetailIds = deleteOptionDetailIds)
+        // (immediately run query)
+        cafeSeriesRemoverPort.bulkDeleteOptionDetailsInBatch(deleteOptionDetailIds)
 
         // 2. bulk delete MenuOptions
-        val deleteMenuOptionIds = commands.filter { it.delete }.map { it.menuOptionId }
+        val deleteMenuOptionIds = commands
+            .filter { it.delete }
+            .map { it.menuOptionId }
 
-        cafeSeriesRemoverPort.bulkDeleteMenuOptions(menuOptionIds = deleteMenuOptionIds)
+        // (immediately run query)
+        cafeSeriesRemoverPort.bulkDeleteMenuOptionsInBatch(deleteMenuOptionIds)
     }
 
-    override fun bulkDeleteCafeMenus(menuIds: List<Long>) {
+    @Transactional
+    override fun bulkDeleteCafeMenusWithSeries(menuIds: List<Long>) {
         val cafeMenus = cafeSeriesReaderPort.getCafeMenus(menuIds)
+        check(cafeMenus.map { it.id }.toSet() == menuIds.toSet()) {
+            throw BusinessException(ErrorCode.CAFE_MENU_INVALID_REQUEST)
+        }
 
         cafeMenus.forEach { cafeMenu ->
-            cafeSeriesRemoverPort.bulkDeleteOptionDetails(
-                optionDetailIds = cafeMenu.menuOptions.flatMap { menuOption ->
+            // 1. bulk delete OptionDetails (immediately run query)
+            cafeSeriesRemoverPort.bulkDeleteOptionDetailsInBatch(
+                cafeMenu.menuOptions.flatMap { menuOption ->
                     menuOption.optionDetails.map { it.id }
-                }
-            )
+                })
 
-            cafeSeriesRemoverPort.bulkDeleteMenuOptions(
+            // 2. bulk delete MenuOptions (immediately run query)
+            cafeSeriesRemoverPort.bulkDeleteMenuOptionsInBatch(
                 menuOptionIds = cafeMenu.menuOptions.map { it.id }
             )
         }
+
+        // 3. bulk delete CafeMenus (after complete bulk deleting MenuOptions, OptionDetails)
+        cafeSeriesRemoverPort.bulkDeleteCafeMenusInBatch(cafeMenus.map { it.id })
     }
 }
