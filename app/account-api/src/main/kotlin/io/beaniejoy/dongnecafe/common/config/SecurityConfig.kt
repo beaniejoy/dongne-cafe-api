@@ -5,6 +5,7 @@ import io.beaniejoy.dongnecafe.security.config.JwtAuthenticationConfigurer
 import io.beaniejoy.dongnecafe.security.handler.CustomAccessDeniedHandler
 import io.beaniejoy.dongnecafe.security.handler.CustomAuthenticationEntryPoint
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.security.StaticResourceLocation
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -28,14 +29,30 @@ class SecurityConfig {
     @Autowired
     lateinit var customAuthenticationEntryPoint: CustomAuthenticationEntryPoint
 
+    companion object {
+        val permittedUrls = arrayOf(
+            "/error",
+            "/auth/members/join",
+            "/auth/authenticate"
+        )
+
+        // resource urls
+        val resourceUrls = StaticResourceLocation
+            .values()
+            .flatMap {
+                it.patterns.toList()
+            }
+            .toTypedArray()
+    }
+
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
             .csrf().disable()
 
             .authorizeRequests()
-            .antMatchers("/auth/members/join").permitAll()
-            .antMatchers("/auth/authenticate").permitAll()
+            .antMatchers(*permittedUrls, *resourceUrls).permitAll()
+            .antMatchers().permitAll()
             .anyRequest().authenticated()
 
             .and()
@@ -58,13 +75,13 @@ class SecurityConfig {
             .jwtTokenUtils(jwtTokenUtils)
     }
 
-    @Bean
-    fun webSecurityCustomizer(): WebSecurityCustomizer {
-        return WebSecurityCustomizer { web ->
-            web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-            web.ignoring().antMatchers("/error")
-        }
-    }
+//    @Bean
+//    fun webSecurityCustomizer(): WebSecurityCustomizer {
+//        return WebSecurityCustomizer { web ->
+//            web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+//            web.ignoring().antMatchers("/error")
+//        }
+//    }
 
     @Bean
     fun passwordEncoder(): PasswordEncoder {

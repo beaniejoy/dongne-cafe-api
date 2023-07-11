@@ -8,7 +8,7 @@ dependencies {
     implementation(project(SubModule.APP_COMMON))
     implementation(project(SubModule.DOMAIN))
     testImplementation(testFixtures(project(SubModule.DOMAIN)))
-    runtimeOnly(project(SubModule.DB))
+    implementation(project(SubModule.DB))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-security")

@@ -1,4 +1,4 @@
-package io.beaniejoy.dongnecafe.domain.member.repository
+package io.beaniejoy.dongnecafe.db.member.repository
 
 import io.beaniejoy.dongnecafe.domain.member.entity.Member
 import org.springframework.data.jpa.repository.JpaRepository

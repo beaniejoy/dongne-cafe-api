@@ -1,4 +1,4 @@
-package io.beaniejoy.dongnecafe.app.cafe.controller
+package io.beaniejoy.dongnecafe.app.cafe
 
 import io.beaniejoy.dongnecafe.app.cafe.model.request.CafeInputDto
 import io.beaniejoy.dongnecafe.app.cafe.model.request.CafeInputDtoMapper

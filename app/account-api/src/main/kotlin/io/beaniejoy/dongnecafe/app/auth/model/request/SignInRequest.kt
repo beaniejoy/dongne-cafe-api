@@ -1,4 +1,4 @@
-package io.beaniejoy.dongnecafe.domain.member.model.request
+package io.beaniejoy.dongnecafe.app.auth.model.request
 
 data class SignInRequest(
     val email: String,

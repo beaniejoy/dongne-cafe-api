@@ -2,6 +2,8 @@ package io.beaniejoy.dongnecafe.domain.member.entity
 
 import io.beaniejoy.dongnecafe.common.entity.BaseEntity
 import io.beaniejoy.dongnecafe.domain.member.constant.RoleType
+import io.beaniejoy.dongnecafe.domain.member.model.MemberCommand
+import org.springframework.security.crypto.password.PasswordEncoder
 import javax.persistence.*
 
 @Entity
@@ -43,17 +45,15 @@ class Member(
         protected set
 
     companion object {
-        fun createMember(
-            email: String,
-            password: String,
-            address: String?,
-            phoneNumber: String?
+        fun createEntity(
+            command: MemberCommand.RegisterMember,
+            passwordEncoder: PasswordEncoder
         ): Member {
             return Member(
-                email = email,
-                password = password,
-                address = address,
-                phoneNumber = phoneNumber
+                email = command.email,
+                password = passwordEncoder.encode(command.password),
+                address = command.address,
+                phoneNumber = command.phoneNumber
             )
         }
     }

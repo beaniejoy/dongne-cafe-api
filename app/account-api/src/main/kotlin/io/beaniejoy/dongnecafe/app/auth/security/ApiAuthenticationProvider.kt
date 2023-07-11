@@ -1,7 +1,7 @@
-package io.beaniejoy.dongnecafe.security
+package io.beaniejoy.dongnecafe.app.auth.security
 
 import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
-import io.beaniejoy.dongnecafe.security.SecurityUser
+import io.beaniejoy.dongnecafe.domain.member.model.SecurityUser
 import mu.KLogging
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.BadCredentialsException
@@ -29,7 +29,7 @@ class ApiAuthenticationProvider(
         val password = authentication.credentials as String?
 
         val user = userDetailsService.loadUserByUsername(email) as SecurityUser
-        if (!passwordEncoder.matches(password, user.password)) {
+        check(passwordEncoder.matches(password, user.password)) {
             throw BadCredentialsException(ErrorCode.AUTH_PASSWORD_NOT_VALID.name)
         }
 

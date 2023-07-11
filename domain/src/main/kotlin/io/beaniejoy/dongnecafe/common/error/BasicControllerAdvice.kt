@@ -1,4 +1,4 @@
-package io.beaniejoy.dongnecafe.common.error.advice
+package io.beaniejoy.dongnecafe.common.error
 
 import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
 import io.beaniejoy.dongnecafe.common.error.exception.BusinessException
