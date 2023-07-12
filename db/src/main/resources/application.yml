@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: local
   lifecycle:
     timeout-per-shutdown-phase: 30s # default 30s (graceful shutdown)
   datasource:
