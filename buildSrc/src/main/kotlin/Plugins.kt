@@ -1,5 +1,5 @@
 object Plugins {
-    const val java = "java"
+    const val JAVA = "java"
 
     object Spring {
         const val BOOT = "org.springframework.boot"
@@ -15,4 +15,6 @@ object Plugins {
         const val PLUGIN_SPRING = "plugin.spring"
         const val PLUGIN_JPA = "plugin.jpa"
     }
+
+    const val KTLINT = "org.jlleitschuh.gradle.ktlint"
 }

@@ -1,9 +1,9 @@
 import org.gradle.api.JavaVersion
 
 object Version {
-    const val PROJECT_VERSION = "0.0.1-SNAPSHOT"
-    const val KOTLIN = "1.6.21"
+//    const val PROJECT_VERSION = "0.0.1-SNAPSHOT"
 
+    const val KOTLIN = "1.6.21"
     val JAVA = JavaVersion.VERSION_17
 
     object Spring {
@@ -17,4 +17,6 @@ object Version {
 
         const val MYSQL = "8.0.32"
     }
+
+    const val KTLINT = "11.5.0"
 }

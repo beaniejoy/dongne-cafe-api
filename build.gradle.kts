@@ -16,6 +16,8 @@ plugins {
     kotlin(Plugins.Kotlin.JVM).version(Version.KOTLIN)
     kotlin(Plugins.Kotlin.PLUGIN_SPRING).version(Version.KOTLIN).apply(false)
     kotlin(Plugins.Kotlin.PLUGIN_JPA).version(Version.KOTLIN).apply(false)
+
+    id(Plugins.KTLINT).version(Version.KTLINT)
 }
 
 allprojects {
@@ -29,7 +31,7 @@ allprojects {
 
 subprojects {
     apply {
-        plugin(Plugins.java)
+        plugin(Plugins.JAVA)
         plugin(Plugins.Spring.DEPENDENCY_MANAGEMENT)
         plugin(Plugins.Spring.BOOT)
 
