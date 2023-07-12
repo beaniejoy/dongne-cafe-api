@@ -5,12 +5,11 @@ import io.beaniejoy.dongnecafe.security.config.JwtAuthenticationConfigurer
 import io.beaniejoy.dongnecafe.security.handler.CustomAccessDeniedHandler
 import io.beaniejoy.dongnecafe.security.handler.CustomAuthenticationEntryPoint
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest
+import org.springframework.boot.autoconfigure.security.StaticResourceLocation
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 
@@ -26,6 +25,20 @@ class SecurityConfig {
     @Autowired
     lateinit var customAuthenticationEntryPoint: CustomAuthenticationEntryPoint
 
+    companion object {
+        val permittedUrls = arrayOf(
+            "/error",
+        )
+
+        // resource urls
+        val resourceUrls = StaticResourceLocation
+            .values()
+            .flatMap {
+                it.patterns.toList()
+            }
+            .toTypedArray()
+    }
+
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
@@ -34,6 +47,8 @@ class SecurityConfig {
             .formLogin().disable()
 
             .authorizeRequests()
+            .antMatchers(*permittedUrls, *resourceUrls).permitAll()
+            // TODO 임시 적용(추후에 모든 api에 대해서 인증 여부 통한 authenticated 필요)
 //            .anyRequest().authenticated()
             .anyRequest().permitAll()
 
@@ -55,14 +70,5 @@ class SecurityConfig {
         http
             .apply(JwtAuthenticationConfigurer())
             .jwtTokenUtils(jwtTokenUtils)
-    }
-
-    // Security Filter 미적용 자원 설정
-    @Bean
-    fun webSecurityCustomizer(): WebSecurityCustomizer {
-        return WebSecurityCustomizer { web ->
-            web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-            web.ignoring().antMatchers("/error")
-        }
     }
 }
