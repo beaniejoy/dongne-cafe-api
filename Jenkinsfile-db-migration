@@ -1,5 +1,5 @@
 enum Stage {
-    ALL, INFO, MIGRATE, VALIDATE;
+    ALL, INFO, MIGRATE, VALIDATE, REPAIR;
     Stage() {}
 }
 
@@ -31,7 +31,7 @@ pipeline {
         // Choice of flyway target command
         choice(
                 name: 'FLYWAY_COMMAND',
-                choices: ["${Stage.ALL}", "${Stage.INFO}", "${Stage.MIGRATE}", "${Stage.VALIDATE}"],
+                choices: ["${Stage.ALL}", "${Stage.INFO}", "${Stage.MIGRATE}", "${Stage.VALIDATE}", "${Stage.REPAIR}"],
                 description: 'target flyway command'
         )
     }
@@ -83,6 +83,13 @@ pipeline {
                 expression { executeConditionAllOr(Stage.VALIDATE) }
             }
             steps { executeFlywayRunner(Stage.VALIDATE) }
+        }
+
+        stage('DB Repair(Only)') {
+            when {
+                expression { params.FLYWAY_COMMAND == Stage.REPAIR.name() }
+            }
+            steps { executeFlywayRunner(Stage.REPAIR) }
         }
     }
 }
