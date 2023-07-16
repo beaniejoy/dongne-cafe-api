@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*
 class AuthController(
     private val authFacade: AuthFacade
 ) {
-    companion object: KLogging()
+    companion object : KLogging()
 
     @PostMapping("/authenticate")
     fun signIn(@RequestBody signInRequest: SignInRequest): ApplicationResponse<TokenResponse> {

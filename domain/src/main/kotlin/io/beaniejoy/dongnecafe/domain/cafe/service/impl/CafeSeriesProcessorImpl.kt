@@ -80,7 +80,8 @@ class CafeSeriesProcessorImpl(
             cafeSeriesRemoverPort.bulkDeleteOptionDetailsInBatch(
                 cafeMenu.menuOptions.flatMap { menuOption ->
                     menuOption.optionDetails.map { it.id }
-                })
+                }
+            )
 
             // 2. bulk delete MenuOptions (immediately run query)
             cafeSeriesRemoverPort.bulkDeleteMenuOptionsInBatch(

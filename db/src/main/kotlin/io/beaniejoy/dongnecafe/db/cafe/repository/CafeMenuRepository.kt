@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.Query
 
 interface CafeMenuRepository : JpaRepository<CafeMenu, Long> {
     @Query("select cm from CafeMenu cm where cm.name = :name and cm.cafeMenuCategory.id in (:menuCategoryIds)")
-    fun findByNameAndCafeMenuCategoryId(name: String, menuCategoryIds: List<Long>) : List<CafeMenu>
+    fun findByNameAndCafeMenuCategoryId(name: String, menuCategoryIds: List<Long>): List<CafeMenu>
 }

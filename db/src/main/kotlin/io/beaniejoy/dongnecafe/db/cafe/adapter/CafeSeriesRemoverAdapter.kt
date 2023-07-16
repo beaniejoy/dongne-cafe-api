@@ -13,7 +13,7 @@ class CafeSeriesRemoverAdapter(
     private val cafeMenuRepository: CafeMenuRepository,
     private val menuOptionRepository: MenuOptionRepository,
     private val optionDetailRepository: OptionDetailRepository
-): CafeSeriesRemoverPort {
+) : CafeSeriesRemoverPort {
     override fun bulkDeleteCafeMenusInBatch(cafeMenuIds: List<Long>) {
         cafeMenuRepository.deleteAllByIdInBatch(cafeMenuIds)
     }

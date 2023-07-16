@@ -12,7 +12,7 @@ class PasswordEncoderTest {
     @Autowired
     lateinit var passwordEncoder: PasswordEncoder
 
-    companion object: KLogging()
+    companion object : KLogging()
 
     @Test
     fun makeEncodedPasswordTest() {

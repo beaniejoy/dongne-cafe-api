@@ -19,7 +19,7 @@ class MemberServiceImpl(
     private val memberStorePort: MemberStorePort,
     private val passwordEncoder: PasswordEncoder,
     private val memberInfoMapper: MemberInfoMapper
-): MemberService {
+) : MemberService {
 
     @Transactional
     override fun registerMember(command: MemberCommand.RegisterMember): MemberInfo.RegisteredMember {

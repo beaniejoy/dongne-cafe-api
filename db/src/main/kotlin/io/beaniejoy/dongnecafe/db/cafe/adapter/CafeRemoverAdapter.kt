@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class CafeRemoverAdapter(
     private val cafeMenuCategoryRepository: CafeMenuCategoryRepository
-): CafeRemoverPort {
+) : CafeRemoverPort {
     override fun deleteCafeMenuCategory(cafeMenuCategory: CafeMenuCategory) {
         cafeMenuCategoryRepository.delete(cafeMenuCategory)
     }

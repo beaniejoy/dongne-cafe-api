@@ -20,5 +20,8 @@ object Version {
         const val MAPSTRUCT = "1.5.5.Final"
     }
 
-    const val KTLINT = "11.5.0"
+    object KtLint {
+        const val PLUGIN = "11.5.0"
+        const val PINTEREST = "0.49.1"
+    }
 }

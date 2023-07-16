@@ -12,7 +12,7 @@ import java.util.*
 @Configuration
 @EnableJpaAuditing
 class AuditingConfig {
-    companion object: KLogging() {
+    companion object : KLogging() {
         const val SYSTEM = "system"
     }
 

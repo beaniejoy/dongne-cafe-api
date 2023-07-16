@@ -1,6 +1,7 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 import plugin.BuildLifecyclePlugin
 import task.test.TestContainer
 import task.test.TestLoggingUtils
@@ -14,7 +15,7 @@ plugins {
     kotlin(Plugins.Kotlin.PLUGIN_JPA).version(Version.KOTLIN).apply(false)
     kotlin(Plugins.Kotlin.KAPT).version(Version.KOTLIN)
 
-    id(Plugins.KTLINT).version(Version.KTLINT)
+    id(Plugins.KTLINT).version(Version.KtLint.PLUGIN)
 }
 
 java {
@@ -24,10 +25,21 @@ java {
 
 allprojects {
     group = "io.beaniejoy.dongecafe"
-//    version = Version.PROJECT_VERSION
 
     repositories {
         mavenCentral()
+    }
+
+    apply {
+        plugin(Plugins.KTLINT)
+    }
+
+    ktlint {
+        version.set(Version.KtLint.PINTEREST)
+
+        reporters {
+            reporter(ReporterType.JSON)
+        }
     }
 }
 
@@ -39,7 +51,6 @@ subprojects {
 
         plugin(Plugins.Kotlin.KOTLIN)
         plugin(Plugins.Kotlin.KOTLIN_SPRING)
-//        plugin(Plugins.Kotlin.KOTLIN_JPA)
         plugin(Plugins.Kotlin.KOTLIN_KAPT)
     }
 

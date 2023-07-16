@@ -35,7 +35,9 @@ class BasicControllerAdvice {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(BusinessException::class)
     fun handleBusinessException(e: BusinessException): ApplicationResponse<Nothing> {
-        logger.error { "[${BusinessException::class.simpleName}] <ErrorCode>: ${e.errorCode.name}, <ErrorMessage>: ${e.message}" }
+        logger.error {
+            "[${BusinessException::class.simpleName}] <ErrorCode>: ${e.errorCode.name}, <ErrorMessage>: ${e.message}"
+        }
         e.printStackTrace()
         return ApplicationResponse.fail(errorCode = e.errorCode).build()
     }

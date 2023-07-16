@@ -12,11 +12,11 @@ class BusinessException : RuntimeException {
     var errorCode: ErrorCode
         private set
 
-    constructor(errorCode: ErrorCode) : super(errorCode.name){
+    constructor(errorCode: ErrorCode) : super(errorCode.name) {
         this.errorCode = errorCode
     }
 
-    constructor(errorCode: ErrorCode, message: String): super(message) {
+    constructor(errorCode: ErrorCode, message: String) : super(message) {
         this.errorCode = errorCode
     }
 

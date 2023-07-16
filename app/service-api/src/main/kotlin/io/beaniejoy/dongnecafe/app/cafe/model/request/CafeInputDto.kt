@@ -2,7 +2,6 @@ package io.beaniejoy.dongnecafe.app.cafe.model.request
 
 import java.math.BigDecimal
 
-
 class CafeInputDto {
     // ### Request Body ###
     data class RegisterCafeRequest(

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 class CafeMenuCategoryCrudValidator(
     private val cafeReaderPort: CafeReaderPort,
     private val cafeSeriesReaderPort: CafeSeriesReaderPort
-): CafeMenuCategoryValidator {
+) : CafeMenuCategoryValidator {
     override fun validateNotExisted(name: String, cafeId: Long) {
         check(cafeSeriesReaderPort.existsCafeMenuCategoryByName(name = name, cafeId = cafeId).not()) {
             throw BusinessException(ErrorCode.CAFE_MENU_CATEGORY_EXISTED)

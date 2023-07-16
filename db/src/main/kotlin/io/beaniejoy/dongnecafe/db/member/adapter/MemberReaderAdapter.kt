@@ -6,9 +6,7 @@ import io.beaniejoy.dongnecafe.domain.member.persistence.MemberReaderPort
 import org.springframework.stereotype.Component
 
 @Component
-class MemberReaderAdapter(
-    private val memberRepository: MemberRepository
-) : MemberReaderPort {
+class MemberReaderAdapter(private val memberRepository: MemberRepository) : MemberReaderPort {
     override fun existsMemberByEmail(email: String): Boolean {
         return memberRepository.findByEmail(email) != null
     }
