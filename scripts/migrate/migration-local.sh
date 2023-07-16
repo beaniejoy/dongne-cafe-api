@@ -10,7 +10,7 @@ export REDGATE_DISABLE_TELEMETRY=true
 
 PROJECT_NAME="dongne-cafe-api"
 PROJECT_ROOT_DIR=$(pwd)
-FLYWAY_CONFIG_FILE="${PROJECT_ROOT_DIR}/db/flyway-local.conf"
+FLYWAY_CONFIG_FILE="${PROJECT_ROOT_DIR}/flyway/flyway-local.conf"
 HELP_FILE="${PROJECT_ROOT_DIR}/scripts/migrate/migration-local.help"
 
 repeat() {

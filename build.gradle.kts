@@ -1,14 +1,10 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.springframework.boot.gradle.tasks.bundling.BootJar
 import plugin.BuildLifecyclePlugin
 import task.test.TestContainer
 import task.test.TestLoggingUtils
 import task.test.TestSummary
-
-val bootJar: BootJar by tasks
-bootJar.enabled = false
 
 plugins {
     id(Plugins.Spring.BOOT).version(Version.Spring.BOOT)
@@ -16,8 +12,14 @@ plugins {
     kotlin(Plugins.Kotlin.JVM).version(Version.KOTLIN)
     kotlin(Plugins.Kotlin.PLUGIN_SPRING).version(Version.KOTLIN).apply(false)
     kotlin(Plugins.Kotlin.PLUGIN_JPA).version(Version.KOTLIN).apply(false)
+    kotlin(Plugins.Kotlin.KAPT).version(Version.KOTLIN)
 
     id(Plugins.KTLINT).version(Version.KTLINT)
+}
+
+java {
+    sourceCompatibility = Version.JAVA
+    targetCompatibility = Version.JAVA
 }
 
 allprojects {
@@ -37,42 +39,30 @@ subprojects {
 
         plugin(Plugins.Kotlin.KOTLIN)
         plugin(Plugins.Kotlin.KOTLIN_SPRING)
-        plugin(Plugins.Kotlin.KOTLIN_JPA)
-    }
-
-    java.apply {
-        sourceCompatibility = Version.JAVA
-        targetCompatibility = Version.JAVA
+//        plugin(Plugins.Kotlin.KOTLIN_JPA)
+        plugin(Plugins.Kotlin.KOTLIN_KAPT)
     }
 
     dependencies {
         // Spring Boot Project
         implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-        implementation("org.springframework.boot:spring-boot-starter-web")
         implementation("org.springframework.boot:spring-boot-starter-validation")
-        implementation("org.springframework.boot:spring-boot-starter-security")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
         //kotlin
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-        // DB
-        runtimeOnly("mysql:mysql-connector-java:${Version.Deps.MYSQL}") // MySQL
-        runtimeOnly("com.h2database:h2") // H2
-
-        // JWT
-        implementation("io.jsonwebtoken:jjwt-api:${Version.Deps.JWT}")
-        runtimeOnly("io.jsonwebtoken:jjwt-impl:${Version.Deps.JWT}")
-        runtimeOnly("io.jsonwebtoken:jjwt-jackson:${Version.Deps.JWT}")
-
         // Logging
         implementation("io.github.microutils:kotlin-logging:${Version.Deps.KOTLIN_LOGGING}")
-        implementation("com.google.code.gson:gson")
+
+        // mapstruct for dto mapping (https://mapstruct.org/documentation/reference-guide/)
+        implementation("org.mapstruct:mapstruct:${Version.Deps.MAPSTRUCT}")
+        kapt("org.mapstruct:mapstruct-processor:${Version.Deps.MAPSTRUCT}")
+        kaptTest("org.mapstruct:mapstruct-processor:${Version.Deps.MAPSTRUCT}")
 
         // Test
         testImplementation("org.springframework.boot:spring-boot-starter-test")
-        testImplementation("org.springframework.security:spring-security-test")
     }
 
     tasks.withType<KotlinCompile> {
@@ -81,9 +71,6 @@ subprojects {
             jvmTarget = Version.JAVA.toString()
         }
     }
-
-    // for logging when build finished
-    apply<BuildLifecyclePlugin>()
 
     // gradle test logging
     tasks.withType<Test> {
@@ -106,6 +93,7 @@ subprojects {
 
         addTestListener(object : TestListener {
             override fun beforeSuite(desc: TestDescriptor) {}
+
             // handling after all test finished
             override fun afterSuite(desc: TestDescriptor, result: TestResult) {
                 if (desc.parent != null) return
@@ -120,10 +108,14 @@ subprojects {
             }
 
             override fun beforeTest(desc: TestDescriptor) {}
+
             // handling after each test finished
             override fun afterTest(desc: TestDescriptor, result: TestResult) {
                 TestLoggingUtils.printEachResult(desc, result)
             }
         })
     }
+
+    // for logging when build finished
+    apply<BuildLifecyclePlugin>()
 }
