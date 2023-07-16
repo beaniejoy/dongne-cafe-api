@@ -14,7 +14,10 @@ class BuildLifecyclePlugin : Plugin<Project> {
 
         val operationService = gradle.sharedServices.registerIfAbsent("operationService", BuildOperationService::class.java) {
             gradle.taskGraph.whenReady {
-                parameters.lastTaskPath = this.allTasks.last().path
+                parameters.targetTaskPaths =
+                    this.allTasks
+                        .map { it.path }
+                        .filter { it.endsWith(":test") }
             }
         }
 
