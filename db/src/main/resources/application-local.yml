@@ -1,5 +1,6 @@
 spring:
   datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       jdbc-url: jdbc:mysql://localhost:3306/dongne?autoreconnect=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
       username: root
