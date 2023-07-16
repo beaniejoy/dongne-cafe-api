@@ -30,7 +30,9 @@ pipeline {
                     sh 'printenv'
 
                     PROJECT_PROFILE = 'prod'
-                    MODULE_NAME = 'app:service-api'
+                    PROJECT_NAME = 'service-api'
+                    PARENT_MODULE_NAME = 'app'
+                    MODULE_NAME = "${PARENT_MODULE_NAME}:${PROJECT_NAME}"
 
                     // DB Connection Credential
                     DB_CONNECTION_CREDENTIAL = 'b873f9bf-03cc-4daf-be4f-7e00194aa2a0'
@@ -108,8 +110,8 @@ pipeline {
                                                 patternSeparator: '[, ]+',
                                                 remoteDirectory: 'deploy',
                                                 remoteDirectorySDF: false,
-                                                removePrefix: "${MODULE_NAME}/build/libs",
-                                                sourceFiles: "${MODULE_NAME}/build/libs/${MODULE_NAME}.jar"
+                                                removePrefix: "${PARENT_MODULE_NAME}/${PROJECT_NAME}/build/libs",
+                                                sourceFiles: "${PARENT_MODULE_NAME}/${PROJECT_NAME}/build/libs/${PROJECT_NAME}.jar"
                                         )
                                 ],
                                 usePromotionTimestamp: false,
@@ -128,7 +130,7 @@ pipeline {
                 ansiblePlaybook inventory: "${ANSIBLE_INVENTORY}",
                         playbook: "${ANSIBLE_PLAYBOOK}",
                         extraVars: [
-                                module_name: "${MODULE_NAME}",
+                                module_name: "${PROJECT_NAME}",
                                 jenkins_user_home: "${HOME}",
                                 spring_profile: "${PROJECT_PROFILE}",
                                 database_host: "${DATABASE_HOST}",
