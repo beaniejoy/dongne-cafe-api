@@ -59,7 +59,7 @@ class SecurityConfig {
             .also { jwtAuthenticationConfigurer(it) }
             .exceptionHandling()
             .authenticationEntryPoint(customAuthenticationEntryPoint)   // 인증 예외 entryPoint 적용
-            .accessDeniedHandler(customAccessDeniedHandler) // 인가 예외 handler 적용
+            .accessDeniedHandler(customAccessDeniedHandler)             // 인가 예외 handler 적용
 
             .and()
             .build()

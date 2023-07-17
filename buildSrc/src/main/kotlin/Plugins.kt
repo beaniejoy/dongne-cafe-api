@@ -17,4 +17,6 @@ object Plugins {
         const val PLUGIN_JPA = "plugin.jpa"
         const val KAPT = "kapt" // Kotlin Annotation Processing Tool
     }
+
+    const val KTLINT = "org.jlleitschuh.gradle.ktlint"
 }

@@ -12,13 +12,16 @@ interface CafeInfoMapper {
     // #### [START] response of registered entity ####
     @Mapping(source = "cafe.id", target = "cafeId")
     fun of(cafe: Cafe): CafeInfo.RegisteredCafe
+
     @Mapping(source = "cafeMenuCategory.id", target = "menuCategoryId")
     fun of(cafeMenuCategory: CafeMenuCategory): CafeInfo.RegisteredCafeMenuCategory
 
     @Mapping(source = "cafeMenu.id", target = "cafeMenuId")
     fun of(cafeMenu: CafeMenu, menuOptions: List<MenuOption>): CafeInfo.RegisteredCafeMenu
+
     @Mapping(source = "menuOption.id", target = "menuOptionId")
     fun of(menuOption: MenuOption): CafeInfo.RegisteredMenuOption
+
     @Mapping(source = "optionDetail.id", target = "optionDetailId")
     fun of(optionDetail: OptionDetail): CafeInfo.RegisteredOptionDetail
     // #### [END] response of registered entity ####

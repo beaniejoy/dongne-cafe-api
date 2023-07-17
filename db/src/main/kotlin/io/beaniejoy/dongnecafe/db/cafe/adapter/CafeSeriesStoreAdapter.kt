@@ -12,5 +12,4 @@ class CafeSeriesStoreAdapter(
     override fun storeCafeMenus(cafeMenus: List<CafeMenu>): List<CafeMenu> {
         return cafeMenuRepository.saveAll(cafeMenus)
     }
-
 }

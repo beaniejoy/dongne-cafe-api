@@ -20,7 +20,7 @@ class ApiAuthenticationProvider(
     private val userDetailsService: UserDetailsService,
     private val passwordEncoder: PasswordEncoder
 ) : AuthenticationProvider {
-    companion object: KLogging()
+    companion object : KLogging()
 
     override fun authenticate(authentication: Authentication): Authentication {
         logger.info { "start authentication" }

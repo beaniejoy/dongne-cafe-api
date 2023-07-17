@@ -51,3 +51,8 @@ $ docker run --name mysql-server -e MYSQL_ROOT_PASSWORD=beaniejoy -d -p 3306:330
 ```bash
 $ docker-compose up --build
 ```
+
+### 🪄 Kotlin Lint
+```bash
+$ ./gradlew addKtlintCheckGitPreCommitHook
+```

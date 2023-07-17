@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletResponse
 @Component
 class CustomAuthenticationEntryPoint(
     private val handlerExceptionResolver: HandlerExceptionResolver
-): AuthenticationEntryPoint {
-    companion object: KLogging()
+) : AuthenticationEntryPoint {
+    companion object : KLogging()
 
     override fun commence(
         request: HttpServletRequest,

@@ -23,5 +23,4 @@ interface CafeInputDtoMapper {
 
     // from Dto to Query
     fun of(param: CafeInputDto.SearchCafesParam): CafeQuery.SearchCafesParam
-
 }
