@@ -2,6 +2,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
+import org.jlleitschuh.gradle.ktlint.tasks.GenerateReportsTask
 import plugin.BuildLifecyclePlugin
 import task.test.TestContainer
 import task.test.TestLoggingUtils
@@ -40,6 +41,12 @@ allprojects {
         reporters {
             reporter(ReporterType.JSON)
         }
+    }
+
+    tasks.withType<GenerateReportsTask> {
+        reportsOutputDirectory.set(
+            rootProject.layout.buildDirectory.dir("reports/ktlint/${project.name}")
+        )
     }
 }
 
