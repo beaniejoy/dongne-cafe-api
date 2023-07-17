@@ -35,6 +35,7 @@ allprojects {
         plugin(Plugins.KTLINT)
     }
 
+    // ktlint setting
     ktlint {
         version.set(Version.KtLint.PINTEREST)
 
@@ -43,6 +44,7 @@ allprojects {
         }
     }
 
+    // report directory location setting
     tasks.withType<GenerateReportsTask> {
         reportsOutputDirectory.set(
             rootProject.layout.buildDirectory.dir("reports/ktlint/${project.name}")
