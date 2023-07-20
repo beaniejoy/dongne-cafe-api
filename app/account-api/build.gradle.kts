@@ -1,6 +1,14 @@
+import org.jlleitschuh.gradle.ktlint.tasks.KtLintCheckTask
+
 afterEvaluate {
-    project.tasks.withType<Test> {
-        dependsOn("${SubModule.APP_COMMON}:test")
+    project.tasks.apply {
+        this.withType<Test> {
+            dependsOn("${SubModule.APP_COMMON}:test")
+        }
+
+        this.withType<KtLintCheckTask> {
+            dependsOn("${SubModule.APP_COMMON}:ktlintCheck")
+        }
     }
 }
 

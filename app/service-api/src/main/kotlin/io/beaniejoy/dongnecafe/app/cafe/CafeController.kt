@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*
 class CafeController(
     private val cafeService: CafeService,
     private val cafeInputDtoMapper: CafeInputDtoMapper,
-    private val cafeOutputDtoMapper: CafeOutputDtoMapper
+    private val cafeOutputDtoMapper: CafeOutputDtoMapper,
 ) {
     /**
      * 신규 카페 생성

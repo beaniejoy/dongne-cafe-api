@@ -1,3 +1,4 @@
+import org.jlleitschuh.gradle.ktlint.tasks.KtLintCheckTask
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 val jar: Jar by tasks
@@ -7,8 +8,18 @@ bootJar.enabled = false
 jar.enabled = true
 
 afterEvaluate {
-    project.tasks.withType<Test> {
-        dependsOn("${SubModule.DOMAIN}:test")
+    project.tasks.apply {
+        this.withType<Test> {
+            dependsOn("${SubModule.DOMAIN}:test")
+        }
+
+        this.withType<KtLintCheckTask> {
+            dependsOn(
+                ":ktlintCheck",
+                "${SubModule.DB}:ktlintCheck",
+                "${SubModule.DOMAIN}:ktlintCheck"
+            )
+        }
     }
 }
 
