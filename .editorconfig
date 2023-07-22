@@ -18,3 +18,7 @@ ktlint_standard_comment-spacing=disabled
 ktlint_standard_no-wildcard-imports=disabled
 ktlint_standard_no-blank-lines-in-chained-method-calls=disabled
 ktlint_standard_no-multi-spaces=disabled
+
+[*.{yml,yaml}]
+tab_width = 2
+indent_size = 2

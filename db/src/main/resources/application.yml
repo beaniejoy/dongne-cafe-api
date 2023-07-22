@@ -20,6 +20,19 @@ spring:
         format_sql: true
         show-sql: false
     open-in-view: false
+  config:
+    import: vault://
+  cloud:
+    vault:
+      uri: # vault domain uri (port: 8200)
+      authentication: TOKEN
+      token: # vault root token
+      kv:
+        backend: secret
+        application-name: dongne
+        default-context:
+        profiles: ${spring.profiles.active}
+
 
 server:
   shutdown: graceful
