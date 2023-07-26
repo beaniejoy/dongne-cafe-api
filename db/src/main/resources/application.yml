@@ -33,6 +33,5 @@ spring:
         default-context:
         profiles: ${spring.profiles.active}
 
-
 server:
   shutdown: graceful
