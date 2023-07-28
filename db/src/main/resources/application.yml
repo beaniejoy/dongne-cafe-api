@@ -1,6 +1,7 @@
 spring:
   lifecycle:
     timeout-per-shutdown-phase: 30s # default 30s (graceful shutdown)
+
   datasource:
     hikari:
       connection-timeout: 3000
@@ -11,6 +12,7 @@ spring:
         prepStmtCacheSize: 250
         prepStmtCacheSqlLimit: 2048
         useServerPrepStmts: true
+
   jpa:
     hibernate:
       ddl-auto: none
@@ -20,13 +22,16 @@ spring:
         format_sql: true
         show-sql: false
     open-in-view: false
+
   config:
-    import: vault://
+    import:
+      - optional:file:./env/.env.${spring.profiles.active}[.properties]
+      - vault://
   cloud:
     vault:
-      uri: # vault domain uri (port: 8200)
+      uri: ${VAULT_DOMAIN_ADDR} # vault domain uri (port: 8200)
       authentication: TOKEN
-      token: # vault root token
+      token: ${VAULT_AUTH_TOKEN} # vault root token
       kv:
         backend: secret
         application-name: dongne
