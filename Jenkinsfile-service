@@ -35,29 +35,17 @@ pipeline {
                     MODULE_NAME = "${PARENT_MODULE_NAME}:${PROJECT_NAME}"
 
                     def secrets = [
-                        [path: "secret/dongne/${PROJECT_PROFILE}", engineVersion: 2, secretValues: [
-                            [envVar: 'jdbcUrl', vaultKey: 'spring.datasource.hikari.jdbc-url'],
-                            [envVar: 'username', vaultKey: 'spring.datasource.hikari.username']]],
+                        [
+                            path: "secret/dongne/${PROJECT_PROFILE}",
+                            engineVersion: 2,
+                            secretValues: [
+                                [envVar: 'jdbcUrl', vaultKey: 'spring.datasource.hikari.jdbc-url']
+                            ]
+                        ],
                     ]
 
                     withVault([vaultSecrets: secrets]) {
                         JDBC_URL = "${jdbcUrl}"
-                        DB_USERNAME = "${username}"
-                    }
-
-                    echo "vault db JDBC_URL: ${JDBC_URL}"
-
-                    // DB Connection Credential
-                    DB_CONNECTION_CREDENTIAL = "vault-db-connection-${PROJECT_PROFILE}"
-                    withCredentials([
-                            usernamePassword(
-                                    credentialsId: "${DB_CONNECTION_CREDENTIAL}",
-                                    usernameVariable: 'username',
-                                    passwordVariable: 'password'
-                            )
-                    ]) {
-                        DATABASE_USERNAME = "${username}"
-                        DATABASE_PASSWORD = "${password}"
                     }
 
                     // flyway migration
@@ -78,7 +66,7 @@ pipeline {
                 flywayrunner installationName: 'flyway-jenkins',
                         flywayCommand: 'info validate',
                         commandLineArgs: "-configFiles=${MIGRATION_WORKSPACE}/flyway-${PROJECT_PROFILE}.conf",
-                        credentialsId: "${DB_CONNECTION_CREDENTIAL}",
+                        credentialsId: "vault-db-connection-${PROJECT_PROFILE}",
                         url: "${JDBC_URL}",
                         locations: "filesystem:${MIGRATION_WORKSPACE}/migration"
             }
@@ -145,10 +133,7 @@ pipeline {
                         extraVars: [
                                 module_name: "${PROJECT_NAME}",
                                 jenkins_user_home: "${HOME}",
-                                spring_profile: "${PROJECT_PROFILE}",
-                                database_host: "${DATABASE_HOST}",
-                                database_username: "${DATABASE_USERNAME}",
-                                database_password: "${DATABASE_PASSWORD}"
+                                spring_profile: "${PROJECT_PROFILE}"
                         ]
             }
         }
