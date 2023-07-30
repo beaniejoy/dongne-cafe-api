@@ -75,7 +75,7 @@ pipeline {
                 expression { executeConditionAllOr(Stage.DB_VALIDATE) }
             }
             steps {
-                flywayrunner installationName: 'flywaytool-jenkins',
+                flywayrunner installationName: 'flyway-jenkins',
                         flywayCommand: 'info validate',
                         commandLineArgs: "-configFiles=${MIGRATION_WORKSPACE}/flyway-${PROJECT_PROFILE}.conf",
                         credentialsId: "${DB_CONNECTION_CREDENTIAL}",
