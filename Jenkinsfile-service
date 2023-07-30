@@ -34,8 +34,21 @@ pipeline {
                     PARENT_MODULE_NAME = 'app'
                     MODULE_NAME = "${PARENT_MODULE_NAME}:${PROJECT_NAME}"
 
+                    def secrets = [
+                        [path: "secret/dongne/${PROJECT_PROFILE}", engineVersion: 2, secretValues: [
+                            [envVar: 'jdbcUrl', vaultKey: 'spring.datasource.hikari.jdbc-url'],
+                            [envVar: 'username', vaultKey: 'spring.datasource.hikari.username']]],
+                    ]
+
+                    withVault([vaultSecrets: secrets]) {
+                        JDBC_URL = "${jdbcUrl}"
+                        DB_USERNAME = "${username}"
+                    }
+
+                    echo "vault db JDBC_URL: ${JDBC_URL}"
+
                     // DB Connection Credential
-                    DB_CONNECTION_CREDENTIAL = 'b873f9bf-03cc-4daf-be4f-7e00194aa2a0'
+                    DB_CONNECTION_CREDENTIAL = "vault-db-connection-${PROJECT_PROFILE}"
                     withCredentials([
                             usernamePassword(
                                     credentialsId: "${DB_CONNECTION_CREDENTIAL}",
@@ -66,7 +79,7 @@ pipeline {
                         flywayCommand: 'info validate',
                         commandLineArgs: "-configFiles=${MIGRATION_WORKSPACE}/flyway-${PROJECT_PROFILE}.conf",
                         credentialsId: "${DB_CONNECTION_CREDENTIAL}",
-                        url: "jdbc:mysql://${DATABASE_HOST}:3306/dongne",
+                        url: "${JDBC_URL}",
                         locations: "filesystem:${MIGRATION_WORKSPACE}/migration"
             }
         }
