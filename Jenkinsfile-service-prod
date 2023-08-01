@@ -39,7 +39,7 @@ pipeline {
 
                     // ansible playbook
                     ANSIBLE_INVENTORY = "${HOME}/ansible/inventory"
-                    ANSIBLE_PLAYBOOK = "${WORKSPACE}/scripts/deploy/run-app.yml"
+                    ANSIBLE_PLAYBOOK = "${WORKSPACE}/scripts/deploy/test.yml"
 
                     // credentials info
                     def secrets = [
@@ -52,25 +52,25 @@ pipeline {
                         ],
                     ]
 
+                    def config = [
+                            [
+                                path: "vault/config",
+                                engineVersion: 2,
+                                secretValues: [
+                                    [envVar: 'vaultAddr', vaultKey: 'VAULT_ADDR'],
+                                    [envVar: 'vaultToken', vaultKey: 'VAULT_TOKEN']
+                                ]
+                            ],
+                    ]
+
                     withVault([
-                        vaultSecrets: secrets,
+                        vaultSecrets: [secrets, config],
                         configuration: [
                             engineVersion: 2,
                             timeout: 10
                         ]
                     ]) {
                         JDBC_URL = "${jdbcUrl}"
-                    }
-
-                    withCredentials([
-                        [
-                            $class: 'VaultTokenCredentialBinding',
-                            credentialsId: 'VAULT_ROOT_TOKEN',
-                            vaultAddr: '',
-                            addrVariable: 'vaultAddr',
-                            tokenVariable: 'vaultToken'
-                        ]
-                    ]) {
                         VAULT_ADDR = "${vaultAddr}"
                         VAULT_TOKEN = "${vaultToken}"
                     }
