@@ -34,6 +34,14 @@ pipeline {
                     PARENT_MODULE_NAME = 'app'
                     MODULE_NAME = "${PARENT_MODULE_NAME}:${PROJECT_NAME}"
 
+                    // flyway migration
+                    MIGRATION_WORKSPACE = "${WORKSPACE}/flyway"
+
+                    // ansible playbook
+                    ANSIBLE_INVENTORY = "${HOME}/ansible/inventory"
+                    ANSIBLE_PLAYBOOK = "${WORKSPACE}/scripts/deploy/run-app.yml"
+
+                    // credentials info
                     def secrets = [
                         [
                             path: "secret/dongne/${PROJECT_PROFILE}",
@@ -48,12 +56,16 @@ pipeline {
                         JDBC_URL = "${jdbcUrl}"
                     }
 
-                    // flyway migration
-                    MIGRATION_WORKSPACE = "${WORKSPACE}/flyway"
-
-                    // ansible playbook
-                    ANSIBLE_INVENTORY = "${HOME}/ansible/inventory"
-                    ANSIBLE_PLAYBOOK = "${WORKSPACE}/scripts/deploy/run-app.yml"
+                    withCredentials([
+                        [
+                            $class: 'VaultTokenCredentialBinding',
+                            credentialsId: 'VAULT_ROOT_TOKEN',
+                            vaultAddr: '',
+                            tokenVariable: 'vaultToken'
+                        ]
+                    ]) {
+                        VAULT_TOKEN = "${vaultToken}"
+                    }
                 }
             }
         }
@@ -66,7 +78,7 @@ pipeline {
                 flywayrunner installationName: 'flyway-jenkins',
                         flywayCommand: 'info validate',
                         commandLineArgs: "-configFiles=${MIGRATION_WORKSPACE}/flyway-${PROJECT_PROFILE}.conf",
-                        credentialsId: "vault-db-connection-${PROJECT_PROFILE}",
+                        credentialsId: "VAULT_DB_CONNECTION_${PROJECT_PROFILE.toString().toUpperCase()}",
                         url: "${JDBC_URL}",
                         locations: "filesystem:${MIGRATION_WORKSPACE}/migration"
             }
@@ -133,7 +145,8 @@ pipeline {
                         extraVars: [
                                 module_name: "${PROJECT_NAME}",
                                 jenkins_user_home: "${HOME}",
-                                spring_profile: "${PROJECT_PROFILE}"
+                                spring_profile: "${PROJECT_PROFILE}",
+                                vault_token: "${VAULT_TOKEN}"
                         ]
             }
         }

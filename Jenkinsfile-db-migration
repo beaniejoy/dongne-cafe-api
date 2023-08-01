@@ -13,11 +13,11 @@ def executeFlywayRunner(stage) {
         return
     }
 
-    flywayrunner installationName: 'flywaytool-jenkins',
+    flywayrunner installationName: 'flyway-jenkins',
             flywayCommand: "$stage".toLowerCase(),
             commandLineArgs: "-configFiles=${MIGRATION_WORKSPACE}/flyway-${PROJECT_PROFILE}.conf",
-            credentialsId: "${DB_CONNECTION_CREDENTIAL}",
-            url: "jdbc:mysql://${DATABASE_HOST}:3306/dongne",
+            credentialsId: "VAULT_DB_CONNECTION_${PROJECT_PROFILE.toString().toUpperCase()}",
+            url: "${JDBC_URL}",
             locations: "filesystem:${MIGRATION_WORKSPACE}/migration"
 }
 
@@ -45,21 +45,23 @@ pipeline {
 
                     PROJECT_PROFILE = 'prod'
 
-                    // DB Connection Credential
-                    DB_CONNECTION_CREDENTIAL = 'b873f9bf-03cc-4daf-be4f-7e00194aa2a0'
-                    withCredentials([
-                            usernamePassword(
-                                    credentialsId: "${DB_CONNECTION_CREDENTIAL}",
-                                    usernameVariable: 'username',
-                                    passwordVariable: 'password'
-                            )
-                    ]) {
-                        DATABASE_USERNAME = "${username}"
-                        DATABASE_PASSWORD = "${password}"
-                    }
-
                     // flyway migration directory
                     MIGRATION_WORKSPACE = "${WORKSPACE}/flyway"
+
+                    // credentials info
+                    def secrets = [
+                        [
+                            path: "secret/dongne/${PROJECT_PROFILE}",
+                            engineVersion: 2,
+                            secretValues: [
+                                [envVar: 'jdbcUrl', vaultKey: 'spring.datasource.hikari.jdbc-url']
+                            ]
+                        ],
+                    ]
+
+                    withVault([vaultSecrets: secrets]) {
+                        JDBC_URL = "${jdbcUrl}"
+                    }
                 }
             }
         }
