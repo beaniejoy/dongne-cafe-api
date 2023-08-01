@@ -38,14 +38,6 @@
         state: absent
         path: "{{ remote_deploy_path }}/{{ module_name }}.jar"
 
-    - name: Copy env file to remote server
-      ansible.builtin.template:
-        src: .env.j2
-        dest: "{{ remote_env_path }}/.env"
-        owner: "{{ remote_server_user }}"
-        group: "{{ remote_server_group }}"
-        mode: 0644
-
     - name: Copy service script file to remote server
       ansible.builtin.template:
         src: service.sh.j2
