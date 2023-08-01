@@ -50,21 +50,18 @@ pipeline {
                                 [envVar: 'jdbcUrl', vaultKey: 'spring.datasource.hikari.jdbc-url']
                             ]
                         ],
-                    ]
-
-                    def config = [
-                            [
-                                path: "vault/config",
-                                engineVersion: 2,
-                                secretValues: [
-                                    [envVar: 'vaultAddr', vaultKey: 'VAULT_ADDR'],
-                                    [envVar: 'vaultToken', vaultKey: 'VAULT_TOKEN']
-                                ]
-                            ],
+                        [
+                            path: "vault/config",
+                            engineVersion: 2,
+                            secretValues: [
+                                [envVar: 'vaultAddr', vaultKey: 'VAULT_ADDR'],
+                                [envVar: 'vaultToken', vaultKey: 'VAULT_TOKEN']
+                            ]
+                        ],
                     ]
 
                     withVault([
-                        vaultSecrets: [secrets, config],
+                        vaultSecrets: secrets,
                         configuration: [
                             engineVersion: 2,
                             timeout: 10
