@@ -94,7 +94,11 @@ pipeline {
                 expression { executeConditionAllOr(Stage.TEST) }
             }
             steps {
-                sh "./gradlew clean :${MODULE_NAME}:test"
+                sh """
+                    ./gradlew clean :${MODULE_NAME}:test \
+                        -Denv.vault.address=${VAULT_ADDR} \
+                        -Denv.vault.token=${VAULT_TOKEN}
+                """
             }
         }
 

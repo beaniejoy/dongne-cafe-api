@@ -31,3 +31,7 @@ dependencies {
     runtimeOnly("mysql:mysql-connector-java:${Version.Deps.MYSQL}") // MySQL
     runtimeOnly("com.h2database:h2") // H2
 }
+
+configurations.testImplementation {
+    exclude("org.springframework.cloud", "spring-cloud-starter-vault-config")
+}

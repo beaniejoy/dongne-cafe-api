@@ -33,7 +33,8 @@ then
 fi
 
 nohup java -jar \
-  -Dspring.
+  -Denv.vault.address="${}" \
+  -Denv.vault.token="${}" \
   -Dspring.profiles.active="${SPRING_PROFILE}" \
   ${APP_WORKSPACE}/${MODULE_NAME}.jar 1>${STD_OUT} 2>${STD_ERR} &
 
