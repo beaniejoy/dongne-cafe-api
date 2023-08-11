@@ -147,16 +147,17 @@ pipeline {
                 expression { executeConditionAllOr(Stage.RUN_APP) }
             }
             steps {
-                ansiblePlaybook installation: 'ansible',
-                        inventory: "${ANSIBLE_INVENTORY}",
+                ansiblePlaybook(
                         playbook: "${ANSIBLE_PLAYBOOK}",
-                        extras: [
+                        inventory: "${ANSIBLE_INVENTORY}",
+                        extraVars: [
                             module_name: "${PROJECT_NAME}",
                             jenkins_user_home: "${HOME}",
                             spring_profile: "${PROJECT_PROFILE}",
                             vault_address: "${VAULT_ADDR}",
                             vault_token: "${VAULT_TOKEN}"
                         ]
+                )
             }
         }
     }
