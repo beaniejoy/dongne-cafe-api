@@ -148,6 +148,7 @@ pipeline {
             }
             steps {
                 ansiblePlaybook(
+                        installation: 'ansible',
                         playbook: "${ANSIBLE_PLAYBOOK}",
                         inventory: "${ANSIBLE_INVENTORY}",
                         extraVars: [
