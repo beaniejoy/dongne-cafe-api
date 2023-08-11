@@ -95,9 +95,7 @@ pipeline {
             }
             steps {
                 sh """
-                    ./gradlew clean :${MODULE_NAME}:test \
-                        -Denv.vault.address=${VAULT_ADDR} \
-                        -Denv.vault.token=${VAULT_TOKEN}
+                    ./gradlew clean :${MODULE_NAME}:test
                 """
             }
         }
