@@ -6,6 +6,9 @@ PORT=8080
 
 SPRING_PROFILE={{ spring_profile }}
 
+VAULT_DOMAIN_ADDR={{ vault_address }}
+VAULT_AUTH_TOKEN={{ vault_token }}
+
 STD_OUT=${APP_WORKSPACE}/logs/stdout_${PORT}.log
 STD_ERR=${APP_WORKSPACE}/logs/stderr_${PORT}.log
 
@@ -33,8 +36,8 @@ then
 fi
 
 nohup java -jar \
-  -Denv.vault.address="${}" \
-  -Denv.vault.token="${}" \
+  -Dvault.domain.addr="${VAULT_DOMAIN_ADDR}" \
+  -Dvault.auth.token="${VAULT_AUTH_TOKEN}" \
   -Dspring.profiles.active="${SPRING_PROFILE}" \
   ${APP_WORKSPACE}/${MODULE_NAME}.jar 1>${STD_OUT} 2>${STD_ERR} &
 

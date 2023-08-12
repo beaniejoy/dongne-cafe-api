@@ -1,8 +1,0 @@
----
-- name: Test
-  hosts: ec2
-
-  tasks:
-    - name: Register JAR file existence status
-      ansible.builtin.debug:
-        msg: "Test {{ vault_address }}, {{ vault_token }}"
