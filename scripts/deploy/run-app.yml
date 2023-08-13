@@ -8,21 +8,41 @@
     - "{{ jenkins_user_home }}/ansible/vars/app_config.yml"
 
   tasks:
-    - name: Register JAR file existence status
+    - name: Register JAR file
       ansible.builtin.stat:
         path: "{{ remote_deploy_path }}/{{ module_name }}.jar"
-      register: file_status
+      register: jar_file
 
-    - name: Check if JAR file exists
+    - name: Check JAR file exists
       block:
-        - name: Check 'file_status'
+        - name: Fail and print message
           ansible.builtin.fail:
             msg: "{{ module_name }}.jar does not exist"
-          when: not file_status.stat.exists
+          when: not jar_file.stat.exists
 
         - name: Print success message
           ansible.builtin.debug:
             msg: "{{ module_name }}.jar exists!!"
+
+    - name: "Register directory({{ remote_app_path }})"
+      ansible.builtin.stat:
+        path: "{{ remote_app_path }}"
+      register: app_dir
+
+    - name: "Check directory({{ remote_app_path }}) exists"
+      block:
+        - name: "Make directory({{ remote_app_path }})"
+          ansible.builtin.file:
+            path: "{{ remote_app_path }}"
+            state: directory
+            mode: 0755
+            owner: "{{ remote_server_user }}"
+            group: "{{ remote_server_group }}"
+          when: not app_dir.stat.exists
+
+        - name: Print success message
+          ansible.builtin.debug:
+            msg: "{{ remote_app_path }} exists!!"
 
     - name: Copy JAR file for running application
       ansible.builtin.copy:
