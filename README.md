@@ -16,6 +16,7 @@
   - Flyway(migration)
 - CI/CD
   - Jenkins
+  - Ansible
 - Cloud Server
   - AWS Lightsail(Amazon Linux2)
 
@@ -49,4 +50,9 @@ $ docker run --name mysql-server -e MYSQL_ROOT_PASSWORD=beaniejoy -d -p 3306:330
 - docker compose를 이용한 nginx, DB(MySQL), application 한꺼번에 실행하는 경우
 ```bash
 $ docker-compose up --build
+```
+
+### 🪄 Kotlin Lint
+```bash
+$ ./gradlew addKtlintCheckGitPreCommitHook
 ```

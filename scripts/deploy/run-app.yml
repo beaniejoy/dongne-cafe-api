@@ -1,0 +1,67 @@
+---
+- name: Run java application
+  hosts: ec2
+
+ # "app_config.yml": application config
+  vars_files:
+    - vars/all.yml
+    - "{{ jenkins_user_home }}/ansible/vars/app_config.yml"
+
+  tasks:
+    - name: Register JAR file existence status
+      ansible.builtin.stat:
+        path: "{{ remote_deploy_path }}/{{ module_name }}.jar"
+      register: file_status
+
+    - name: Check if JAR file exists
+      block:
+        - name: Check 'file_status'
+          ansible.builtin.fail:
+            msg: "{{ module_name }}.jar does not exist"
+          when: not file_status.stat.exists
+
+        - name: Print success message
+          ansible.builtin.debug:
+            msg: "{{ module_name }}.jar exists!!"
+
+    - name: Copy JAR file for running application
+      ansible.builtin.copy:
+        src: "{{ remote_deploy_path }}/{{ module_name }}.jar"
+        remote_src: yes
+        dest: "{{ remote_app_path }}/{{ module_name }}.jar"
+        owner: "{{ remote_server_user }}"
+        group: "{{ remote_server_group }}"
+        mode: 0644
+
+    - name: Remove deployed JAR file
+      ansible.builtin.file:
+        state: absent
+        path: "{{ remote_deploy_path }}/{{ module_name }}.jar"
+
+    - name: Copy env file to remote server
+      ansible.builtin.template:
+        src: .env.j2
+        dest: "{{ remote_env_path }}/.env"
+        owner: "{{ remote_server_user }}"
+        group: "{{ remote_server_group }}"
+        mode: 0644
+
+    - name: Copy service script file to remote server
+      ansible.builtin.template:
+        src: service.sh.j2
+        dest: "{{ remote_script_path }}/service.sh"
+        owner: "{{ remote_server_user }}"
+        group: "{{ remote_server_group }}"
+        mode: 0755
+
+    - name: Run Application
+      ansible.builtin.command: "{{ remote_script_path }}/service.sh"
+      register: result
+
+    - name: Show all prints while running service script
+      ansible.builtin.debug:
+        msg: "{{ result.stdout_lines }}"
+
+    - name: Finish
+      ansible.builtin.debug:
+        msg: "All tasks completed!!"

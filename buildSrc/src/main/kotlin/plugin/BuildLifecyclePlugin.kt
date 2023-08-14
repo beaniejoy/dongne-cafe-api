@@ -13,8 +13,11 @@ class BuildLifecyclePlugin : Plugin<Project> {
         val registry = services[BuildEventListenerRegistryInternal::class.java]
 
         val operationService = gradle.sharedServices.registerIfAbsent("operationService", BuildOperationService::class.java) {
-            gradle.taskGraph.whenReady {
-                parameters.lastTaskPath = this.allTasks.last().path
+                gradle.taskGraph.whenReady {
+                parameters.targetTaskPaths =
+                    this.allTasks
+                        .map { it.path }
+                        .filter { it.endsWith(":test") }
             }
         }
 

@@ -1,0 +1,8 @@
+spring:
+  security:
+    filter:
+      order: 10 # for logging filter
+
+jwt:
+  secret_key: ZG9uZ25lLWNhZmUtcHJvamVjdC1rZXktZm9yLXRlc3QtY29kZQo
+  validity_time_in_sec: 60

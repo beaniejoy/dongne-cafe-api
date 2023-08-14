@@ -36,7 +36,7 @@ class TestLoggingUtils {
             println("[${desc.className}] ${desc.displayName} >> result: ${colorResultType(result.resultType).second}")
         }
 
-        fun colorResultType(resultType: TestResult.ResultType): Pair<TestResult.ResultType, String> {
+        private fun colorResultType(resultType: TestResult.ResultType): Pair<TestResult.ResultType, String> {
             if (TestContainer.colorMode.not()) {
                 return resultType to "${resultType}"
             }

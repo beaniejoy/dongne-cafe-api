@@ -1,0 +1,10 @@
+DB migration by using flyway in local environment (By beaniejoy)
+
+usage: first, move to the root path of this project.
+    ./scripts/migrate/migration-local.sh [arguments]			execute flyway command
+
+Arguments:
+    migrate			Migrate DB(info > migrate > validate)
+    clean			Drops all objects (tables, views, procedures, triggers, …) in the configured schemas.
+    repair			Remove failed migration entries
+    help			Print Help (this message) and exit
