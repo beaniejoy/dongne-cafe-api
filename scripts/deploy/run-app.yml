@@ -56,6 +56,11 @@
         state: absent
         path: "{{ remote_deploy_path }}/{{ module_name }}.jar"
 
+    - name: Install java package
+      ansible.builtin.dnf:
+        name: "{{ java_package }}"
+        state: present
+
     - name: Copy service script file to remote server
       ansible.builtin.template:
         src: service.sh.j2
