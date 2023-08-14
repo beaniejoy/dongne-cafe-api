@@ -2,27 +2,45 @@
 - name: Run java application
   hosts: ec2
 
- # "app_config.yml": application config
   vars_files:
     - vars/all.yml
-    - "{{ jenkins_user_home }}/ansible/vars/app_config.yml"
 
   tasks:
-    - name: Register JAR file existence status
+    - name: Register JAR file
       ansible.builtin.stat:
         path: "{{ remote_deploy_path }}/{{ module_name }}.jar"
-      register: file_status
+      register: jar_file
 
-    - name: Check if JAR file exists
+    - name: Check JAR file exists
       block:
-        - name: Check 'file_status'
+        - name: Fail and print message
           ansible.builtin.fail:
             msg: "{{ module_name }}.jar does not exist"
-          when: not file_status.stat.exists
+          when: not jar_file.stat.exists
 
         - name: Print success message
           ansible.builtin.debug:
             msg: "{{ module_name }}.jar exists!!"
+
+    - name: "Register directory({{ remote_app_path }})"
+      ansible.builtin.stat:
+        path: "{{ remote_app_path }}"
+      register: app_dir
+
+    - name: "Check directory({{ remote_app_path }}) exists"
+      block:
+        - name: "Make directory({{ remote_app_path }})"
+          ansible.builtin.file:
+            path: "{{ remote_app_path }}"
+            state: directory
+            mode: 0755
+            owner: "{{ remote_server_user }}"
+            group: "{{ remote_server_group }}"
+          when: not app_dir.stat.exists
+
+        - name: Print success message
+          ansible.builtin.debug:
+            msg: "{{ remote_app_path }} exists!!"
 
     - name: Copy JAR file for running application
       ansible.builtin.copy:
@@ -38,24 +56,21 @@
         state: absent
         path: "{{ remote_deploy_path }}/{{ module_name }}.jar"
 
-    - name: Copy env file to remote server
-      ansible.builtin.template:
-        src: .env.j2
-        dest: "{{ remote_env_path }}/.env"
-        owner: "{{ remote_server_user }}"
-        group: "{{ remote_server_group }}"
-        mode: 0644
+    - name: Install java package
+      ansible.builtin.dnf:
+        name: "{{ java_package }}"
+        state: present
 
     - name: Copy service script file to remote server
       ansible.builtin.template:
         src: service.sh.j2
-        dest: "{{ remote_script_path }}/service.sh"
+        dest: "{{ remote_app_path }}/service.sh"
         owner: "{{ remote_server_user }}"
         group: "{{ remote_server_group }}"
         mode: 0755
 
     - name: Run Application
-      ansible.builtin.command: "{{ remote_script_path }}/service.sh"
+      ansible.builtin.command: "{{ remote_app_path }}/service.sh"
       register: result
 
     - name: Show all prints while running service script

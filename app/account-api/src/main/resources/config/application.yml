@@ -4,3 +4,7 @@ server:
 spring:
   profiles:
     active: local
+
+  security:
+    filter:
+      order: 10 # for logging filter

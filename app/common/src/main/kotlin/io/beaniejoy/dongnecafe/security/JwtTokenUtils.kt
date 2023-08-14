@@ -18,6 +18,8 @@ import java.util.*
 
 @Component
 class JwtTokenUtils(
+    // HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
+    // echo '.....'|base64
     @Value("\${jwt.secret_key}")
     private val secretKey: String,
     @Value("\${jwt.validity_time_in_sec}")
