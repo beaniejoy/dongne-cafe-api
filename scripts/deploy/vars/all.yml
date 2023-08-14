@@ -5,4 +5,3 @@ remote_user_workspace: "/home/{{ remote_server_user }}"
 
 remote_deploy_path: "{{ remote_user_workspace }}/deploy"
 remote_app_path: "{{ remote_user_workspace }}/app"
-remote_script_path: "{{ remote_user_workspace }}/app/scripts"

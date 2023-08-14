@@ -2,10 +2,8 @@
 - name: Run java application
   hosts: ec2
 
- # "app_config.yml": application config
   vars_files:
     - vars/all.yml
-    - "{{ jenkins_user_home }}/ansible/vars/app_config.yml"
 
   tasks:
     - name: Register JAR file
@@ -61,13 +59,13 @@
     - name: Copy service script file to remote server
       ansible.builtin.template:
         src: service.sh.j2
-        dest: "{{ remote_script_path }}/service.sh"
+        dest: "{{ remote_app_path }}/service.sh"
         owner: "{{ remote_server_user }}"
         group: "{{ remote_server_group }}"
         mode: 0755
 
     - name: Run Application
-      ansible.builtin.command: "{{ remote_script_path }}/service.sh"
+      ansible.builtin.command: "{{ remote_app_path }}/service.sh"
       register: result
 
     - name: Show all prints while running service script
