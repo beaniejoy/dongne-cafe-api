@@ -33,8 +33,6 @@ then
 fi
 
 nohup java -jar \
-  -Dvault.domain.addr="${VAULT_DOMAIN_ADDR}" \
-  -Dvault.auth.token="${VAULT_AUTH_TOKEN}" \
   -Dspring.profiles.active="${SPRING_PROFILE}" \
   ${APP_WORKSPACE}/${MODULE_NAME}.jar 1>${STD_OUT} 2>${STD_ERR} &
 
