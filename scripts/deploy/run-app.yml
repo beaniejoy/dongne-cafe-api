@@ -1,6 +1,7 @@
 ---
 - name: Run java application
   hosts: ec2
+  become: true
 
   vars_files:
     - vars/all.yml
