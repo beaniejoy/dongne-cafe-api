@@ -63,6 +63,26 @@
           ansible.builtin.debug:
             msg: "{{ remote_app_log_path }} exists!!"
 
+    - name: "Register directory({{ remote_app_env_path }})"
+      ansible.builtin.stat:
+        path: "{{ remote_app_env_path }}"
+      register: app_env_dir
+
+    - name: "Check directory({{ remote_app_env_path }}) exists"
+      block:
+        - name: "Make directory({{ remote_app_env_path }})"
+          ansible.builtin.file:
+            path: "{{ remote_app_env_path }}"
+            state: directory
+            mode: 0755
+            owner: "{{ remote_server_user }}"
+            group: "{{ remote_server_group }}"
+          when: not app_env_dir.stat.exists
+
+        - name: Print success message
+          ansible.builtin.debug:
+            msg: "{{ remote_app_env_path }} exists!!"
+
     - name: Copy JAR file for running application
       ansible.builtin.copy:
         src: "{{ remote_deploy_path }}/{{ module_name }}.jar"
@@ -81,6 +101,14 @@
       ansible.builtin.dnf:
         name: "{{ java_package }}"
         state: present
+
+    - name: Copy service script file to remote server
+      ansible.builtin.template:
+        src: service.sh.j2
+        dest: "{{ remote_app_env_path }}/service.sh"
+        owner: "{{ remote_server_user }}"
+        group: "{{ remote_server_group }}"
+        mode: 0755
 
     - name: Copy service script file to remote server
       ansible.builtin.template:

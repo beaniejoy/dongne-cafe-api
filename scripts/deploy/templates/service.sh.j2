@@ -9,10 +9,6 @@ SPRING_PROFILE={{ spring_profile }}
 STD_OUT=${APP_WORKSPACE}/logs/stdout_${PORT}.log
 STD_ERR=${APP_WORKSPACE}/logs/stderr_${PORT}.log
 
-echo "## export environment variables"
-export VAULT_DOMAIN_ADDR={{ vault_address }}
-export VAULT_AUTH_TOKEN={{ vault_token }}
-
 echo "## move to application workspace"
 cd ${APP_WORKSPACE} || exit 1
 
