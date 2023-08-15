@@ -34,25 +34,43 @@ pipeline {
                     PARENT_MODULE_NAME = 'app'
                     MODULE_NAME = "${PARENT_MODULE_NAME}:${PROJECT_NAME}"
 
-                    // DB Connection Credential
-                    DB_CONNECTION_CREDENTIAL = 'b873f9bf-03cc-4daf-be4f-7e00194aa2a0'
-                    withCredentials([
-                            usernamePassword(
-                                    credentialsId: "${DB_CONNECTION_CREDENTIAL}",
-                                    usernameVariable: 'username',
-                                    passwordVariable: 'password'
-                            )
-                    ]) {
-                        DATABASE_USERNAME = "${username}"
-                        DATABASE_PASSWORD = "${password}"
-                    }
-
                     // flyway migration
                     MIGRATION_WORKSPACE = "${WORKSPACE}/flyway"
 
                     // ansible playbook
                     ANSIBLE_INVENTORY = "${HOME}/ansible/inventory"
                     ANSIBLE_PLAYBOOK = "${WORKSPACE}/scripts/deploy/run-app.yml"
+
+                    // credentials info
+                    def secrets = [
+                        [
+                            path: "secret/dongne/${PROJECT_PROFILE}",
+                            engineVersion: 2,
+                            secretValues: [
+                                [envVar: 'jdbcUrl', vaultKey: 'spring.datasource.hikari.jdbc-url']
+                            ]
+                        ],
+                        [
+                            path: "vault/config",
+                            engineVersion: 2,
+                            secretValues: [
+                                [envVar: 'vaultAddr', vaultKey: 'VAULT_ADDR'],
+                                [envVar: 'vaultToken', vaultKey: 'VAULT_TOKEN']
+                            ]
+                        ],
+                    ]
+
+                    withVault([
+                        vaultSecrets: secrets,
+                        configuration: [
+                            engineVersion: 2,
+                            timeout: 10
+                        ]
+                    ]) {
+                        JDBC_URL = "${jdbcUrl}"
+                        VAULT_ADDR = "${vaultAddr}"
+                        VAULT_TOKEN = "${vaultToken}"
+                    }
                 }
             }
         }
@@ -62,11 +80,11 @@ pipeline {
                 expression { executeConditionAllOr(Stage.DB_VALIDATE) }
             }
             steps {
-                flywayrunner installationName: 'flywaytool-jenkins',
+                flywayrunner installationName: 'flyway-jenkins',
                         flywayCommand: 'info validate',
                         commandLineArgs: "-configFiles=${MIGRATION_WORKSPACE}/flyway-${PROJECT_PROFILE}.conf",
-                        credentialsId: "${DB_CONNECTION_CREDENTIAL}",
-                        url: "jdbc:mysql://${DATABASE_HOST}:3306/dongne",
+                        credentialsId: "VAULT_DB_CONNECTION_${PROJECT_PROFILE.toString().toUpperCase()}",
+                        url: "${JDBC_URL}",
                         locations: "filesystem:${MIGRATION_WORKSPACE}/migration"
             }
         }
@@ -76,7 +94,9 @@ pipeline {
                 expression { executeConditionAllOr(Stage.TEST) }
             }
             steps {
-                sh "./gradlew clean :${MODULE_NAME}:test"
+                sh """
+                    ./gradlew clean :${MODULE_NAME}:test
+                """
             }
         }
 
@@ -127,16 +147,18 @@ pipeline {
                 expression { executeConditionAllOr(Stage.RUN_APP) }
             }
             steps {
-                ansiblePlaybook inventory: "${ANSIBLE_INVENTORY}",
+                ansiblePlaybook(
+                        installation: 'ansible',
                         playbook: "${ANSIBLE_PLAYBOOK}",
+                        inventory: "${ANSIBLE_INVENTORY}",
                         extraVars: [
-                                module_name: "${PROJECT_NAME}",
-                                jenkins_user_home: "${HOME}",
-                                spring_profile: "${PROJECT_PROFILE}",
-                                database_host: "${DATABASE_HOST}",
-                                database_username: "${DATABASE_USERNAME}",
-                                database_password: "${DATABASE_PASSWORD}"
+                            module_name: "${PROJECT_NAME}",
+                            jenkins_user_home: "${HOME}",
+                            spring_profile: "${PROJECT_PROFILE}",
+                            vault_address: "${VAULT_ADDR}",
+                            vault_token: "${VAULT_TOKEN}"
                         ]
+                )
             }
         }
     }

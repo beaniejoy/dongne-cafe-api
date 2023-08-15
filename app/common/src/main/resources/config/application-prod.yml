@@ -1,8 +1,0 @@
-spring:
-  security:
-    filter:
-      order: 10 # for logging filter
-
-jwt:
-  secret_key: ${SECRET_KEY}
-  validity_time_in_sec: ${SECRET_KEY_VALIDITY_TIME}

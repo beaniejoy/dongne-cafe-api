@@ -5,5 +5,8 @@ remote_user_workspace: "/home/{{ remote_server_user }}"
 
 remote_deploy_path: "{{ remote_user_workspace }}/deploy"
 remote_app_path: "{{ remote_user_workspace }}/app"
-remote_env_path: "{{ remote_user_workspace }}/app/env"
-remote_script_path: "{{ remote_user_workspace }}/app/scripts"
+remote_app_log_path: "{{ remote_user_workspace }}/app/logs"
+remote_app_env_path: "{{ remote_user_workspace }}/app/env"
+
+# java package
+java_package: java-17-amazon-corretto

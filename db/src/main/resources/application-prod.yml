@@ -2,9 +2,6 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      jdbc-url: jdbc:mysql://${DATABASE_HOST}/dongne
-      username: ${DATABASE_USERNAME}
-      password: ${DATABASE_PASSWORD}
       maximum-pool-size: 5
       minimum-idle: 5
 
