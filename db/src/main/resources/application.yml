@@ -25,7 +25,8 @@ spring:
 
   config:
     import:
-      - optional:file:./env/.env.${spring.profiles.active}[.properties]
+      - optional:file:./env/.env.${spring.profiles.active}[.properties] # local
+      - optional:file:/home/ec2-user/app/env/.env.${spring.profiles.active}[.properties] # app-server
       - optional:vault://
   cloud:
     vault:
