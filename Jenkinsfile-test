@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Init') {
+            steps {
+                script {
+                    // ansible playbook
+                    ANSIBLE_INVENTORY = "${HOME}/ansible/inventory"
+                    ANSIBLE_PLAYBOOK = "${WORKSPACE}/scripts/deploy/test.yml"
+                }
+            }
+        }
+
+        stage('Run Application with Ansible') {
+            steps {
+                ansiblePlaybook(
+                        installation: 'ansible',
+                        playbook: "${ANSIBLE_PLAYBOOK}",
+                        inventory: "${ANSIBLE_INVENTORY}",
+                        extraVars: [
+                                hello: "world",
+                                beanie: "joy"
+                        ]
+                )
+            }
+        }
+    }
+}

@@ -1,0 +1,8 @@
+---
+- name: Test Ansible
+  hosts: ec2
+
+  tasks:
+    - name: Debug extra vars
+      ansible.builtin.debug:
+        msg: "{{ hello }}, {{ beanie }}"
