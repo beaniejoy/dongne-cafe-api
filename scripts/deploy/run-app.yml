@@ -105,14 +105,6 @@
     - name: Copy service script file to remote server
       ansible.builtin.template:
         src: service.sh.j2
-        dest: "{{ remote_app_env_path }}/service.sh"
-        owner: "{{ remote_server_user }}"
-        group: "{{ remote_server_group }}"
-        mode: 0755
-
-    - name: Copy service script file to remote server
-      ansible.builtin.template:
-        src: service.sh.j2
         dest: "{{ remote_app_path }}/service.sh"
         owner: "{{ remote_server_user }}"
         group: "{{ remote_server_group }}"
@@ -121,6 +113,9 @@
     - name: Run Application
       ansible.builtin.command: "{{ remote_app_path }}/service.sh"
       register: result
+      environment:
+        VAULT_DOMAIN_ADDR: "{{ vault_address }}"
+        VAULT_AUTH_TOKEN: "{{ vault_token }}"
 
     - name: Show all prints while running service script
       ansible.builtin.debug:
