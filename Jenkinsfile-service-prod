@@ -39,7 +39,7 @@ pipeline {
 
                     // ansible playbook
                     ANSIBLE_INVENTORY = "${HOME}/ansible/inventory"
-                    ANSIBLE_PLAYBOOK = "${WORKSPACE}/scripts/deploy/run-app.yml"
+                    ANSIBLE_PLAYBOOK = "${WORKSPACE}/scripts/deploy/${PROJECT_NAME}.yml"
 
                     // credentials info
                     def secrets = [
@@ -153,7 +153,6 @@ pipeline {
                         inventory: "${ANSIBLE_INVENTORY}",
                         extraVars: [
                             module_name: "${PROJECT_NAME}",
-                            jenkins_user_home: "${HOME}",
                             spring_profile: "${PROJECT_PROFILE}",
                             vault_address: "${VAULT_ADDR}",
                             vault_token: "${VAULT_TOKEN}"

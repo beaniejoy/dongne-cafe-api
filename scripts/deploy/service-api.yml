@@ -1,0 +1,10 @@
+---
+- name: "Deploy service-api({{ spring_profile }}) "
+  hosts: ec2
+  become: true
+  vars_files:
+    - group_vars/all.yml
+  roles:
+    - package
+    - setup
+    - run-app
