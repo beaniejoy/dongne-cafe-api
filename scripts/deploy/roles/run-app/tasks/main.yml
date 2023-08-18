@@ -1,0 +1,53 @@
+---
+- name: Register JAR file
+  ansible.builtin.stat:
+    path: "{{ remote_deploy_path }}/{{ module_name }}.jar"
+  register: jar_file
+
+- name: Check JAR file exists
+  block:
+    - name: Fail and print message
+      ansible.builtin.fail:
+        msg: "{{ module_name }}.jar does not exist"
+      when: not jar_file.stat.exists
+
+    - name: Print success message
+      ansible.builtin.debug:
+        msg: "{{ module_name }}.jar exists!!"
+
+- name: Copy JAR file for running application
+  ansible.builtin.copy:
+    src: "{{ remote_deploy_path }}/{{ module_name }}.jar"
+    remote_src: yes
+    dest: "{{ remote_app_path }}/{{ module_name }}.jar"
+    owner: "{{ remote_server_user }}"
+    group: "{{ remote_server_group }}"
+    mode: 0644
+
+- name: Remove deployed JAR file
+  ansible.builtin.file:
+    state: absent
+    path: "{{ remote_deploy_path }}/{{ module_name }}.jar"
+
+- name: Copy service script file to remote server
+  ansible.builtin.template:
+    src: service.sh.j2
+    dest: "{{ remote_app_path }}/service.sh"
+    owner: "{{ remote_server_user }}"
+    group: "{{ remote_server_group }}"
+    mode: 0755
+
+- name: Run Application
+  ansible.builtin.command: "{{ remote_app_path }}/service.sh"
+  register: result
+  environment:
+    VAULT_DOMAIN_ADDR: "{{ vault_address }}"
+    VAULT_AUTH_TOKEN: "{{ vault_token }}"
+
+- name: Show all prints while running service script
+  ansible.builtin.debug:
+    msg: "{{ result.stdout_lines }}"
+
+- name: Finish
+  ansible.builtin.debug:
+    msg: "All tasks completed!!"
