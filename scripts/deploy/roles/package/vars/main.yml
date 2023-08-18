@@ -1,5 +1,2 @@
----
-- name: Install java package
-  ansible.builtin.dnf:
-    name: "{{ java_package }}"
-    state: present
+# java package
+java_package: java-17-amazon-corretto
