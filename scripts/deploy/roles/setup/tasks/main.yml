@@ -1,60 +1,25 @@
 ---
-- name: "Register directory({{ remote_app_path }})"
-  ansible.builtin.stat:
+- name: "Make directory({{ remote_app_path }})"
+  ansible.builtin.file:
     path: "{{ remote_app_path }}"
-  register: app_dir
+    state: directory
+    owner: "{{ remote_server_user }}"
+    group: "{{ remote_server_group }}"
+    mode: 0755
 
-- name: "Check directory({{ remote_app_path }}) exists"
-  block:
-    - name: "Make directory({{ remote_app_path }})"
-      ansible.builtin.file:
-        path: "{{ remote_app_path }}"
-        state: directory
-        mode: 0755
-        owner: "{{ remote_server_user }}"
-        group: "{{ remote_server_group }}"
-      when: not app_dir.stat.exists
-
-    - name: Print success message
-      ansible.builtin.debug:
-        msg: "{{ remote_app_path }} exists!!"
-
-- name: "Register directory({{ remote_app_log_path }})"
-  ansible.builtin.stat:
+- name: "Make directory({{ remote_app_log_path }})"
+  ansible.builtin.file:
     path: "{{ remote_app_log_path }}"
-  register: app_log_dir
+    state: directory
+    mode: 0755
+    owner: "{{ remote_server_user }}"
+    group: "{{ remote_server_group }}"
 
-- name: "Check directory({{ remote_app_log_path }}) exists"
-  block:
-    - name: "Make directory({{ remote_app_log_path }})"
-      ansible.builtin.file:
-        path: "{{ remote_app_log_path }}"
-        state: directory
-        mode: 0755
-        owner: "{{ remote_server_user }}"
-        group: "{{ remote_server_group }}"
-      when: not app_log_dir.stat.exists
-
-    - name: Print success message
-      ansible.builtin.debug:
-        msg: "{{ remote_app_log_path }} exists!!"
-
-- name: "Register directory({{ remote_app_env_path }})"
-  ansible.builtin.stat:
+- name: "Make directory({{ remote_app_env_path }})"
+  ansible.builtin.file:
     path: "{{ remote_app_env_path }}"
-  register: app_env_dir
-
-- name: "Check directory({{ remote_app_env_path }}) exists"
-  block:
-    - name: "Make directory({{ remote_app_env_path }})"
-      ansible.builtin.file:
-        path: "{{ remote_app_env_path }}"
-        state: directory
-        mode: 0755
-        owner: "{{ remote_server_user }}"
-        group: "{{ remote_server_group }}"
-      when: not app_env_dir.stat.exists
-
-    - name: Print success message
-      ansible.builtin.debug:
-        msg: "{{ remote_app_env_path }} exists!!"
+    state: directory
+    mode: 0755
+    owner: "{{ remote_server_user }}"
+    group: "{{ remote_server_group }}"
+  when: not app_env_dir.stat.exists
