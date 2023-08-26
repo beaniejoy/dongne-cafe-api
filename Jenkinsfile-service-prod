@@ -39,7 +39,8 @@ pipeline {
 
                     // ansible playbook
                     ANSIBLE_INVENTORY = "${HOME}/ansible/inventory"
-                    ANSIBLE_PLAYBOOK = "${WORKSPACE}/scripts/deploy/${PROJECT_NAME}.yml"
+//                    ANSIBLE_PLAYBOOK = "${WORKSPACE}/scripts/deploy/${PROJECT_NAME}.yml"
+                    ANSIBLE_PLAYBOOK = "${WORKSPACE}/scripts/deploy/test.yml"
 
                     // credentials info
                     def secrets = [

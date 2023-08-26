@@ -1,8 +1,8 @@
 ---
-- name: Test Ansible
+- name: "Deploy service-api({{ spring_profile }}) "
   hosts: ec2
-
-  tasks:
-    - name: Debug extra vars
-      ansible.builtin.debug:
-        msg: "{{ hello }}, {{ beanie }}"
+  become: true
+  vars_files:
+    - group_vars/all.yml
+  roles:
+    - test

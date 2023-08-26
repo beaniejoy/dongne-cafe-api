@@ -1,0 +1,8 @@
+---
+- name: Copy Test
+  ansible.builtin.copy:
+    src: test.txt
+    dest: "{{ remote_app_path }}/test.txt"
+    owner: "{{ remote_server_user }}"
+    group: "{{ remote_server_group }}"
+    mode: 0644
