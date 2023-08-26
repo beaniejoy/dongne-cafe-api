@@ -29,6 +29,7 @@
     state: absent
     path: "{{ remote_deploy_path }}/{{ module_name }}.jar"
 
+#### run application
 - name: Copy service script file to remote server
   ansible.builtin.template:
     src: service.sh.j2
@@ -51,3 +52,16 @@
 - name: Finish
   ansible.builtin.debug:
     msg: "All tasks completed!!"
+
+
+# 1. readlink current deploy stamp
+# 2. current link -> previous link
+# 3. 현재 배포된 jar 파일 -> current link
+
+# rolling deploy
+# 1. nginx 8080 port 연결 끊기
+# 2. 8080 app graceful shutdown
+# 3. run current link jar
+# 4. after completion, nginx 8080 port connect again (reload)
+
+# 5. 8081 port도 위와 같이 진행

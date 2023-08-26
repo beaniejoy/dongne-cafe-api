@@ -1,5 +1,10 @@
 ---
-- name: Install java package
+- name: Install java
   ansible.builtin.dnf:
     name: "{{ java_package }}"
+    state: present
+
+- name: Install nginx
+  ansible.builtin.dnf:
+    name: "{{ nginx_package }}"
     state: present
