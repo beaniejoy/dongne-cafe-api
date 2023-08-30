@@ -3,8 +3,12 @@
   ansible.builtin.dnf:
     name: "{{ java_package }}"
     state: present
+  tags:
+    - package
 
 - name: Install nginx
   ansible.builtin.dnf:
     name: "{{ nginx_package }}"
     state: present
+  tags:
+    - package

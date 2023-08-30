@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# prevent from running multiple
+if [ $(pgrep -c `basename $0`) -gt 1 ]; then
+    echo -e "not allowed to run multiple..."
+    exit 10
+fi
+
 APP_WORKSPACE={{ remote_app_path }}
 MODULE_NAME={{ module_name }}
 PORT=8080
