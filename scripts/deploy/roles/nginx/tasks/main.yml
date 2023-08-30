@@ -18,20 +18,19 @@
   block:
     - name: Fail and print message
       ansible.builtin.fail:
-        msg: "{{ nginx_dir }} does not exist"
+        msg: "{{ nginx_conf_dir }} does not exist"
       when: not nginx_dir.stat.exists
 
     - name: Print success message
       ansible.builtin.debug:
-        msg: "{{ nginx_dir }} exists!!"
+        msg: "{{ nginx_conf_dir }} exists!!"
   tags:
     - init
-    - app
 
 - name: Copy nginx.conf to remote server
   ansible.builtin.copy:
     src: "nginx.conf"
-    dest: "{{ nginx_dir }}"
+    dest: "{{ nginx_dir }}/"
     owner: "{{ remote_server_user }}"
     group: "{{ remote_server_group }}"
     mode: 0644
