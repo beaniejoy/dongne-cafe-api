@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# ctrl + c handling
 trap "echo -e '\nThe script is terminated'; exit" SIGINT
 
 # get flyway command from first argument

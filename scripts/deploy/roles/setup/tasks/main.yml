@@ -6,6 +6,8 @@
     owner: "{{ remote_server_user }}"
     group: "{{ remote_server_group }}"
     mode: 0755
+  tags:
+    - hello
 
 - name: "Make directory({{ remote_app_log_path }})"
   ansible.builtin.file:
@@ -14,6 +16,8 @@
     mode: 0755
     owner: "{{ remote_server_user }}"
     group: "{{ remote_server_group }}"
+  tags:
+    - hello
 
 - name: "Make directory({{ remote_app_env_path }})"
   ansible.builtin.file:

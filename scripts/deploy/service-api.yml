@@ -1,5 +1,5 @@
 ---
-- name: "Deploy service-api({{ spring_profile }}) "
+- name: "Deploy service-api({{ spring_profile }})"
   hosts: ec2
   become: true
   vars_files:
