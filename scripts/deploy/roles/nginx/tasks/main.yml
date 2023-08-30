@@ -9,7 +9,7 @@
 
 - name: Register nginx directory
   ansible.builtin.stat:
-    path: "{{ nginx_dir }}"
+    path: "{{ nginx_conf_dir }}"
   register: nginx_dir
   tags:
     - init
