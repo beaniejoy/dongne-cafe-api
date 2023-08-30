@@ -42,3 +42,9 @@
   tags:
     - init
 
+- name: Reload nginx in all cases
+  ansible.builtin.systemd:
+    state: reloaded
+    name: nginx
+  tags:
+    - init
