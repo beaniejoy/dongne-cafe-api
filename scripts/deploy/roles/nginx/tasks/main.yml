@@ -27,9 +27,9 @@
   tags:
     - init
 
-- name: Copy nginx.conf to remote server
+- name: Copy nginx.conf file to remote server
   ansible.builtin.copy:
-    src: "nginx.conf"
+    src: nginx.conf
     dest: "{{ nginx_conf_dir }}/"
     owner: "{{ remote_server_user }}"
     group: "{{ remote_server_group }}"
