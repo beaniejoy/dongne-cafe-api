@@ -4,11 +4,11 @@
     name: "{{ java_package }}"
     state: present
   tags:
-    - package
+    - init
 
 - name: Install nginx
   ansible.builtin.dnf:
     name: "{{ nginx_package }}"
     state: present
   tags:
-    - package
+    - init
