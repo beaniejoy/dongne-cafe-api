@@ -3,6 +3,9 @@
   ansible.builtin.stat:
     path: "{{ remote_deploy_path }}/{{ module_name }}.jar"
   register: jar_file
+  tags:
+    - init
+    - app
 
 - name: Check JAR file exists
   block:
@@ -14,6 +17,9 @@
     - name: Print success message
       ansible.builtin.debug:
         msg: "{{ module_name }}.jar exists!!"
+  tags:
+    - init
+    - app
 
 - name: Copy JAR file for running application
   ansible.builtin.copy:
@@ -23,11 +29,17 @@
     owner: "{{ remote_server_user }}"
     group: "{{ remote_server_group }}"
     mode: 0644
+  tags:
+    - init
+    - app
 
 - name: Remove deployed JAR file
   ansible.builtin.file:
     state: absent
     path: "{{ remote_deploy_path }}/{{ module_name }}.jar"
+  tags:
+    - init
+    - app
 
 #### run application
 - name: Copy service script file to remote server
@@ -37,6 +49,9 @@
     owner: "{{ remote_server_user }}"
     group: "{{ remote_server_group }}"
     mode: 0755
+  tags:
+    - init
+    - app
 
 - name: Run Application
   ansible.builtin.command: "{{ remote_app_path }}/service.sh"
@@ -48,11 +63,16 @@
 - name: Show all prints while running service script
   ansible.builtin.debug:
     msg: "{{ result.stdout_lines }}"
+  tags:
+    - init
+    - app
 
 - name: Finish
   ansible.builtin.debug:
     msg: "All tasks completed!!"
-
+  tags:
+    - init
+    - app
 
 # 1. readlink current deploy stamp
 # 2. current link -> previous link
