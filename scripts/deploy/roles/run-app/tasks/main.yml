@@ -52,9 +52,13 @@
     - init
     - deploy
 
-- name: Run service script
+- name: Run service script with ports
   ansible.builtin.include_tasks:
     file: run_script.yml
+    apply:
+      tags:
+        - init
+        - deploy
   loop:
     - 8080
     - 8081
