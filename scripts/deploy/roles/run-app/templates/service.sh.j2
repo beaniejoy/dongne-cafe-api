@@ -22,7 +22,7 @@ shutdown() {
   echo "[SHUTDOWN] ${MODULE_NAME}:${PORT}"
 
   echo "## kill current running application"
-  CURRENT_PID=$(pgrep -f "${MODULE_NAME}")
+  CURRENT_PID=$(pgrep -f "java.*${PORT}")
 
   if [ -z "${CURRENT_PID}" ];
   then
