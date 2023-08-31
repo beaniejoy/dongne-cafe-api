@@ -41,7 +41,6 @@
     - init
     - deploy
 
-#### run application
 - name: Copy service script file to remote server
   ansible.builtin.template:
     src: service.sh.j2
@@ -54,22 +53,21 @@
     - deploy
 
 - name: Run Application
-  become: false
-  ansible.builtin.command: "{{ remote_app_path }}/service.sh {{ item }}"
-  register: result
-  environment:
-    VAULT_DOMAIN_ADDR: "{{ vault_address }}"
-    VAULT_AUTH_TOKEN: "{{ vault_token }}"
+  block:
+    - name: Run service script with port - {{ item }}
+      become: false
+      ansible.builtin.command: "{{ remote_app_path }}/service.sh {{ item }}"
+      register: result
+      environment:
+        VAULT_DOMAIN_ADDR: "{{ vault_address }}"
+        VAULT_AUTH_TOKEN: "{{ vault_token }}"
+
+    - name: Show messages while running service script ({{ item }})
+      ansible.builtin.debug:
+        msg: "{{ result.stdout_lines }}"
   loop:
     - 8080
     - 8081
-  tags:
-    - init
-    - deploy
-
-- name: Show all prints while running service script
-  ansible.builtin.debug:
-    msg: "{{ result.stdout_lines }}"
   tags:
     - init
     - deploy
