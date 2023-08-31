@@ -134,7 +134,7 @@ remove_report_files() {
     rm ${REPORT_HTML} ${REPORT_JSON}
   else
     echo "[${RETRY_COUNT}] No report files"
-    RETRY_COUNT=`expr ${RETRY_COUNT} + 1`
+    RETRY_COUNT=$(expr ${RETRY_COUNT} + 1)
     remove_report_files
   fi
 }

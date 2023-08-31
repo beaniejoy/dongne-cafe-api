@@ -5,7 +5,7 @@
   vars_files:
     - group_vars/all.yml
   roles:
+    - package
     - nginx
-#    - package
-#    - setup
-#    - run-app
+    - setup
+    - run-app

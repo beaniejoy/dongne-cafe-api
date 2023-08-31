@@ -6,6 +6,7 @@
     name: nginx
   tags:
     - init
+    - nginx
 
 - name: Register nginx directory
   ansible.builtin.stat:
@@ -13,9 +14,11 @@
   register: nginx_dir
   tags:
     - init
+    - nginx
 
 - name: Check nginx config directory
   block:
+    # if nginx package is installed, nginx default directory must exist
     - name: Fail and print message
       ansible.builtin.fail:
         msg: "{{ nginx_conf_dir }} does not exist"
@@ -26,6 +29,7 @@
         msg: "{{ nginx_conf_dir }} exists!!"
   tags:
     - init
+    - nginx
 
 - name: Copy nginx.conf file to remote server
   ansible.builtin.copy:
@@ -36,11 +40,13 @@
     mode: 0644
   tags:
     - init
+    - nginx
 
 - name: Test nginx configuration
   ansible.builtin.shell: 'nginx -t'
   tags:
     - init
+    - nginx
 
 - name: Reload nginx in all cases
   ansible.builtin.systemd:
@@ -48,3 +54,4 @@
     name: nginx
   tags:
     - init
+    - nginx
