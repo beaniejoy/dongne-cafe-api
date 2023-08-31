@@ -52,19 +52,9 @@
     - init
     - deploy
 
-- name: Run Application
-  block:
-    - name: Run service script with port - {{ item }}
-      become: false
-      ansible.builtin.command: "{{ remote_app_path }}/service.sh {{ item }}"
-      register: result
-      environment:
-        VAULT_DOMAIN_ADDR: "{{ vault_address }}"
-        VAULT_AUTH_TOKEN: "{{ vault_token }}"
-
-    - name: Show messages while running service script ({{ item }})
-      ansible.builtin.debug:
-        msg: "{{ result.stdout_lines }}"
+- name: Run service script
+  ansible.builtin.include_tasks:
+    file: run_script.yml
   loop:
     - 8080
     - 8081
