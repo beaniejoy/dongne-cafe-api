@@ -1,45 +1,85 @@
 #!/bin/bash
 
 # prevent from running multiple
-if [ $(pgrep -c `basename $0`) -gt 1 ]; then
+SHELL_SCRIPT=$(basename "$0")
+PROCESS_SHELL_COUNT=$(pgrep -c "${SHELL_SCRIPT}")
+if [ "$PROCESS_SHELL_COUNT" -gt 1 ]; then
     echo -e "not allowed to run multiple..."
     exit 10
 fi
 
 APP_WORKSPACE={{ remote_app_path }}
 MODULE_NAME={{ module_name }}
-PORT=8080
+PORT=$1
 
 SPRING_PROFILE={{ spring_profile }}
 
 STD_OUT=${APP_WORKSPACE}/logs/stdout_${PORT}.log
 STD_ERR=${APP_WORKSPACE}/logs/stderr_${PORT}.log
 
-echo "## move to application workspace"
-cd ${APP_WORKSPACE} || exit 1
+# shutdown application
+shutdown() {
+  echo "[SHUTDOWN] ${MODULE_NAME}:${PORT}"
 
-echo "## kill current running application"
-CURRENT_PID=$(pgrep -f "${MODULE_NAME}")
+  echo "## kill current running application"
+  CURRENT_PID=$(pgrep -f "${MODULE_NAME}")
 
-if [ -z "${CURRENT_PID}" ];
-then
-  echo "no current running application >> pass killing process"
-else
-  echo "kill -TERM CURRENT_PID"
-  kill -TERM "${CURRENT_PID}"
-  sleep 2
-fi
+  if [ -z "${CURRENT_PID}" ];
+  then
+    echo "no current running application >> pass killing process"
+  else
+    echo "stop CURRENT_PID"
+    kill -TERM "${CURRENT_PID}"
+    sleep 2
+  fi
+}
 
-echo "## run java application"
-java --version
-if [ $? -ne 0 ];
-then
-  echo "no JRE setup > JRE is required!!"
-  exit 1
-fi
+# run application
+run_app() {
+  echo "[RUN_APP] ${MODULE_NAME}:${PORT}"
 
-nohup java -jar \
-  -Dspring.profiles.active="${SPRING_PROFILE}" \
-  ${APP_WORKSPACE}/${MODULE_NAME}.jar 1>${STD_OUT} 2>${STD_ERR} &
+  echo "## move to application workspace"
+  cd "${APP_WORKSPACE}" || exit 1
+
+  echo "## run java application"
+  java --version
+  if [ $? -ne 0 ];
+  then
+    echo "no JRE setup > JRE is required!!"
+    exit 40
+  fi
+
+  nohup java -jar \
+    -Dspring.profiles.active="${SPRING_PROFILE}" \
+    -Dserver.port="${PORT}" \
+    "${APP_WORKSPACE}"/"${MODULE_NAME}".jar 1>"${STD_OUT}" 2>"${STD_ERR}" &
+}
+
+# health check application
+CHECK_MAX_COUNT=10
+CHECK_COUNT=0
+app_health_check() {
+  if [ $CHECK_COUNT -gt $CHECK_MAX_COUNT ];
+  then
+    echo "Failure of running java application(${PORT})"
+    exit 50
+  fi
+
+  local status_code
+  status_code=$(curl --connect-timeout 1 --max-time 3 -i -X GET http://localhost:${PORT}/health | awk '/HTTP\/1/{print $2}')
+  if [[ $status_code =~ ^2[0-9]{2}$ ]];
+  then
+    echo "application(${PORT}) health check > UP"
+  else
+    echo "application(${PORT}) health check > DOWN"
+    sleep 3
+    CHECK_COUNT=$(expr ${CHECK_COUNT} + 1)
+    app_health_check
+  fi
+}
+
+shutdown
+run_app
+app_health_check
 
 echo "## run application completed!!"
