@@ -77,7 +77,7 @@ func_toggle_proxy_upstream() {
     sudo sed -i "s/\(${from_upstream_status}\)/${to_upstream_status}/g" "${PROXY_CONF_FILE}"
   fi
 
-  if ! nginx -t;
+  if ! sudo nginx -t;
   then
     echo "Invalid nginx conf > upstream(${PORT}}) ${toggle_status}"
     exit 40
