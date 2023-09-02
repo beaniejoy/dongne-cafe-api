@@ -33,6 +33,8 @@
     path: "{{ nginx_conf_dir }}/conf.d"
     state: directory
     mode: 0644
+  tags:
+    - nginx
 
 - name: Copy nginx.conf file to remote server
   ansible.builtin.copy:
@@ -44,7 +46,7 @@
 
 - name: "Copy {{ module_name }}.conf file to remote server"
   ansible.builtin.copy:
-    src: "{{ module.name }}.conf"
+    src: "{{ module_name }}.conf"
     dest: "{{ nginx_conf_dir }}/conf.d/"
     mode: 0644
   tags:
