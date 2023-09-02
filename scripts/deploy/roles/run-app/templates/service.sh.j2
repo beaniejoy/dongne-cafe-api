@@ -74,7 +74,7 @@ func_toggle_proxy_upstream() {
     echo "proxy upstream ${PORT} status - already ${toggle_status}"
   else
     echo "proxy upstream ${PORT} setting ${toggle_status}"
-    sed -i "s/\(${from_upstream_status}\)/${to_upstream_status}/g" "${PROXY_CONF_FILE}"
+    sudo sed -i "s/\(${from_upstream_status}\)/${to_upstream_status}/g" "${PROXY_CONF_FILE}"
   fi
 
   if ! nginx -t;
@@ -83,7 +83,7 @@ func_toggle_proxy_upstream() {
     exit 40
   fi
 
-  systemctl reload nginx
+  sudo systemctl reload nginx
 }
 
 # shutdown application
@@ -101,7 +101,7 @@ shutdown() {
     echo "no current running application >> pass killing process"
   else
     echo "stop java application(${PORT}) - ${current_pid}"
-    kill -TERM "${current_pid}"
+    sudo kill -TERM "${current_pid}"
     sleep 2
   fi
 }
