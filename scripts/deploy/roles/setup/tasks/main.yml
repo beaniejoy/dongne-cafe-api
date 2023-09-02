@@ -28,4 +28,3 @@
     group: "{{ remote_server_group }}"
   tags:
     - init
-
