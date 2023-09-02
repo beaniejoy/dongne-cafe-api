@@ -5,7 +5,6 @@
     state: started
     name: nginx
   tags:
-    - init
     - nginx
 
 - name: Register nginx directory
@@ -13,7 +12,6 @@
     path: "{{ nginx_conf_dir }}"
   register: nginx_dir
   tags:
-    - init
     - nginx
 
 - name: Check nginx config directory
@@ -28,24 +26,33 @@
       ansible.builtin.debug:
         msg: "{{ nginx_conf_dir }} exists!!"
   tags:
-    - init
     - nginx
+
+- name: "Make directory({{ nginx_conf_dir }}/conf.d)"
+  ansible.builtin.file:
+    path: "{{ nginx_conf_dir }}/conf.d"
+    state: directory
+    mode: 0644
 
 - name: Copy nginx.conf file to remote server
   ansible.builtin.copy:
     src: nginx.conf
     dest: "{{ nginx_conf_dir }}/"
-    owner: "{{ remote_server_user }}"
-    group: "{{ remote_server_group }}"
     mode: 0644
   tags:
-    - init
+    - nginx
+
+- name: "Copy {{ module_name }}.conf file to remote server"
+  ansible.builtin.copy:
+    src: "{{ module.name }}.conf"
+    dest: "{{ nginx_conf_dir }}/conf.d/"
+    mode: 0644
+  tags:
     - nginx
 
 - name: Test nginx configuration
   ansible.builtin.shell: 'nginx -t'
   tags:
-    - init
     - nginx
 
 - name: Reload nginx in all cases
@@ -53,5 +60,4 @@
     state: reloaded
     name: nginx
   tags:
-    - init
     - nginx
