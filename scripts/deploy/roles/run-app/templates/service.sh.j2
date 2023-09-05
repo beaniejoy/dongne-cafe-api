@@ -21,29 +21,7 @@ SPRING_PROFILE="{{ spring_profile }}"
 STD_OUT=${APP_WORKSPACE}/logs/stdout_${PORT}.log
 STD_ERR=${APP_WORKSPACE}/logs/stderr_${PORT}.log
 
-# health check application
-CHECK_MAX_COUNT=10
-CHECK_COUNT=0
-func_app_health_check() {
-  echo ">> application(${PORT}) health check"
-  if [ $CHECK_COUNT -gt $CHECK_MAX_COUNT ];
-  then
-    echo "Failure of running java application(${PORT})"
-    exit 50
-  fi
-
-  status_code=$(curl --connect-timeout 1 --max-time 3 -i -X GET http://localhost:"${PORT}"/health | awk '/HTTP\/1/{print $2}')
-  if [[ $status_code =~ ^2[0-9]{2}$ ]];
-  then
-    echo "application(${PORT}) health check > UP"
-  else
-    echo "application(${PORT}) health check > DOWN"
-    sleep 3
-    CHECK_COUNT=$(expr ${CHECK_COUNT} + 1)
-    app_health_check
-  fi
-}
-
+# toggle proxy upstream status (up, down)
 func_toggle_proxy_upstream() {
   local toggle_status
   toggle_status=$1
@@ -74,16 +52,38 @@ func_toggle_proxy_upstream() {
     echo "proxy upstream ${PORT} status - already ${toggle_status}"
   else
     echo "proxy upstream ${PORT} setting ${toggle_status}"
-    sed -i "s/\(${from_upstream_status}\)/${to_upstream_status}/g" "${PROXY_CONF_FILE}"
+    sudo sed -i "s/\(${from_upstream_status}\)/${to_upstream_status}/g" "${PROXY_CONF_FILE}"
   fi
 
-  if ! nginx -t;
+  if ! sudo nginx -t;
   then
     echo "Invalid nginx conf > upstream(${PORT}}) ${toggle_status}"
     exit 40
   fi
 
-  systemctl reload nginx
+  sudo systemctl reload nginx
+}
+
+# health check application
+CHECK_MAX_COUNT=10
+CHECK_COUNT=0
+func_app_health_check() {
+  if [ $CHECK_COUNT -gt $CHECK_MAX_COUNT ];
+  then
+    echo "Failure of running java application(${PORT})"
+    exit 50
+  fi
+
+  status_code=$(curl --connect-timeout 1 --max-time 3 -i -X GET http://localhost:"${PORT}"/health | awk '/HTTP\/1/{print $2}')
+  if [[ $status_code =~ ^2[0-9]{2}$ ]];
+  then
+    echo "application(${PORT}) health check > UP"
+  else
+    echo "application(${PORT}) health check > DOWN"
+    sleep 3
+    CHECK_COUNT=$(expr ${CHECK_COUNT} + 1)
+    func_app_health_check
+  fi
 }
 
 # shutdown application
@@ -101,7 +101,7 @@ shutdown() {
     echo "no current running application >> pass killing process"
   else
     echo "stop java application(${PORT}) - ${current_pid}"
-    kill -TERM "${current_pid}"
+    sudo kill -TERM "${current_pid}"
     sleep 2
   fi
 }
@@ -126,6 +126,7 @@ run_app() {
     -Dserver.port="${PORT}" \
     "${APP_WORKSPACE}"/"${MODULE_NAME}".jar 1>"${STD_OUT}" 2>"${STD_ERR}" &
 
+  echo ">> application(${PORT}) health check"
   func_app_health_check
 
   func_toggle_proxy_upstream up
