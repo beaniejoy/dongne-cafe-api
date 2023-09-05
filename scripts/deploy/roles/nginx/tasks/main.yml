@@ -1,0 +1,72 @@
+---
+# if nginx is not running, ansible will start nginx
+- name: Make sure nginx is running
+  ansible.builtin.systemd:
+    state: started
+    name: nginx
+  tags:
+    - init
+    - nginx
+
+- name: Register nginx directory
+  ansible.builtin.stat:
+    path: "{{ nginx_conf_dir }}"
+  register: nginx_dir
+  tags:
+    - init
+    - nginx
+
+- name: Check nginx config directory
+  block:
+    # if nginx package is installed, nginx default directory must exist
+    - name: Fail and print message
+      ansible.builtin.fail:
+        msg: "{{ nginx_conf_dir }} does not exist"
+      when: not nginx_dir.stat.exists
+
+    - name: Print success message
+      ansible.builtin.debug:
+        msg: "{{ nginx_conf_dir }} exists!!"
+  tags:
+    - init
+    - nginx
+
+- name: "Make directory({{ nginx_conf_dir }}/conf.d)"
+  ansible.builtin.file:
+    path: "{{ nginx_conf_dir }}/conf.d"
+    state: directory
+    mode: 0755
+  tags:
+    - init
+    - nginx
+
+- name: Copy nginx.conf file to remote server
+  ansible.builtin.copy:
+    src: nginx.conf
+    dest: "{{ nginx_conf_dir }}/"
+    mode: 0644
+  tags:
+    - init
+    - nginx
+
+- name: "Copy {{ module_name }}.conf file to remote server"
+  ansible.builtin.copy:
+    src: "{{ module_name }}.conf"
+    dest: "{{ nginx_conf_dir }}/conf.d/"
+    mode: 0644
+  tags:
+    - init
+    - nginx
+
+- name: Test nginx configuration
+  ansible.builtin.shell: 'nginx -t'
+  tags:
+    - nginx
+
+- name: Reload nginx in all cases
+  ansible.builtin.systemd:
+    state: reloaded
+    name: nginx
+  tags:
+    - init
+    - nginx
