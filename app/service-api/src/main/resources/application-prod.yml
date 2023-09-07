@@ -10,7 +10,5 @@ management:
         include: "health"
 
   endpoint:
-    info:
-      enabled: true
     health:
       enabled: true
