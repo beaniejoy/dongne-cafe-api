@@ -7,5 +7,6 @@ import org.springframework.boot.runApplication
 class ServiceApiApplication
 
 fun main(args: Array<String>) {
+    System.setProperty("spring.config.name", "application,application-common,application-db")
     runApplication<ServiceApiApplication>(*args)
 }

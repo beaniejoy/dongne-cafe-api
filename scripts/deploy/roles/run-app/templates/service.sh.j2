@@ -74,7 +74,7 @@ func_app_health_check() {
     exit 50
   fi
 
-  status_code=$(curl --connect-timeout 1 --max-time 3 -i -X GET http://localhost:"${PORT}"/health | awk '/HTTP\/1/{print $2}')
+  status_code=$(curl --connect-timeout 1 --max-time 3 -i -X GET http://localhost:"${PORT}"/monitoring/health | awk '/HTTP\/1/{print $2}')
   if [[ $status_code =~ ^2[0-9]{2}$ ]];
   then
     echo "application(${PORT}) health check > UP"

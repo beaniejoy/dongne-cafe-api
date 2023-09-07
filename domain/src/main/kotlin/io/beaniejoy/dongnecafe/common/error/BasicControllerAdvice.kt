@@ -60,4 +60,6 @@ class BasicControllerAdvice {
         e.printStackTrace()
         return ApplicationResponse.fail(errorCode = errorCode).build()
     }
+
+    // TODO 404 not found에 대한 내용도 api로 처리 필요
 }

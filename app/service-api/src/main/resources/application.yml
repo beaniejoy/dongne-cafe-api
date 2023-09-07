@@ -5,3 +5,8 @@ spring:
   security:
     filter:
       order: 10 # for logging filter
+
+management:
+  endpoints:
+    web:
+      base-path: /monitoring
