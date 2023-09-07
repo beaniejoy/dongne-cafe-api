@@ -1,0 +1,14 @@
+# actuator
+management:
+  endpoints:
+    enabled-by-default: false
+    jmx:
+      exposure:
+        exclude: "*"
+    web:
+      exposure:
+        include: "health"
+
+  endpoint:
+    health:
+      enabled: true

@@ -47,7 +47,7 @@ class SecurityConfig {
             .formLogin().disable()
 
             .authorizeRequests()
-            .antMatchers(*permittedUrls, *resourceUrls).permitAll()
+            .antMatchers(*permittedUrls, *resourceUrls).authenticated()
             // TODO 임시 적용(추후에 모든 api에 대해서 인증 여부 통한 authenticated 필요)
 //            .anyRequest().authenticated()
             .anyRequest().permitAll()

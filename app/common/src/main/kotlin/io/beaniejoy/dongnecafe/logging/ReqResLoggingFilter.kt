@@ -25,7 +25,7 @@ class ReqResLoggingFilter : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        filterChain: FilterChain,
+        filterChain: FilterChain
     ) {
         val cachingRequestWrapper = ContentCachingRequestWrapper(request)
         val cachingResponseWrapper = ContentCachingResponseWrapper(response)
