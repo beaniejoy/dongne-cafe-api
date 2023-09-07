@@ -41,10 +41,6 @@ class SecurityConfig {
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
-        resourceUrls.forEach {
-            println("################ $it")
-        }
-
         return http
             // only api 방식 인증 & 인가 적용 위해 csrf & formLogin 비활성화
             .csrf().disable()
