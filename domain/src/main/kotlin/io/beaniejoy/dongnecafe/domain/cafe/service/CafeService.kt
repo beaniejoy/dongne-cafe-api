@@ -12,7 +12,7 @@ interface CafeService {
 
     fun searchCafes(param: CafeQuery.SearchCafesParam, pageable: Pageable): Page<CafeInfo.CafeSearchInfo>
 
-    fun getDetailedCafe(id: Long): CafeInfo.CafeDetailedInfo
+    fun getDetailedCafe(name: String): CafeInfo.CafeDetailedInfo
 
     fun updateCafe(id: Long, command: CafeCommand.UpdateCafe)
 }

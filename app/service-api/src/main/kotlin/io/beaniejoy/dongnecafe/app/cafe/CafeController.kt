@@ -61,9 +61,9 @@ class CafeController(
     /**
      * 단일 카페 상세 조회
      */
-    @GetMapping("/{id}")
-    fun getDetailedInfo(@PathVariable("id") id: Long): ApplicationResponse<CafeOutputDto.CafeDetailedResponse> {
-        val cafeDetailedInfo = cafeService.getDetailedCafe(id)
+    @GetMapping("/{name}")
+    fun getDetailedInfo(@PathVariable("name") name: String): ApplicationResponse<CafeOutputDto.CafeDetailedResponse> {
+        val cafeDetailedInfo = cafeService.getDetailedCafe(name)
 
         val response = cafeOutputDtoMapper.of(cafeDetailedInfo)
 
