@@ -25,8 +25,8 @@ spring:
 
   config:
     import:
-      - optional:file:./env/.env.${spring.profiles.active}[.properties] # local
       - optional:vault://
+      - optional:file:./env/.env[.properties] # local
   cloud:
     vault:
       uri: ${VAULT_DOMAIN_ADDR} # vault domain uri (port: 8200)
