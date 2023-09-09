@@ -1,10 +1,18 @@
 package io.beaniejoy.dongnecafe.app.cafe.model.request
 
+import io.beaniejoy.dongnecafe.domain.cafe.entity.Cafe
 import java.math.BigDecimal
+import javax.validation.constraints.NotBlank
+import javax.validation.constraints.Pattern
 
 class CafeInputDto {
     // ### Request Body ###
     data class RegisterCafeRequest(
+        @field:NotBlank
+        @field:Pattern(
+            regexp = "^((?!${Cafe.INVALID_NAME_CHARACTER}).)*$",
+            message = "특수문자 '${Cafe.INVALID_NAME_CHARACTER}'는 허용하지 않습니다."
+        )
         val name: String?,
         val address: String?,
         val phoneNumber: String?,
