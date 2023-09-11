@@ -44,8 +44,9 @@ class CafeServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun getDetailedCafe(id: Long): CafeInfo.CafeDetailedInfo {
-        val cafe = cafeReaderPort.getCafeNotNull(id)
+    override fun getDetailedCafe(name: String): CafeInfo.CafeDetailedInfo {
+        val cafe = cafeReaderPort.getCafeNotNullByName(name)
+
         return cafeInfoMapper.cafeDetailedInfoOf(
             cafe = cafe,
             cafeMenuCategories = cafe.cafeMenuCategories,

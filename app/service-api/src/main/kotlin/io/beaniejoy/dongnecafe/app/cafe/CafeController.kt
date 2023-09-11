@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
 import org.springframework.web.bind.annotation.*
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/api/cafes")
@@ -24,7 +25,7 @@ class CafeController(
      */
     @PostMapping
     fun registerNewCafe(
-        @RequestBody resource: CafeInputDto.RegisterCafeRequest
+        @Valid @RequestBody resource: CafeInputDto.RegisterCafeRequest
     ): ApplicationResponse<CafeOutputDto.RegisteredCafeResponse> {
         val registerCommand = cafeInputDtoMapper.of(resource)
 
@@ -61,9 +62,9 @@ class CafeController(
     /**
      * 단일 카페 상세 조회
      */
-    @GetMapping("/{id}")
-    fun getDetailedInfo(@PathVariable("id") id: Long): ApplicationResponse<CafeOutputDto.CafeDetailedResponse> {
-        val cafeDetailedInfo = cafeService.getDetailedCafe(id)
+    @GetMapping("/{name}")
+    fun getDetailedInfo(@PathVariable("name") name: String): ApplicationResponse<CafeOutputDto.CafeDetailedResponse> {
+        val cafeDetailedInfo = cafeService.getDetailedCafe(name)
 
         val response = cafeOutputDtoMapper.of(cafeDetailedInfo)
 
