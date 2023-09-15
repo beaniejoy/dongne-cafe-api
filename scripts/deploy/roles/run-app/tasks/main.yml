@@ -43,7 +43,7 @@
 
 - name: Copy service script file to remote server
   ansible.builtin.template:
-    src: service.sh.j2
+    src: {{ deploy_script_file }}
     dest: "{{ remote_app_path }}/service.sh"
     owner: "{{ remote_server_user }}"
     group: "{{ remote_server_group }}"
