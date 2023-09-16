@@ -209,13 +209,11 @@ shutdown_group_app() {
   readarray -t target_ports < "${target_port_file}"
   for port in "${target_ports[@]}";
   do
-    shutdown "${port}" "${toggle_status}"
+    shutdown "${port}"
   done
 }
 
 main() {
-  check_group_file
-
   check_group_runnable "${GREEN}"
 
   run_group_app "${GREEN}"
