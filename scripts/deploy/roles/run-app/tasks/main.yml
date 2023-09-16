@@ -1,14 +1,11 @@
 ---
-- name: Register JAR file
-  ansible.builtin.stat:
-    path: "{{ remote_deploy_path }}/{{ module_name }}.jar"
-  register: jar_file
-  tags:
-    - init
-    - deploy
-
 - name: Check JAR file exists
   block:
+    - name: Register JAR file
+      ansible.builtin.stat:
+        path: "{{ remote_deploy_path }}/{{ module_name }}.jar"
+      register: jar_file
+
     - name: Fail and print message
       ansible.builtin.fail:
         msg: "{{ module_name }}.jar does not exist"
@@ -62,6 +59,27 @@
     - 8081
   tags:
     - rolling_update
+
+- name: "[Blue Green] Check group files"
+  block:
+    - name: "Register {{ item }} file"
+      ansible.builtin.stat:
+        path: "{{ remote_app_path }}/{{ item }}"
+      register: "{{ item }}"
+
+    - name: Fail and print message
+      ansible.builtin.fail:
+        msg: "{{ item }} does not exist"
+      when: not {{ item }}.stat.exists
+
+    - name: Print success message
+      ansible.builtin.debug:
+        msg: "{{ item }} exists!!"
+  loop:
+    - BLUE
+    - GREEN
+  tags:
+    - blue_green
 
 - name: "[Blue Green] Copy service script file to remote server"
   ansible.builtin.template:

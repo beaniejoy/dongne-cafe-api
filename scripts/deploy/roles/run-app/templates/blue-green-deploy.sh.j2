@@ -164,7 +164,7 @@ toggle_proxy_upstream_group() {
 
 switch_proxy_upstream_group() {
   echo "-----------------------------------------"
-  echo "[SWITCH GROUP] Blue - Green"
+  echo "[SWITCH UPSTREAM GROUP] Blue - Green"
   echo "-----------------------------------------"
 
   toggle_proxy_upstream_group "${GREEN}" up
@@ -214,6 +214,8 @@ shutdown_group_app() {
 }
 
 main() {
+  check_group_file
+
   check_group_runnable "${GREEN}"
 
   run_group_app "${GREEN}"
