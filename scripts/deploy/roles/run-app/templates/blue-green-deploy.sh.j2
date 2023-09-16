@@ -27,8 +27,7 @@ PORT_GROUP=$2
 PORT_GROUP_FILE=${APP_WORKSPACE}/${PORT_GROUP}
 readarray -t TARGET_GROUP_PORTS < "${PORT_GROUP_FILE}"  # target ports
 printf -v JOINED_GROUP_PORTS "%s," "${TARGET_GROUP_PORTS[@]}"
-
-
+JOINED_GROUP_PORTS="${JOINED_GROUP_PORTS%,}"
 
 # check group app runnable before deploy (param: group_name)
 check_group_runnable() {
@@ -164,11 +163,13 @@ switch_group_file() {
   local green_file
   green_file="${APP_WORKSPACE}/GREEN"
 
-  readarray -t green_ports < "${green_file}"
   readarray -t blue_ports < "${blue_file}"
+  readarray -t green_ports < "${green_file}"
 
-  printf "%s\n" "${green_ports[@]}" > "${blue_file}"
   printf "%s\n" "${blue_ports[@]}" > "${green_file}"
+  printf "%s\n" "${green_ports[@]}" > "${blue_file}"
+
+  echo ">> switching group file completed!!"
 }
 
 switch_proxy_upstream_group() {
