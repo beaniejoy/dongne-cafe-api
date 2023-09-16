@@ -3,12 +3,12 @@
     - name: "Register {{ item }} file"
       ansible.builtin.stat:
         path: "{{ remote_app_path }}/{{ item }}"
-      register: "{{ item }}"
+      register: group_file
 
     - name: Fail and print message
       ansible.builtin.fail:
         msg: "{{ item }} does not exist"
-      when: not {{ item }}.stat.exists
+      when: not group_file.stat.exists
 
     - name: Print success message
       ansible.builtin.debug:
