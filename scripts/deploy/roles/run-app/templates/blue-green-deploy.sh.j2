@@ -14,156 +14,86 @@ PORT=$1
 
 # nginx proxy
 PROXY_CONF_FILE=/etc/nginx/conf.d/${MODULE_NAME}.conf
-PROXY_TARGET_UPSTREAM="server 127.0.0.1:${PORT}"
+PROXY_TARGET_UPSTREAM="server 127.0.0.1"
 
 # app
 SPRING_PROFILE="{{ spring_profile }}"
 STD_OUT=${APP_WORKSPACE}/logs/stdout_${PORT}.log
 STD_ERR=${APP_WORKSPACE}/logs/stderr_${PORT}.log
 
-# port
+# port group
 BLUE=${APP_WORKSPACE}/BLUE
 GREEN=${APP_WORKSPACE}/GREEN
 
-func_get_target_ports_or_default() {
-  local group_file=$1
-  local group_name=$2
-  local -n return_ports=$3  # nameref
-
-  local default_ports
-  if [ "$group_name" == "BLUE" ];
-  then
-    default_ports=(8080 8081)
-  else
-    default_ports=(8082 8083)
-  fi
-
-  readarray -t return_ports < "$group_file"
-  if [ ${#return_ports[@]} -ne 0 ];
-  then
-    printf "$group_name: "
-    printf "%s\n" "${return_ports[@]}"
-  else
-    return_ports=("${default_ports[@]}")
-  fi
-}
-
-# param: BLUE or GREEN
-func_check_target_ports_group() {
-  local target_ports_file=$1
+# check group app runnable before deploy (param: group_file)
+check_group_runnable() {
+  local target_port_file=$1
   local target_group_name
-  target_group_name=$(basename "$target_ports_file")
+  target_group_name=$(basename "$target_port_file")
+
   echo "-----------------------------------------"
-  echo "[CHECK $target_group_name PORTS]"
+  printf "[CHECK $target_group_name RUNNABLE] ports: (%s)\n" "${target_port_file[@]}"
   echo "-----------------------------------------"
 
-  # create file if not exists
-  touch "$target_ports_file"
-
-  local target_ports
-  func_get_target_ports_or_default "$target_ports_file" "$target_group_name" target_ports
-
-  for port in "${PORT_NUMBERS[@]}";
+  readarray -t target_ports < "${target_port_file}"
+  for port in "${target_ports[@]}";
   do
     current_pid=$(pgrep -f "java.*${port}")
-    if [ -z "${current_pid}" ];
+    if [ -n "${current_pid}" ];
     then
-      echo "no current running application >> pass killing process"
-    else
-      sleep 2
+      echo "$target_group_name($port) already running"
+      exit 50
     fi
   done
+
+  echo "$target_group_name runnable!!"
 }
 
-# toggle proxy upstream status (up, down)
-func_toggle_proxy_upstream() {
-  local toggle_status
-  toggle_status=$1
-
-  local from_upstream_status  # regex
-  local to_upstream_status
-  case ${toggle_status} in
-    up)
-      from_upstream_status="${PROXY_TARGET_UPSTREAM}\sdown;"
-      to_upstream_status="${PROXY_TARGET_UPSTREAM};"
-      ;;
-    down)
-      from_upstream_status="${PROXY_TARGET_UPSTREAM};"
-      to_upstream_status="${PROXY_TARGET_UPSTREAM} down;"
-      ;;
-    *)
-      # TODO 취약점
-      # 만약 중간에 exit 되고 이미 적용된 upstream이 있는 경우 upstream간에 버전 불일치 발생 가능
-      echo "[func_toggle_proxy_upstream] Invalid command - ${toggle_status}"
-      exit 40;
-      ;;
-  esac
-
-  echo ">> proxy upstream ${PORT} ${toggle_status}"
-  target_upstream_status=$(grep "${to_upstream_status}" "${PROXY_CONF_FILE}")
-  if [ -n "${target_upstream_status}" ]
-  then
-    echo "proxy upstream ${PORT} status - already ${toggle_status}"
-  else
-    echo "proxy upstream ${PORT} setting ${toggle_status}"
-    sudo sed -i "s/\(${from_upstream_status}\)/${to_upstream_status}/g" "${PROXY_CONF_FILE}"
-  fi
-
-  if ! sudo nginx -t;
-  then
-    echo "Invalid nginx conf > upstream(${PORT}}) ${toggle_status}"
-    exit 40
-  fi
-
-  sudo systemctl reload nginx
-}
-
-# health check application
+# health check application (param: port)
 CHECK_MAX_COUNT=10
 CHECK_COUNT=0
-func_app_health_check() {
+app_health_check() {
+  echo ">> application(${target_port}) health check"
+  local target_port=$1
+
   if [ $CHECK_COUNT -gt $CHECK_MAX_COUNT ];
   then
-    echo "Failure of running java application(${PORT})"
+    echo "Failure of running java application($target_port)"
     exit 50
   fi
 
-  status_code=$(curl --connect-timeout 1 --max-time 3 -i -X GET http://localhost:"${PORT}"/monitoring/health | awk '/HTTP\/1/{print $2}')
+  status_code=$(curl --connect-timeout 1 --max-time 3 -i -X GET http://localhost:"$target_port"/monitoring/health | awk '/HTTP\/1/{print $2}')
   if [[ $status_code =~ ^2[0-9]{2}$ ]];
   then
-    echo "application(${PORT}) health check > UP"
+    echo "application($target_port) health check > UP"
   else
-    echo "application(${PORT}) health check > DOWN"
+    echo "application($target_port) health check > DOWN"
     sleep 3
     CHECK_COUNT=$(expr ${CHECK_COUNT} + 1)
-    func_app_health_check
+    app_health_check "${target_port}"
   fi
 }
 
-# shutdown application
-shutdown() {
-  echo "-----------------------------------------"
-  echo "[SHUTDOWN] ${MODULE_NAME}:${PORT}"
-  echo "-----------------------------------------"
-
-  func_toggle_proxy_upstream down
-
-  echo ">> kill current running application(${PORT})"
-  current_pid=$(pgrep -f "java.*${PORT}")
-  if [ -z "${current_pid}" ];
-  then
-    echo "no current running application >> pass killing process"
-  else
-    echo "stop java application(${PORT}) - ${current_pid}"
-    sudo kill -TERM "${current_pid}"
-    sleep 2
-  fi
-}
-
-# run application
+# run app (param: port)
 run_app() {
+  local target_port=$1
+
+  nohup java -jar \
+    -Dspring.profiles.active="${SPRING_PROFILE}" \
+    -Dserver.port="${target_port}" \
+    "${APP_WORKSPACE}"/"${MODULE_NAME}".jar 1>"${STD_OUT}" 2>"${STD_ERR}" &
+
+  app_health_check "${target_port}"
+}
+
+# run group application (param: group_file)
+run_group_app() {
+  local target_port_file=$1
+  local target_group_name
+  target_group_name=$(basename "$target_port_file")
+
   echo "-----------------------------------------"
-  echo "[RUN_APP] ${MODULE_NAME}:${PORT}"
+  printf "[RUN APP] ${target_group_name} (%s)\n" "${target_port_file[@]}"
   echo "-----------------------------------------"
 
   cd "${APP_WORKSPACE}" || exit 40
@@ -175,20 +105,122 @@ run_app() {
     exit 50
   fi
 
-  nohup java -jar \
-    -Dspring.profiles.active="${SPRING_PROFILE}" \
-    -Dserver.port="${PORT}" \
-    "${APP_WORKSPACE}"/"${MODULE_NAME}".jar 1>"${STD_OUT}" 2>"${STD_ERR}" &
+  readarray -t target_ports < "${target_port_file}"
+  for port in "${target_ports[@]}";
+  do
+    run_app "$port"
+  done
+}
 
-  echo ">> application(${PORT}) health check"
-  func_app_health_check
+# toggle proxy upstream status (param: port, toggle_status(up/down))
+toggle_proxy_upstream() {
+  local target_port=$1
+  local toggle_status=$2
 
-  func_toggle_proxy_upstream up
+  local target_proxy_upstream
+  target_proxy_upstream="${PROXY_TARGET_UPSTREAM}:${target_port}"
+  local from_upstream_status  # regex
+  local to_upstream_status
+
+  case ${toggle_status} in
+    up)
+      from_upstream_status="${target_proxy_upstream}\sdown;"
+      to_upstream_status="${target_proxy_upstream};"
+      ;;
+    down)
+      from_upstream_status="${target_proxy_upstream};"
+      to_upstream_status="${target_proxy_upstream} down;"
+      ;;
+    *)
+      echo "[func_toggle_proxy_upstream] Invalid command - ${target_port}(${toggle_status})"
+      exit 40;
+      ;;
+  esac
+
+  echo ">> proxy upstream ${target_port} ${toggle_status}"
+  target_upstream_status=$(grep "${to_upstream_status}" "${PROXY_CONF_FILE}")
+  if [ -n "${target_upstream_status}" ]
+  then
+    echo "proxy upstream ${target_port} status - already ${toggle_status}"
+  else
+    echo "proxy upstream ${target_port} setting ${toggle_status}"
+    sudo sed -i "s/\(${from_upstream_status}\)/${to_upstream_status}/g" "${PROXY_CONF_FILE}"
+  fi
+}
+
+# toggle proxy upstream group status (param: group_file, toggle_status(up/down))
+toggle_proxy_upstream_group() {
+  local target_port_file=$1
+  local toggle_status=$2
+  local target_group_name
+  target_group_name=$(basename "$target_port_file")
+
+  readarray -t target_ports < "${target_port_file}"
+  for port in "${target_ports[@]}";
+  do
+    toggle_proxy_upstream "${port}" "${toggle_status}"
+  done
+}
+
+switch_proxy_upstream_group() {
+  echo "-----------------------------------------"
+  echo "[SWITCH GROUP] Blue - Green"
+  echo "-----------------------------------------"
+
+  toggle_proxy_upstream_group "${GREEN}" up
+  toggle_proxy_upstream_group "${BLUE}" down
+
+  if ! sudo nginx -t;
+  then
+    printf "Invalid nginx conf > switching proxy upstream group"
+    exit 40
+  fi
+
+  sudo systemctl reload nginx
+}
+
+# shutdown application (param: port)
+shutdown() {
+  local target_port=$1
+
+  echo ">> kill current running application(${target_port})"
+
+  current_pid=$(pgrep -f "java.*${target_port}")
+  if [ -z "${current_pid}" ];
+  then
+    echo "no current running application >> pass killing process"
+  else
+    echo "stop java application(${target_port}) - ${current_pid}"
+    sudo kill -TERM "${current_pid}"
+    sleep 5
+  fi
+}
+
+# shutdown group application (param: group_file)
+shutdown_group_app() {
+  local target_port_file=$1
+  local target_group_name
+  target_group_name=$(basename "$target_port_file")
+
+  echo "-----------------------------------------"
+  printf "[SHUTDOWN APP] ${target_group_name} (%s)\n" "${target_port_file[@]}"
+  echo "-----------------------------------------"
+
+  readarray -t target_ports < "${target_port_file}"
+  for port in "${target_ports[@]}";
+  do
+    shutdown "${port}" "${toggle_status}"
+  done
 }
 
 main() {
-  shutdown
-  run_app
+  check_group_runnable "${GREEN}"
+
+  run_group_app "${GREEN}"
+
+  switch_proxy_upstream_group
+
+  shutdown_group_app "${BLUE}"
 
   echo "## run application completed!!"
 }

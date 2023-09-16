@@ -1,11 +1,11 @@
-- name: [Rolling Update] Run service script with port - {{ item }}
-  ansible.builtin.command: "{{ remote_app_path }}/service.sh {{ item }}"
+- name: [Blue Green] Run service script with port
+  ansible.builtin.command: "{{ remote_app_path }}/service.sh"
   register: result
   become: false
   environment:
     VAULT_DOMAIN_ADDR: "{{ vault_address }}"
     VAULT_AUTH_TOKEN: "{{ vault_token }}"
 
-- name: [Rolling Update] Show messages while running service script ({{ item }})
+- name: [Blue Green] Show messages while running service script
   ansible.builtin.debug:
     msg: "{{ result.stdout_lines }}"
