@@ -8,6 +8,8 @@ if [ "$PROCESS_SHELL_COUNT" -gt 1 ]; then
     exit 10
 fi
 
+COMMAND=$1
+
 APP_WORKSPACE="{{ remote_app_path }}"
 MODULE_NAME="{{ module_name }}"
 
@@ -21,10 +23,11 @@ STD_OUT=${APP_WORKSPACE}/logs/stdout
 STD_ERR=${APP_WORKSPACE}/logs/stderr
 
 # blue-green
-COMMAND=$1
 PORT_GROUP=$2
 PORT_GROUP_FILE=${APP_WORKSPACE}/${PORT_GROUP}
-printf -v JOINED_GROUP_PORTS "%s," "${PORT_GROUP_FILE[@]}"
+readarray -t TARGET_GROUP_PORTS < "${PORT_GROUP_FILE}"  # target ports
+printf -v JOINED_GROUP_PORTS "%s," "${TARGET_GROUP_PORTS[@]}"
+
 
 
 # check group app runnable before deploy (param: group_name)
@@ -33,8 +36,7 @@ check_group_runnable() {
   printf "[CHECK ${PORT_GROUP} RUNNABLE] ports: (%s)\n" "${JOINED_GROUP_PORTS}"
   echo "-----------------------------------------"
 
-  readarray -t target_ports < "${PORT_GROUP_FILE}"
-  for port in "${target_ports[@]}";
+  for port in "${TARGET_GROUP_PORTS[@]}";
   do
     current_pid=$(pgrep -f "java.*${port}")
     if [ -n "${current_pid}" ];
@@ -51,7 +53,6 @@ check_group_runnable() {
 CHECK_MAX_COUNT=20
 CHECK_COUNT=0
 app_health_check() {
-  echo ">> application(${target_port}) health check"
   local target_port=$1
 
   if [ ${CHECK_COUNT} -gt ${CHECK_MAX_COUNT} ];
@@ -81,6 +82,7 @@ run_app() {
     -Dserver.port="${target_port}" \
     "${APP_WORKSPACE}"/"${MODULE_NAME}".jar 1>"${STD_OUT}_${target_port}" 2>"${STD_ERR}_${target_port}" &
 
+  echo ">> application(${target_port}) health check"
   CHECK_COUNT=0
   app_health_check "${target_port}"
 }
@@ -100,8 +102,7 @@ run_group_app() {
     exit 50
   fi
 
-  readarray -t target_ports < "${PORT_GROUP_FILE}"
-  for port in "${target_ports[@]}";
+  for port in "${TARGET_GROUP_PORTS[@]}";
   do
     run_app "${port}"
   done
@@ -212,8 +213,7 @@ shutdown_group_app() {
   printf "[SHUTDOWN APP] ${PORT_GROUP} (%s)\n" "${JOINED_GROUP_PORTS}"
   echo "-----------------------------------------"
 
-  readarray -t target_ports < "${PORT_GROUP_FILE}"
-  for port in "${target_ports[@]}";
+  for port in "${TARGET_GROUP_PORTS[@]}";
   do
     shutdown "${port}"
   done

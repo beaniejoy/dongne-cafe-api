@@ -25,8 +25,8 @@
 - ansible.builtin.debug:
     msg: "{{ result.stdout_lines }}"
 
-- name: "[Blue Green] Stop GREEN(old) applications"
-  ansible.builtin.command: "{{ remote_app_path }}/service.sh stop GREEN"
+- name: "[Blue Green] Shutdown GREEN(old) applications"
+  ansible.builtin.command: "{{ remote_app_path }}/service.sh shutdown GREEN"
   register: result
   become: false
 
