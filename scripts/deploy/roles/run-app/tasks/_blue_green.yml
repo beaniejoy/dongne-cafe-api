@@ -1,11 +1,34 @@
-- name: "[Blue Green] Run service script with port"
-  ansible.builtin.command: "{{ remote_app_path }}/service.sh"
+- name: "[Blue Green] Check GREEN applications runnable"
+  ansible.builtin.command: "{{ remote_app_path }}/service.sh check GREEN"
+  register: result
+  become: false
+
+- ansible.builtin.debug:
+    msg: "{{ result.stdout_lines }}"
+
+- name: "[Blue Green] Run GREEN(new) applications"
+  ansible.builtin.command: "{{ remote_app_path }}/service.sh run GREEN"
   register: result
   become: false
   environment:
     VAULT_DOMAIN_ADDR: "{{ vault_address }}"
     VAULT_AUTH_TOKEN: "{{ vault_token }}"
 
-- name: "[Blue Green] Show messages while running service script"
-  ansible.builtin.debug:
+- ansible.builtin.debug:
+    msg: "{{ result.stdout_lines }}"
+
+- name: "[Blue Green] Switch proxy upstream groups between BLUE and GREEN"
+  ansible.builtin.command: "{{ remote_app_path }}/service.sh switch_proxy"
+  register: result
+  become: false
+
+- ansible.builtin.debug:
+    msg: "{{ result.stdout_lines }}"
+
+- name: "[Blue Green] Stop GREEN(old) applications"
+  ansible.builtin.command: "{{ remote_app_path }}/service.sh stop GREEN"
+  register: result
+  become: false
+
+- ansible.builtin.debug:
     msg: "{{ result.stdout_lines }}"

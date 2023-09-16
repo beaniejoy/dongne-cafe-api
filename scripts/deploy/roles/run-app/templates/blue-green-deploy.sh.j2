@@ -10,7 +10,6 @@ fi
 
 APP_WORKSPACE="{{ remote_app_path }}"
 MODULE_NAME="{{ module_name }}"
-PORT=$1
 
 # nginx proxy
 PROXY_CONF_FILE=/etc/nginx/conf.d/${MODULE_NAME}.conf
@@ -18,35 +17,34 @@ PROXY_TARGET_UPSTREAM="server 127.0.0.1"
 
 # app
 SPRING_PROFILE="{{ spring_profile }}"
-STD_OUT=${APP_WORKSPACE}/logs/stdout_${PORT}.log
-STD_ERR=${APP_WORKSPACE}/logs/stderr_${PORT}.log
+STD_OUT=${APP_WORKSPACE}/logs/stdout
+STD_ERR=${APP_WORKSPACE}/logs/stderr
 
-# port group
-BLUE=${APP_WORKSPACE}/BLUE
-GREEN=${APP_WORKSPACE}/GREEN
+# blue-green
+COMMAND=$1
+PORT_GROUP=$2
+PORT_GROUP_FILE=${APP_WORKSPACE}/${PORT_GROUP}
+printf -v JOINED_GROUP_PORTS "%s," "${PORT_GROUP_FILE[@]}"
 
-# check group app runnable before deploy (param: group_file)
+
+# check group app runnable before deploy (param: group_name)
 check_group_runnable() {
-  local target_port_file=$1
-  local target_group_name
-  target_group_name=$(basename "$target_port_file")
-
   echo "-----------------------------------------"
-  printf "[CHECK $target_group_name RUNNABLE] ports: (%s)\n" "${target_port_file[@]}"
+  printf "[CHECK ${PORT_GROUP} RUNNABLE] ports: (%s)\n" "${JOINED_GROUP_PORTS}"
   echo "-----------------------------------------"
 
-  readarray -t target_ports < "${target_port_file}"
+  readarray -t target_ports < "${PORT_GROUP_FILE}"
   for port in "${target_ports[@]}";
   do
     current_pid=$(pgrep -f "java.*${port}")
     if [ -n "${current_pid}" ];
     then
-      echo "$target_group_name($port) already running"
+      echo "${PORT_GROUP}(${port}) already running"
       exit 50
     fi
   done
 
-  echo "$target_group_name runnable!!"
+  echo "${PORT_GROUP} runnable!!"
 }
 
 # health check application (param: port)
@@ -56,20 +54,20 @@ app_health_check() {
   echo ">> application(${target_port}) health check"
   local target_port=$1
 
-  if [ $CHECK_COUNT -gt $CHECK_MAX_COUNT ];
+  if [ ${CHECK_COUNT} -gt ${CHECK_MAX_COUNT} ];
   then
-    echo "Failure of running java application($target_port)"
+    echo "Failure of running java application(${target_port})"
     exit 50
   fi
 
-  status_code=$(curl --connect-timeout 1 --max-time 3 -i -X GET http://localhost:"$target_port"/monitoring/health | awk '/HTTP\/1/{print $2}')
-  if [[ $status_code =~ ^2[0-9]{2}$ ]];
+  status_code=$(curl --connect-timeout 1 --max-time 3 -i -X GET http://localhost:"${target_port}"/monitoring/health | awk '/HTTP\/1/{print $2}')
+  if [[ ${status_code} =~ ^2[0-9]{2}$ ]];
   then
-    echo "application($target_port) health check > UP"
+    echo "application(${target_port}) health check > UP"
   else
-    echo "application($target_port) health check > DOWN"
+    echo "application(${target_port}) health check > DOWN"
     sleep 3
-    CHECK_COUNT=$(expr ${CHECK_COUNT} + 1)
+    CHECK_COUNT=$((CHECK_COUNT + 1))
     app_health_check "${target_port}"
   fi
 }
@@ -86,14 +84,10 @@ run_app() {
   app_health_check "${target_port}"
 }
 
-# run group application (param: group_file)
+# run group application
 run_group_app() {
-  local target_port_file=$1
-  local target_group_name
-  target_group_name=$(basename "$target_port_file")
-
   echo "-----------------------------------------"
-  printf "[RUN APP] ${target_group_name} (%s)\n" "${target_port_file[@]}"
+  printf "[RUN APP] ${PORT_GROUP} (%s)\n" "${JOINED_GROUP_PORTS}"
   echo "-----------------------------------------"
 
   cd "${APP_WORKSPACE}" || exit 40
@@ -105,10 +99,10 @@ run_group_app() {
     exit 50
   fi
 
-  readarray -t target_ports < "${target_port_file}"
+  readarray -t target_ports < "${PORT_GROUP_FILE}"
   for port in "${target_ports[@]}";
   do
-    run_app "$port"
+    run_app "${port}"
   done
 }
 
@@ -150,16 +144,29 @@ toggle_proxy_upstream() {
 
 # toggle proxy upstream group status (param: group_file, toggle_status(up/down))
 toggle_proxy_upstream_group() {
-  local target_port_file=$1
+  local target_group_name=$1
   local toggle_status=$2
-  local target_group_name
-  target_group_name=$(basename "$target_port_file")
 
-  readarray -t target_ports < "${target_port_file}"
+  echo ">> proxy upstream group(${target_group_name}) ${toggle_status}"
+  readarray -t target_ports < "${APP_WORKSPACE}/${target_group_name}"
   for port in "${target_ports[@]}";
   do
     toggle_proxy_upstream "${port}" "${toggle_status}"
   done
+}
+
+# switch BLUE, GREEN group file
+switch_group_file() {
+  local blue_file
+  blue_file="${APP_WORKSPACE}/BLUE"
+  local green_file
+  green_file="${APP_WORKSPACE}/GREEN"
+
+  readarray -t green_ports < "${green_file}"
+  readarray -t blue_ports < "${blue_file}"
+
+  printf "%s\n" "${green_ports[@]}" > "${blue_file}"
+  printf "%s\n" "${blue_ports[@]}" > "${green_file}"
 }
 
 switch_proxy_upstream_group() {
@@ -167,8 +174,8 @@ switch_proxy_upstream_group() {
   echo "[SWITCH UPSTREAM GROUP] Blue - Green"
   echo "-----------------------------------------"
 
-  toggle_proxy_upstream_group "${GREEN}" up
-  toggle_proxy_upstream_group "${BLUE}" down
+  toggle_proxy_upstream_group "GREEN" up
+  toggle_proxy_upstream_group "BLUE" down
 
   if ! sudo nginx -t;
   then
@@ -177,6 +184,8 @@ switch_proxy_upstream_group() {
   fi
 
   sudo systemctl reload nginx
+
+  switch_group_file
 }
 
 # shutdown application (param: port)
@@ -198,31 +207,34 @@ shutdown() {
 
 # shutdown group application (param: group_file)
 shutdown_group_app() {
-  local target_port_file=$1
-  local target_group_name
-  target_group_name=$(basename "$target_port_file")
-
   echo "-----------------------------------------"
-  printf "[SHUTDOWN APP] ${target_group_name} (%s)\n" "${target_port_file[@]}"
+  printf "[SHUTDOWN APP] ${PORT_GROUP} (%s)\n" "${JOINED_GROUP_PORTS}"
   echo "-----------------------------------------"
 
-  readarray -t target_ports < "${target_port_file}"
+  readarray -t target_ports < "${PORT_GROUP_FILE}"
   for port in "${target_ports[@]}";
   do
     shutdown "${port}"
   done
 }
 
-main() {
-  check_group_runnable "${GREEN}"
-
-  run_group_app "${GREEN}"
-
-  switch_proxy_upstream_group
-
-  shutdown_group_app "${BLUE}"
-
-  echo "## run application completed!!"
-}
-
-main
+case "${COMMAND}" in
+  check)
+    # need group param(2nd)
+    check_group_runnable
+    ;;
+  run)
+    # need group param(2nd)
+    run_group_app
+    ;;
+  switch_proxy)
+    switch_proxy_upstream_group
+    ;;
+  shutdown)
+    # need group param(2nd)
+    shutdown_group_app
+    ;;
+  *)
+    echo "${COMMAND} > Not supported command"
+    exit 40;
+esac
