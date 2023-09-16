@@ -41,30 +41,46 @@
     - init
     - deploy
 
-- name: Copy service script file to remote server
+- name: [Rolling Update] Copy service script file to remote server
   ansible.builtin.template:
-    src: {{ deploy_script_file }}
+    src: rolling-deploy.sh.j2
     dest: "{{ remote_app_path }}/service.sh"
     owner: "{{ remote_server_user }}"
     group: "{{ remote_server_group }}"
     mode: 0755
   tags:
-    - init
-    - deploy
+    - rolling_update
 
-- name: Run service script with ports
+- name: [Rolling Update] Run service script
   ansible.builtin.include_tasks:
-    file: run_script.yml
+    file: _rolling_update.yml
     apply:
       tags:
-        - init
-        - deploy
+        - rolling_update
   loop:
     - 8080
     - 8081
   tags:
-    - init
-    - deploy
+    - rolling_update
+
+- name: [Blue Green] Copy service script file to remote server
+  ansible.builtin.template:
+    src: blue-green-deploy.sh.j2
+    dest: "{{ remote_app_path }}/service.sh"
+    owner: "{{ remote_server_user }}"
+    group: "{{ remote_server_group }}"
+    mode: 0755
+  tags:
+    - blue_green
+
+- name: [Blue Green] Run service script
+  ansible.builtin.include_tasks:
+    file: _blue_green.yml
+    apply:
+      tags:
+        - blue_green
+  tags:
+    - blue_green
 
 - name: Finish
   ansible.builtin.debug:
