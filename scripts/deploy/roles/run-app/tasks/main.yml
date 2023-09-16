@@ -41,7 +41,7 @@
     - init
     - deploy
 
-- name: [Rolling Update] Copy service script file to remote server
+- name: "[Rolling Update] Copy service script file to remote server"
   ansible.builtin.template:
     src: rolling-deploy.sh.j2
     dest: "{{ remote_app_path }}/service.sh"
@@ -51,7 +51,7 @@
   tags:
     - rolling_update
 
-- name: [Rolling Update] Run service script
+- name: "[Rolling Update] Run service script"
   ansible.builtin.include_tasks:
     file: _rolling_update.yml
     apply:
@@ -63,7 +63,7 @@
   tags:
     - rolling_update
 
-- name: [Blue Green] Copy service script file to remote server
+- name: "[Blue Green] Copy service script file to remote server"
   ansible.builtin.template:
     src: blue-green-deploy.sh.j2
     dest: "{{ remote_app_path }}/service.sh"
@@ -73,7 +73,7 @@
   tags:
     - blue_green
 
-- name: [Blue Green] Run service script
+- name: "[Blue Green] Run service script"
   ansible.builtin.include_tasks:
     file: _blue_green.yml
     apply:
