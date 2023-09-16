@@ -5,11 +5,14 @@
         path: "{{ remote_app_path }}/{{ item }}"
       register: group_file
 
-    - name: Fail and print message
-      ansible.builtin.fail:
-        msg: "{{ item }} does not exist"
-      when: not group_file.stat.exists
+    - name: "Copy {{ item }} file to remote server"
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: "{{ remote_app_path }}/"
+        owner: "{{ remote_server_user }}"
+        group: "{{ remote_server_group }}"
+        mode: 0644
 
-    - name: Print success message
+    - name: Print message
       ansible.builtin.debug:
         msg: "{{ item }} exists!!"
