@@ -52,6 +52,7 @@
     file: blue_green/main.yml
   tags:
     - blue_green
+    - blue_green_init
 
 - name: Finish
   ansible.builtin.debug:
