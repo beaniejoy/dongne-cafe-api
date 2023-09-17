@@ -5,6 +5,3 @@
     owner: "{{ remote_server_user }}"
     group: "{{ remote_server_group }}"
     mode: 0644
-  when: not group_file.stat.exists
-  tags:
-    - blue_green_init
