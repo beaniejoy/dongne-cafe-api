@@ -50,9 +50,6 @@
 - name: "[Blue Green] Run all tasks"
   ansible.builtin.include_tasks:
     file: blue_green/main.yml
-    apply:
-      tags:
-        - blue_green
   tags:
     - blue_green
 

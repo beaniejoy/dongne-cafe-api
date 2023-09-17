@@ -1,14 +1,14 @@
-- name: "[Blue Green] Check group files"
+- name: "[Blue Green] Init group files"
   ansible.builtin.include_tasks:
     file: file_check.yml
     apply:
       tags:
-        - blue_green
+        - blue_green_init
   loop:
     - BLUE
     - GREEN
   tags:
-    - blue_green
+    - blue_green_init
 
 - name: "[Blue Green] Copy service script file to remote server"
   ansible.builtin.template:
@@ -19,6 +19,7 @@
     mode: 0755
   tags:
     - blue_green
+    - blue_green_init
 
 - name: "[Blue Green] Run service script"
   ansible.builtin.include_tasks:
@@ -26,5 +27,7 @@
     apply:
       tags:
         - blue_green
+        - blue_green_init
   tags:
     - blue_green
+    - blue_green_init

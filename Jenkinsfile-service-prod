@@ -151,7 +151,7 @@ pipeline {
                         installation: 'ansible',
                         playbook: "${ANSIBLE_PLAYBOOK}",
                         inventory: "${ANSIBLE_INVENTORY}",
-                        tags: 'deploy,blue_green',
+                        tags: 'deploy,blue_green_init',
                         extraVars: [
                             module_name: "${PROJECT_NAME}",
                             spring_profile: "${PROJECT_PROFILE}",
