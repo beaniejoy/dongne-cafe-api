@@ -1,5 +1,3 @@
-DROP PROCEDURE IF EXISTS insertCafeMenuCategories;
-
 DELIMITER $$
 CREATE PROCEDURE insertCafeMenuCategories()
 BEGIN
@@ -29,3 +27,5 @@ END$$
 DELIMITER ;
 
 CALL insertCafeMenuCategories();
+
+DROP PROCEDURE IF EXISTS insertCafeMenuCategories;

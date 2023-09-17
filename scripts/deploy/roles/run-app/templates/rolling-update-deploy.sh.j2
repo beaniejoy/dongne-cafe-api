@@ -40,7 +40,7 @@ func_toggle_proxy_upstream() {
     *)
       # TODO 취약점
       # 만약 중간에 exit 되고 이미 적용된 upstream이 있는 경우 upstream간에 버전 불일치 발생 가능
-      echo "[func_toggle_proxy_upstream] Invalid command - ${toggle_status}"
+      echo "(func_toggle_proxy_upstream) Invalid command - ${toggle_status}"
       exit 40;
       ;;
   esac
@@ -109,7 +109,7 @@ shutdown() {
 # run application
 run_app() {
   echo "-----------------------------------------"
-  echo "[RUN_APP] ${MODULE_NAME}:${PORT}"
+  echo "[RUN APP] ${MODULE_NAME}:${PORT}"
   echo "-----------------------------------------"
 
   cd "${APP_WORKSPACE}" || exit 40
@@ -134,6 +134,7 @@ run_app() {
 
 main() {
   shutdown
+
   run_app
 
   echo "## run application completed!!"

@@ -80,17 +80,17 @@ flyway_migration_process() {
   STEP_2="2. Flyway Migrate"
   STEP_3="3. Flyway Validate"
 
-  echo ${STEP_1}
+  echo "${STEP_1}"
   flyway info -configFiles="${FLYWAY_CONFIG_FILE}"
 
   echo
 
-  echo ${STEP_2}
+  echo "${STEP_2}"
   flyway migrate -configFiles="${FLYWAY_CONFIG_FILE}"
 
   echo
 
-  echo ${STEP_3}
+  echo "${STEP_3}"
   flyway validate -configFiles="${FLYWAY_CONFIG_FILE}"
 }
 
@@ -153,7 +153,7 @@ main() {
   # print help file
   if [[ ${COMMAND} == "help" ]];
   then
-    cat ${HELP_FILE}
+    cat "${HELP_FILE}"
     exit 0
   fi
 
@@ -176,6 +176,9 @@ main() {
     info)
       flyway_info
       ;;
+    *)
+      echo "${COMMAND} > Not supported command"
+      exit 40;
   esac
 
   after_process

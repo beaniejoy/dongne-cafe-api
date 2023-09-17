@@ -19,8 +19,8 @@ class Cafe protected constructor(
     @Column(name = "cafe_id", nullable = false)
     val id: Long = 0L
 
-    @Column(name = "name", nullable = false)
-    var name: String = name
+    @Column(name = "name", nullable = false, unique = true)
+    var name: String = name.replace(WHITE_SPACE, INVALID_NAME_CHARACTER)
         protected set
 
     @Column(name = "address", nullable = false)
@@ -44,7 +44,16 @@ class Cafe protected constructor(
     @OneToMany(mappedBy = "cafe", fetch = FetchType.LAZY)
     val cafeImages: MutableList<CafeImage> = arrayListOf()
 
+    init {
+        if (name.isBlank() || name.contains(INVALID_NAME_CHARACTER)) {
+            throw BusinessException(errorCode = ErrorCode.CAFE_INVALID_REQUEST)
+        }
+    }
+
     companion object {
+        const val INVALID_NAME_CHARACTER = '-'
+        private const val WHITE_SPACE = ' '
+
         fun createEntity(command: CafeCommand.RegisterCafe): Cafe {
             return Cafe(
                 name = command.name,

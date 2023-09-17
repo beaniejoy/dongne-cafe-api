@@ -12,4 +12,6 @@ interface CafeReaderPort {
     fun getCafe(id: Long): Cafe?
 
     fun getCafeNotNull(id: Long): Cafe
+
+    fun getCafeNotNullByName(name: String): Cafe
 }

@@ -1,4 +1,4 @@
-- name: Run service script with port - {{ item }}
+- name: "[Rolling Update] Run service script with port - {{ item }}"
   ansible.builtin.command: "{{ remote_app_path }}/service.sh {{ item }}"
   register: result
   become: false
@@ -6,6 +6,6 @@
     VAULT_DOMAIN_ADDR: "{{ vault_address }}"
     VAULT_AUTH_TOKEN: "{{ vault_token }}"
 
-- name: Show messages while running service script ({{ item }})
+- name: "[Rolling Update] Show messages while running service script ({{ item }})"
   ansible.builtin.debug:
     msg: "{{ result.stdout_lines }}"
