@@ -1,0 +1,20 @@
+- name: "[Rolling Update] Shutdown old application - {{ item.port }}"
+  ansible.builtin.command: "{{ remote_app_path }}/service.sh shutdown {{ item.port }}"
+  register: result
+  become: false
+
+- ansible.builtin.debug:
+    msg: "{{ result.stdout_lines }}"
+
+- name: "[Rolling Update] Run service script - {{ item.port }}"
+  ansible.builtin.command: "{{ remote_app_path }}/service.sh run {{ item.port }}"
+  register: result
+  become: false
+  environment:
+    VAULT_DOMAIN_ADDR: "{{ vault_address }}"
+    VAULT_AUTH_TOKEN: "{{ vault_token }}"
+  when: item.action == "up"
+
+- ansible.builtin.debug:
+    msg: "{{ result.stdout_lines }}"
+  when: item.action == "up"

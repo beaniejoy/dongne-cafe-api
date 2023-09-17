@@ -1,14 +1,11 @@
 ---
-- name: Register JAR file
-  ansible.builtin.stat:
-    path: "{{ remote_deploy_path }}/{{ module_name }}.jar"
-  register: jar_file
-  tags:
-    - init
-    - deploy
-
 - name: Check JAR file exists
   block:
+    - name: Register JAR file
+      ansible.builtin.stat:
+        path: "{{ remote_deploy_path }}/{{ module_name }}.jar"
+      register: jar_file
+
     - name: Fail and print message
       ansible.builtin.fail:
         msg: "{{ module_name }}.jar does not exist"
@@ -41,30 +38,21 @@
     - init
     - deploy
 
-- name: Copy service script file to remote server
-  ansible.builtin.template:
-    src: service.sh.j2
-    dest: "{{ remote_app_path }}/service.sh"
-    owner: "{{ remote_server_user }}"
-    group: "{{ remote_server_group }}"
-    mode: 0755
-  tags:
-    - init
-    - deploy
-
-- name: Run service script with ports
+- name: "[Rolling Update] Run all tasks"
   ansible.builtin.include_tasks:
-    file: run_script.yml
+    file: rolling_update/main.yml
     apply:
       tags:
-        - init
-        - deploy
-  loop:
-    - 8080
-    - 8081
+        - rolling_update
   tags:
-    - init
-    - deploy
+    - rolling_update
+
+- name: "[Blue Green] Run all tasks"
+  ansible.builtin.include_tasks:
+    file: blue_green/main.yml
+  tags:
+    - blue_green
+    - blue_green_init
 
 - name: Finish
   ansible.builtin.debug:

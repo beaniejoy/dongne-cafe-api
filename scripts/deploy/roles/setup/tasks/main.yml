@@ -8,6 +8,7 @@
     mode: 0755
   tags:
     - init
+    - setup
 
 - name: "Make directory({{ remote_app_log_path }})"
   ansible.builtin.file:
@@ -18,6 +19,7 @@
     group: "{{ remote_server_group }}"
   tags:
     - init
+    - setup
 
 - name: "Make directory({{ remote_app_env_path }})"
   ansible.builtin.file:
@@ -28,3 +30,4 @@
     group: "{{ remote_server_group }}"
   tags:
     - init
+    - setup
