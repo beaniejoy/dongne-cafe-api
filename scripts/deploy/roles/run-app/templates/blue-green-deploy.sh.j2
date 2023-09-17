@@ -222,18 +222,15 @@ shutdown_group_app() {
 
 case "${COMMAND}" in
   check)
-    # need group param(2nd)
     check_group_runnable
     ;;
   run)
-    # need group param(2nd)
     run_group_app
     ;;
   switch_proxy)
     switch_proxy_upstream_group
     ;;
   shutdown)
-    # need group param(2nd)
     shutdown_group_app
     ;;
   *)

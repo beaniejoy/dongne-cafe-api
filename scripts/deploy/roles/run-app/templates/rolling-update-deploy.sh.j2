@@ -8,9 +8,11 @@ if [ "$PROCESS_SHELL_COUNT" -gt 1 ]; then
     exit 10
 fi
 
+COMMAND=$1
+PORT=$2
+
 APP_WORKSPACE="{{ remote_app_path }}"
 MODULE_NAME="{{ module_name }}"
-PORT=$1
 
 # nginx proxy
 PROXY_CONF_FILE=/etc/nginx/conf.d/${MODULE_NAME}.conf
@@ -22,7 +24,7 @@ STD_OUT=${APP_WORKSPACE}/logs/stdout_${PORT}.log
 STD_ERR=${APP_WORKSPACE}/logs/stderr_${PORT}.log
 
 # toggle proxy upstream status (up, down)
-func_toggle_proxy_upstream() {
+private_toggle_proxy_upstream() {
   local toggle_status
   toggle_status=$1
 
@@ -40,7 +42,7 @@ func_toggle_proxy_upstream() {
     *)
       # TODO 취약점
       # 만약 중간에 exit 되고 이미 적용된 upstream이 있는 경우 upstream간에 버전 불일치 발생 가능
-      echo "(func_toggle_proxy_upstream) Invalid command - ${toggle_status}"
+      echo "(private_toggle_proxy_upstream) Invalid command - ${toggle_status}"
       exit 40;
       ;;
   esac
@@ -67,7 +69,7 @@ func_toggle_proxy_upstream() {
 # health check application
 CHECK_MAX_COUNT=10
 CHECK_COUNT=0
-func_app_health_check() {
+private_app_health_check() {
   if [ $CHECK_COUNT -gt $CHECK_MAX_COUNT ];
   then
     echo "Failure of running java application(${PORT})"
@@ -82,7 +84,7 @@ func_app_health_check() {
     echo "application(${PORT}) health check > DOWN"
     sleep 3
     CHECK_COUNT=$(expr ${CHECK_COUNT} + 1)
-    func_app_health_check
+    private_app_health_check
   fi
 }
 
@@ -92,7 +94,7 @@ shutdown() {
   echo "[SHUTDOWN] ${MODULE_NAME}:${PORT}"
   echo "-----------------------------------------"
 
-  func_toggle_proxy_upstream down
+  private_toggle_proxy_upstream down
 
   echo ">> kill current running application(${PORT})"
   current_pid=$(pgrep -f "java.*${PORT}")
@@ -127,17 +129,19 @@ run_app() {
     "${APP_WORKSPACE}"/"${MODULE_NAME}".jar 1>"${STD_OUT}" 2>"${STD_ERR}" &
 
   echo ">> application(${PORT}) health check"
-  func_app_health_check
+  private_app_health_check
 
-  func_toggle_proxy_upstream up
+  private_toggle_proxy_upstream up
 }
 
-main() {
-  shutdown
-
-  run_app
-
-  echo "## run application completed!!"
-}
-
-main
+case "${COMMAND}" in
+  shutdown)
+    shutdown
+    ;;
+  run)
+    run_app
+    ;;
+  *)
+    echo "${COMMAND} > Not supported command"
+    exit 40;
+esac
