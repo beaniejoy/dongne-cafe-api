@@ -2,8 +2,8 @@
   ansible.builtin.template:
     src: rolling-update-deploy.sh.j2
     dest: "{{ remote_app_path }}/service.sh"
-    owner: "{{ remote_server_user }}"
-    group: "{{ remote_server_group }}"
+    owner: "{{ remote_server_user[ansible_distribution] }}"
+    group: "{{ remote_server_group[ansible_distribution] }}"
     mode: 0755
 
 - name: "[Rolling Update] Run service script"

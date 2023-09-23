@@ -1,6 +1,10 @@
 # remote server
-remote_server_user: ec2-user
-remote_server_group: ec2-user
+remote_server_user:
+  Amazon: ec2-user
+  Debian: pi
+remote_server_group:
+  Amazon: ec2-user
+  Debian: pi
 remote_user_workspace: "/home/{{ remote_server_user }}"
 
 remote_deploy_path: "{{ remote_user_workspace }}/deploy"

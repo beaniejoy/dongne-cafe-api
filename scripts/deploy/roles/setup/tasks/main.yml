@@ -3,8 +3,8 @@
   ansible.builtin.file:
     path: "{{ remote_app_path }}"
     state: directory
-    owner: "{{ remote_server_user }}"
-    group: "{{ remote_server_group }}"
+    owner: "{{ remote_server_user[ansible_distribution] }}"
+    group: "{{ remote_server_group[ansible_distribution] }}"
     mode: 0755
   tags:
     - init
@@ -15,8 +15,8 @@
     path: "{{ remote_app_log_path }}"
     state: directory
     mode: 0755
-    owner: "{{ remote_server_user }}"
-    group: "{{ remote_server_group }}"
+    owner: "{{ remote_server_user[ansible_distribution] }}"
+    group: "{{ remote_server_group[ansible_distribution] }}"
   tags:
     - init
     - setup
@@ -26,8 +26,8 @@
     path: "{{ remote_app_env_path }}"
     state: directory
     mode: 0755
-    owner: "{{ remote_server_user }}"
-    group: "{{ remote_server_group }}"
+    owner: "{{ remote_server_user[ansible_distribution] }}"
+    group: "{{ remote_server_group[ansible_distribution] }}"
   tags:
     - init
     - setup
