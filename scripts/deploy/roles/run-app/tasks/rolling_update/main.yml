@@ -1,0 +1,19 @@
+- name: "[Rolling Update] Copy service script file to remote server"
+  ansible.builtin.template:
+    src: rolling-update-deploy.sh.j2
+    dest: "{{ remote_app_path }}/service.sh"
+    owner: "{{ remote_server_user }}"
+    group: "{{ remote_server_group }}"
+    mode: 0755
+
+- name: "[Rolling Update] Run service script"
+  ansible.builtin.include_tasks:
+    file: deploy.yml
+    apply:
+      tags:
+        - rolling_update
+  loop:
+    - { port: 8082, action: 'down' }
+    - { port: 8083, action: 'down' }
+    - { port: 8080, action: 'up' }
+    - { port: 8081, action: 'up' }

@@ -94,9 +94,7 @@ pipeline {
                 expression { executeConditionAllOr(Stage.TEST) }
             }
             steps {
-                sh """
-                    ./gradlew clean :${MODULE_NAME}:test
-                """
+                sh "./gradlew clean :${MODULE_NAME}:test"
             }
         }
 
@@ -151,7 +149,7 @@ pipeline {
                         installation: 'ansible',
                         playbook: "${ANSIBLE_PLAYBOOK}",
                         inventory: "${ANSIBLE_INVENTORY}",
-                        tags: 'deploy,rolling_update',
+                        tags: 'test',
                         extraVars: [
                             module_name: "${PROJECT_NAME}",
                             spring_profile: "${PROJECT_PROFILE}",

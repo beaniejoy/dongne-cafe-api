@@ -1,19 +1,7 @@
-- name: "[Blue Green] Check group files"
-  block:
-    - name: "Register {{ item }} file"
-      ansible.builtin.stat:
-        path: "{{ remote_app_path }}/{{ item }}"
-      register: group_file
-
-    - name: "Copy {{ item }} file to remote server"
-      ansible.builtin.copy:
-        src: "{{ item }}"
-        dest: "{{ remote_app_path }}/"
-        owner: "{{ remote_server_user }}"
-        group: "{{ remote_server_group }}"
-        mode: 0644
-      when: not group_file.stat.exists
-
-    - name: Print message
-      ansible.builtin.debug:
-        msg: "{{ item }} exists!!"
+- name: "[Blue Green] Copy {{ item }} file to remote server"
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ remote_app_path }}/"
+    owner: "{{ remote_server_user }}"
+    group: "{{ remote_server_group }}"
+    mode: 0644
