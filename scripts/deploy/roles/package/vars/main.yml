@@ -1,3 +1,7 @@
 # java package
-java_package: java-17-amazon-corretto
-nginx_package: nginx
+java_package:
+  Centos: java-17-amazon-corretto
+  Debian: openjdk-17-jre
+nginx_package:
+  Centos: nginx
+  Debian: nginx
