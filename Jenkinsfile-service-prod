@@ -94,9 +94,7 @@ pipeline {
                 expression { executeConditionAllOr(Stage.TEST) }
             }
             steps {
-                sh """
-                    ./gradlew clean :${MODULE_NAME}:test
-                """
+                sh "./gradlew clean :${MODULE_NAME}:test"
             }
         }
 
