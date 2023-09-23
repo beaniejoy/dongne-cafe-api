@@ -1,14 +1,18 @@
 ---
+- name: Check OS
+  ansible.builtin.debug:
+    msg: "OS: {{ ansible_distribution }} / OS version: {{ ansible_distribution_version }}"
+  tags:
+    - always
+
 - name: Install java
-  ansible.builtin.dnf:
-    name: "{{ java_package }}"
-    state: present
+  action: >
+    {{ ansible_pkg_mgr }} name={{ java_package[ansible_distribution] }} state=present
   tags:
     - init
 
 - name: Install nginx
-  ansible.builtin.dnf:
-    name: "{{ nginx_package }}"
-    state: present
+  action: >
+    {{ ansible_pkg_mgr }} name={{ nginx_package[ansible_distribution] }} state=present
   tags:
     - init
