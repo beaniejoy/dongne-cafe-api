@@ -1,5 +1,5 @@
 enum Stage {
-    ALL, DB_VALIDATE, TEST, BUILD, RUN_APP;
+    ALL, DB_VALIDATE, TEST, BUILD, DEPLOY, RUN_APP;
     Stage() {}
 }
 
@@ -17,7 +17,7 @@ pipeline {
         // Choice of pipeline target stages
         choice(
                 name: 'PIPELINE_STAGE_TARGET',
-                choices: ["${Stage.ALL}", "${Stage.DB_VALIDATE}", "${Stage.TEST}", "${Stage.BUILD}", "${Stage.RUN_APP}"],
+                choices: ["${Stage.ALL}", "${Stage.DB_VALIDATE}", "${Stage.TEST}", "${Stage.BUILD}", "${Stage.DEPLOY}", "${Stage.RUN_APP}"],
                 description: 'set target pipeline stages'
         )
     }
@@ -109,7 +109,7 @@ pipeline {
 
         stage('Deploy') {
             when {
-                expression { executeConditionAllOr(Stage.ALL) }
+                expression { executeConditionAllOr(Stage.DEPLOY) }
             }
             steps {
                 echo 'Deploy JAR file'
