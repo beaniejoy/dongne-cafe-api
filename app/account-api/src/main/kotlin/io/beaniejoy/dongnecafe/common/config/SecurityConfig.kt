@@ -48,7 +48,7 @@ class SecurityConfig {
 
             .authorizeRequests()
             .antMatchers(*permittedUrls, *resourceUrls).permitAll()
-            .antMatchers().permitAll()
+            .antMatchers("/auth/members/test").permitAll()
             .anyRequest().authenticated()
 
             .and()
