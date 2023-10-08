@@ -1,7 +1,7 @@
 package io.beaniejoy.dongnecafe.app.config
 
-import io.beaniejoy.dongnecafe.common.security.JwtTokenUtils
 import io.beaniejoy.dongnecafe.common.config.JwtAuthenticationConfigurer
+import io.beaniejoy.dongnecafe.common.security.JwtTokenUtils
 import io.beaniejoy.dongnecafe.common.security.handler.CustomAccessDeniedHandler
 import io.beaniejoy.dongnecafe.common.security.handler.CustomAuthenticationEntryPoint
 import org.springframework.beans.factory.annotation.Autowired
@@ -48,7 +48,6 @@ class SecurityConfig {
 
             .authorizeRequests()
             .antMatchers(*permittedUrls, *resourceUrls).permitAll()
-            .antMatchers("/auth/members/test").permitAll()
             .anyRequest().authenticated()
 
             .and()

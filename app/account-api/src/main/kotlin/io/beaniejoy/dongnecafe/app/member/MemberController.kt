@@ -6,7 +6,10 @@ import io.beaniejoy.dongnecafe.app.member.model.response.MemberOutputDto
 import io.beaniejoy.dongnecafe.app.member.model.response.MemberOutputDtoMapper
 import io.beaniejoy.dongnecafe.domain.common.response.ApplicationResponse
 import io.beaniejoy.dongnecafe.domain.member.service.MemberService
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/auth/members")
@@ -26,10 +29,5 @@ class MemberController(
         val response = memberOutputDtoMapper.of(joinedMember)
 
         return ApplicationResponse.created().data(response)
-    }
-
-    @GetMapping("/test")
-    fun test(): String {
-        return "OK"
     }
 }
