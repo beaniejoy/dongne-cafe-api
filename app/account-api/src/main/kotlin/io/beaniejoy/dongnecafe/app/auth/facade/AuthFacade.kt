@@ -1,6 +1,7 @@
 package io.beaniejoy.dongnecafe.app.auth.facade
 
-import io.beaniejoy.dongnecafe.security.JwtTokenUtils
+import io.beaniejoy.dongnecafe.common.security.JwtTokenUtils
+import io.beaniejoy.dongnecafe.common.security.JwtTokens
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
@@ -13,11 +14,11 @@ class AuthFacade(
 ) {
     private val authenticationManager: AuthenticationManager = authenticationConfiguration.authenticationManager
 
-    fun signIn(email: String, password: String): String {
+    fun signIn(email: String, password: String): JwtTokens {
         val authenticationToken = UsernamePasswordAuthenticationToken(email, password)
 
         val authentication = authenticationManager.authenticate(authenticationToken)
 
-        return jwtTokenUtils.createToken(authentication)
+        return jwtTokenUtils.createNewTokens(authentication)
     }
 }

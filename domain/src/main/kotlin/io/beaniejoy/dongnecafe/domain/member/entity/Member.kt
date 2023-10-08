@@ -1,6 +1,6 @@
 package io.beaniejoy.dongnecafe.domain.member.entity
 
-import io.beaniejoy.dongnecafe.common.entity.BaseEntity
+import io.beaniejoy.dongnecafe.domain.common.entity.BaseEntity
 import io.beaniejoy.dongnecafe.domain.member.constant.RoleType
 import io.beaniejoy.dongnecafe.domain.member.model.MemberCommand
 import org.springframework.security.crypto.password.PasswordEncoder

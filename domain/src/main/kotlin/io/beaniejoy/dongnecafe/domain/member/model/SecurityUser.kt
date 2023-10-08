@@ -1,7 +1,7 @@
 package io.beaniejoy.dongnecafe.domain.member.model
 
-import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
-import io.beaniejoy.dongnecafe.common.error.exception.BusinessException
+import io.beaniejoy.dongnecafe.domain.common.error.constant.ErrorCode
+import io.beaniejoy.dongnecafe.domain.common.error.exception.BusinessException
 import io.beaniejoy.dongnecafe.domain.member.entity.Member
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority

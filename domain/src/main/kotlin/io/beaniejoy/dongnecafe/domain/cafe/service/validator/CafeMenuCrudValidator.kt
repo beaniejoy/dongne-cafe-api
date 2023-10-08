@@ -1,7 +1,7 @@
 package io.beaniejoy.dongnecafe.domain.cafe.service.validator
 
-import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
-import io.beaniejoy.dongnecafe.common.error.exception.BusinessException
+import io.beaniejoy.dongnecafe.domain.common.error.constant.ErrorCode
+import io.beaniejoy.dongnecafe.domain.common.error.exception.BusinessException
 import io.beaniejoy.dongnecafe.domain.cafe.model.CafeCommand
 import io.beaniejoy.dongnecafe.domain.cafe.persistence.CafeSeriesReaderPort
 import org.springframework.stereotype.Component

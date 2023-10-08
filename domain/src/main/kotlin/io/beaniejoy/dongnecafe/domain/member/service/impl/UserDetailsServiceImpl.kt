@@ -1,6 +1,6 @@
 package io.beaniejoy.dongnecafe.domain.member.service.impl
 
-import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
+import io.beaniejoy.dongnecafe.domain.common.error.constant.ErrorCode
 import io.beaniejoy.dongnecafe.domain.member.model.SecurityUser
 import io.beaniejoy.dongnecafe.domain.member.persistence.MemberReaderPort
 import mu.KLogging

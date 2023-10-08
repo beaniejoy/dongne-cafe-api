@@ -1,6 +1,6 @@
 package io.beaniejoy.dongnecafe.app.auth.security
 
-import io.beaniejoy.dongnecafe.common.error.constant.ErrorCode
+import io.beaniejoy.dongnecafe.domain.common.error.constant.ErrorCode
 import io.beaniejoy.dongnecafe.domain.member.model.SecurityUser
 import mu.KLogging
 import org.springframework.security.authentication.AuthenticationProvider
