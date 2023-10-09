@@ -3,6 +3,7 @@ package io.beaniejoy.dongnecafe.common.response.error
 import io.beaniejoy.dongnecafe.common.response.ApplicationResponse
 import io.beaniejoy.dongnecafe.domain.common.error.constant.ErrorCode
 import io.beaniejoy.dongnecafe.domain.common.error.exception.BusinessException
+import io.beaniejoy.dongnecafe.domain.common.error.exception.TokenExpiredException
 import mu.KLogging
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.AuthenticationException
@@ -29,7 +30,6 @@ class BasicControllerAdvice {
 
     /**
      * 비즈니스 로직 상 에러 처리(예상 가능한 예외 처리 - 200 ok 처리)
-     * - TODO: 우선 인증, 인가 관련 에러도 여기에 포함 - 분리할지 고민
      * @param e BusinessException
      */
     @ResponseStatus(HttpStatus.OK)
@@ -44,14 +44,12 @@ class BasicControllerAdvice {
 
     /**
      * 인증, 인가 관련 에러 처리
-     * - TODO: 이부분을 따로 구성해야할 필요성 아직 모르겠음
-     * - 현재로써는 BusinessException handler 내용과 똑같다고 볼 수 있지만 성격상 분리
      */
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(*arrayOf(AuthenticationException::class, AccessDeniedException::class))
     fun handleAuthException(e: Exception): ApplicationResponse<Nothing> {
         val errorCode = when (e) {
-            is AuthenticationException -> ErrorCode.AUTH_UNAUTHORIZED
+            is AuthenticationException -> sortErrorCodeByAuthException(e)
             is AccessDeniedException -> ErrorCode.AUTH_ACCESS_DENIED
             else -> ErrorCode.DEFAULT
         }
@@ -59,6 +57,14 @@ class BasicControllerAdvice {
         logger.error { "[${e::class.simpleName}] <ErrorCode>: ${errorCode.name}, <ErrorMessage>: ${e.message}" }
         e.printStackTrace()
         return ApplicationResponse.fail(errorCode = errorCode).build()
+    }
+
+    private fun sortErrorCodeByAuthException(authException: AuthenticationException): ErrorCode {
+        if (authException is TokenExpiredException) {
+            return ErrorCode.AUTH_TOKEN_EXPIRED
+        }
+
+        return ErrorCode.AUTH_UNAUTHORIZED
     }
 
     // TODO 404 not found에 대한 내용도 api로 처리 필요

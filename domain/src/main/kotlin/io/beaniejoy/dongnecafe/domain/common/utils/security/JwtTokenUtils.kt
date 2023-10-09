@@ -111,4 +111,20 @@ class JwtTokenUtils(private val jwtTokenProperties: JwtTokenProperties) {
             null
         }
     }
+
+    // token 만료 체크
+    fun checkTokenExpired(accessToken: String): Boolean {
+        return try {
+            Jwts.parserBuilder()
+                .setSigningKey(jwtTokenProperties.access.getGeneratedKey())
+                .build()
+                .parseClaimsJws(accessToken)
+
+            false
+        } catch (e: ExpiredJwtException) {
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
 }
