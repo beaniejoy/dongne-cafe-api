@@ -1,7 +1,7 @@
-package io.beaniejoy.dongnecafe.common.config
+package io.beaniejoy.dongnecafe.common.security.config
 
 import io.beaniejoy.dongnecafe.common.security.filter.JwtAuthenticationFilter
-import io.beaniejoy.dongnecafe.common.security.JwtTokenUtils
+import io.beaniejoy.dongnecafe.domain.common.utils.security.JwtTokenUtils
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.web.DefaultSecurityFilterChain

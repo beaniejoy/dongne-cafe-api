@@ -41,8 +41,7 @@ class Member(
         protected set
 
     @Column(name = "activated", nullable = false)
-    var activated: Boolean = true
-        protected set
+    protected var activated: Boolean = true
 
     companion object {
         fun createEntity(
@@ -56,5 +55,9 @@ class Member(
                 phoneNumber = command.phoneNumber
             )
         }
+    }
+
+    fun isActivated(): Boolean {
+        return activated
     }
 }

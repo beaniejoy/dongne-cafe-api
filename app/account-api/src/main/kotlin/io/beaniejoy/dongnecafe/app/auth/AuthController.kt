@@ -2,7 +2,7 @@ package io.beaniejoy.dongnecafe.app.auth
 
 import io.beaniejoy.dongnecafe.app.auth.facade.AuthFacade
 import io.beaniejoy.dongnecafe.app.auth.model.request.SignInRequest
-import io.beaniejoy.dongnecafe.app.auth.model.response.TokenResponse
+import io.beaniejoy.dongnecafe.app.auth.model.response.AuthOutputDto
 import io.beaniejoy.dongnecafe.domain.common.response.ApplicationResponse
 import mu.KLogging
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -16,15 +16,17 @@ class AuthController(
     companion object : KLogging()
 
     @PostMapping("/authenticate")
-    fun signIn(@RequestBody signInRequest: SignInRequest): ApplicationResponse<TokenResponse> {
-        val tokens = authFacade.signIn(
+    fun signIn(
+        @RequestBody signInRequest: SignInRequest
+    ): ApplicationResponse<AuthOutputDto.RegisteredAuthTokenResponse> {
+        val registeredAuthToken = authFacade.signIn(
             email = signInRequest.email,
             password = signInRequest.password
         )
 
         return ApplicationResponse
             .success("success authenticate")
-            .data(TokenResponse.of(tokens))
+            .data(registeredAuthToken)
     }
 
     @GetMapping("/check")

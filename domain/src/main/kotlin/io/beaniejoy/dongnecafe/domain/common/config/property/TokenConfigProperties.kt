@@ -1,4 +1,4 @@
-package io.beaniejoy.dongnecafe.common.config
+package io.beaniejoy.dongnecafe.domain.common.config.property
 
 import io.jsonwebtoken.security.Keys
 import java.security.Key

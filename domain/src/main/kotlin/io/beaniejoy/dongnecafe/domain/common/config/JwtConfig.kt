@@ -1,4 +1,4 @@
-package io.beaniejoy.dongnecafe.common.config
+package io.beaniejoy.dongnecafe.domain.common.config
 
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.context.annotation.Configuration

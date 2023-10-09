@@ -22,10 +22,5 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
-    // JWT
-    implementation("io.jsonwebtoken:jjwt-api:${Version.Deps.JWT}")
-    runtimeOnly("io.jsonwebtoken:jjwt-impl:${Version.Deps.JWT}")
-    runtimeOnly("io.jsonwebtoken:jjwt-jackson:${Version.Deps.JWT}")
-
     testImplementation("org.springframework.security:spring-security-test")
 }
