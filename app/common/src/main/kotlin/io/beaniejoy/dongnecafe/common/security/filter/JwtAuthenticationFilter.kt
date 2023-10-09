@@ -1,6 +1,7 @@
 package io.beaniejoy.dongnecafe.common.security.filter
 
 import io.beaniejoy.dongnecafe.common.security.helper.SecurityFilterHelper
+import io.beaniejoy.dongnecafe.domain.common.utils.security.AuthTokenType
 import io.beaniejoy.dongnecafe.domain.common.utils.security.JwtTokenUtils
 import mu.KotlinLogging
 import org.springframework.security.core.context.SecurityContextHolder
@@ -24,7 +25,10 @@ class JwtAuthenticationFilter(
 
         // 인증 헤더에 토큰값 없는 경우 pass
         SecurityFilterHelper.getAccessToken(httpRequest)?.let {
-            jwtTokenUtils.getAuthentication(it)
+            jwtTokenUtils.getAuthentication(
+                accessToken = it,
+                tokenType = AuthTokenType.ACCESS
+            )
         }?.also {
             // 유효한 인증 토큰 존재하는 경우 SecurityContext 토큰값 저장
             SecurityContextHolder.getContext().authentication = it

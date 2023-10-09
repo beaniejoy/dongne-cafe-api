@@ -2,6 +2,7 @@ package io.beaniejoy.dongnecafe.common.security.handler
 
 import io.beaniejoy.dongnecafe.common.security.helper.SecurityFilterHelper
 import io.beaniejoy.dongnecafe.domain.common.error.exception.TokenExpiredException
+import io.beaniejoy.dongnecafe.domain.common.utils.security.AuthTokenType
 import io.beaniejoy.dongnecafe.domain.common.utils.security.JwtTokenUtils
 import mu.KLogging
 import org.springframework.security.core.AuthenticationException
@@ -42,7 +43,7 @@ class CustomAuthenticationEntryPoint(
         }
 
         // 인증 오류시 토큰 만료 케이스인지 체크
-        if (jwtTokenUtils.checkTokenExpired(accessToken)) {
+        if (jwtTokenUtils.checkTokenExpired(accessToken, AuthTokenType.ACCESS)) {
             return TokenExpiredException()
         }
 

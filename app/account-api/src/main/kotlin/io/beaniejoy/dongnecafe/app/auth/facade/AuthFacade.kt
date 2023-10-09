@@ -14,7 +14,11 @@ class AuthFacade(
     private val authTokenService: AuthTokenService,
     private val authOutputDtoMapper: AuthOutputDtoMapper
 ) {
-    private val authenticationManager: AuthenticationManager = authenticationConfiguration.authenticationManager
+    private lateinit var authenticationManager: AuthenticationManager
+
+    init {
+        authenticationManager = authenticationConfiguration.authenticationManager
+    }
 
     fun signIn(email: String, password: String): AuthOutputDto.RegisteredAuthTokenResponse {
         // 인증 진행

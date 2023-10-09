@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface AuthTokenRepository : JpaRepository<AuthToken, Long> {
     fun findByMember(member: Member): AuthToken?
+
+    fun findByAccessToken(accessToken: String): AuthToken?
 }
