@@ -4,7 +4,7 @@ import io.beaniejoy.dongnecafe.app.member.model.request.MemberInputDto
 import io.beaniejoy.dongnecafe.app.member.model.request.MemberInputDtoMapper
 import io.beaniejoy.dongnecafe.app.member.model.response.MemberOutputDto
 import io.beaniejoy.dongnecafe.app.member.model.response.MemberOutputDtoMapper
-import io.beaniejoy.dongnecafe.domain.common.response.ApplicationResponse
+import io.beaniejoy.dongnecafe.common.response.ApplicationResponse
 import io.beaniejoy.dongnecafe.domain.member.service.MemberService
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody

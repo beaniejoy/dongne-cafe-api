@@ -1,8 +1,8 @@
-package io.beaniejoy.dongnecafe.domain.common.error
+package io.beaniejoy.dongnecafe.common.response.error
 
+import io.beaniejoy.dongnecafe.common.response.ApplicationResponse
 import io.beaniejoy.dongnecafe.domain.common.error.constant.ErrorCode
 import io.beaniejoy.dongnecafe.domain.common.error.exception.BusinessException
-import io.beaniejoy.dongnecafe.domain.common.response.ApplicationResponse
 import mu.KLogging
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.AuthenticationException

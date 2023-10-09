@@ -4,7 +4,7 @@ import io.beaniejoy.dongnecafe.app.cafe.model.request.CafeInputDto
 import io.beaniejoy.dongnecafe.app.cafe.model.request.CafeInputDtoMapper
 import io.beaniejoy.dongnecafe.app.cafe.model.response.CafeOutputDto
 import io.beaniejoy.dongnecafe.app.cafe.model.response.CafeOutputDtoMapper
-import io.beaniejoy.dongnecafe.domain.common.response.ApplicationResponse
+import io.beaniejoy.dongnecafe.common.response.ApplicationResponse
 import io.beaniejoy.dongnecafe.domain.cafe.service.CafeService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable

@@ -1,4 +1,4 @@
-package io.beaniejoy.dongnecafe.domain.common.response
+package io.beaniejoy.dongnecafe.common.response
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import io.beaniejoy.dongnecafe.domain.common.error.constant.ErrorCode
