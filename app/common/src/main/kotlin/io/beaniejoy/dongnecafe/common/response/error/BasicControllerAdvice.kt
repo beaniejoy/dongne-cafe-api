@@ -3,7 +3,7 @@ package io.beaniejoy.dongnecafe.common.response.error
 import io.beaniejoy.dongnecafe.common.response.ApplicationResponse
 import io.beaniejoy.dongnecafe.domain.common.error.constant.ErrorCode
 import io.beaniejoy.dongnecafe.domain.common.error.exception.BusinessException
-import io.beaniejoy.dongnecafe.domain.common.error.exception.TokenExpiredException
+import io.beaniejoy.dongnecafe.domain.common.error.exception.auth.TokenExpiredException
 import mu.KLogging
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.AuthenticationException
@@ -44,6 +44,7 @@ class BasicControllerAdvice {
 
     /**
      * 인증, 인가 관련 에러 처리
+     * @param e AuthenticationException, AccessDeniedException (각각 인증, 인가 오류)
      */
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(*arrayOf(AuthenticationException::class, AccessDeniedException::class))
@@ -64,6 +65,7 @@ class BasicControllerAdvice {
             return ErrorCode.AUTH_TOKEN_EXPIRED
         }
 
+        // 인증 오류(로그인 필요)
         return ErrorCode.AUTH_UNAUTHORIZED
     }
 

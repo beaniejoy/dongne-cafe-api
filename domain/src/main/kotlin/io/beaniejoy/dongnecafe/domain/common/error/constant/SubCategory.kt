@@ -12,5 +12,6 @@ enum class SubCategory {
     DEACTIVATED,
     ACCESS_DENIED,
     UNAUTHORIZED,
-    EXPIRED
+    EXPIRED,
+    NOT_EXPIRED
 }

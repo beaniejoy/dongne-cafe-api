@@ -56,8 +56,14 @@ class AuthToken protected constructor(
         this.refreshToken = refreshToken
     }
 
+    fun updateAccessToken(accessToken: String) {
+        validateTokens(accessToken, this.refreshToken)
+
+        this.accessToken = accessToken
+    }
+
     private fun validateTokens(accessToken: String, refreshToken: String) {
-        if (accessToken == refreshToken) {
+        check(accessToken != refreshToken) {
             throw BusinessException(
                 errorCode = ErrorCode.AUTH_TOKEN_INVALID_REQUEST,
                 message = "access, refresh 토큰은 서로 다른 값을 가져야 합니다."

@@ -26,7 +26,7 @@ class JwtAuthenticationFilter(
         // 인증 헤더에 토큰값 없는 경우 pass
         SecurityFilterHelper.getAccessToken(httpRequest)?.let {
             jwtTokenUtils.getAuthentication(
-                accessToken = it,
+                authToken = it,
                 tokenType = AuthTokenType.ACCESS
             )
         }?.also {

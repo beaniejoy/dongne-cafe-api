@@ -1,7 +1,7 @@
 package io.beaniejoy.dongnecafe.common.security.handler
 
 import io.beaniejoy.dongnecafe.common.security.helper.SecurityFilterHelper
-import io.beaniejoy.dongnecafe.domain.common.error.exception.TokenExpiredException
+import io.beaniejoy.dongnecafe.domain.common.error.exception.auth.TokenExpiredException
 import io.beaniejoy.dongnecafe.domain.common.utils.security.AuthTokenType
 import io.beaniejoy.dongnecafe.domain.common.utils.security.JwtTokenUtils
 import mu.KLogging

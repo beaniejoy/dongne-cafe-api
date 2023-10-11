@@ -8,4 +8,5 @@ object SecurityConstant {
     const val ROLE_ANONYMOUS = "ROLE_ANONYMOUS"
 
     const val JWT_AUTHORITIES_KEY = "authorities"
+    const val JWT_AUTHORITY_DELIMITER = ","
 }
