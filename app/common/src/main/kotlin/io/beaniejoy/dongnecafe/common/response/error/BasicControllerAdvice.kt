@@ -6,6 +6,7 @@ import io.beaniejoy.dongnecafe.domain.common.error.exception.BusinessException
 import io.beaniejoy.dongnecafe.domain.common.error.exception.auth.TokenExpiredException
 import mu.KLogging
 import org.springframework.http.HttpStatus
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.AuthenticationException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -39,6 +40,7 @@ class BasicControllerAdvice {
             "[${BusinessException::class.simpleName}] <ErrorCode>: ${e.errorCode.name}, <ErrorMessage>: ${e.message}"
         }
         e.printStackTrace()
+
         return ApplicationResponse.fail(errorCode = e.errorCode).build()
     }
 
@@ -57,6 +59,7 @@ class BasicControllerAdvice {
 
         logger.error { "[${e::class.simpleName}] <ErrorCode>: ${errorCode.name}, <ErrorMessage>: ${e.message}" }
         e.printStackTrace()
+
         return ApplicationResponse.fail(errorCode = errorCode).build()
     }
 

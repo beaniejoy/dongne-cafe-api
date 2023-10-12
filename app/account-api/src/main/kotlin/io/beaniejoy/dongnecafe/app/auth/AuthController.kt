@@ -42,9 +42,13 @@ class AuthController(
      * access token만 갱신 대상, refresh token은 검증 용도만
      */
     @PostMapping("/token/refresh")
-    fun refreshAccessToken(@RequestBody resource: AuthInputDto.RefreshAuthTokenRequest) {
+    fun refreshAccessToken(@RequestBody resource: AuthInputDto.RefreshAuthTokenRequest): ApplicationResponse<String> {
         val refreshCommand = authInputDtoMapper.of(resource)
 
-        authTokenService.refreshToken(refreshCommand)
+        val newAccessToken = authTokenService.refreshToken(refreshCommand)
+
+        return ApplicationResponse
+            .success()
+            .data(newAccessToken)
     }
 }

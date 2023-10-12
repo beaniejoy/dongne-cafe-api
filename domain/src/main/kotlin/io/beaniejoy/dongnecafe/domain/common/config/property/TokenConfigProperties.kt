@@ -5,6 +5,7 @@ import java.security.Key
 
 /**
  * HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
+ * 최소 32글자 이상
  * echo '.....' | base64
  */
 data class TokenConfigProperties(

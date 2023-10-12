@@ -1,10 +1,12 @@
 package io.beaniejoy.dongnecafe.app.config
 
 import io.beaniejoy.dongnecafe.common.security.config.JwtAuthenticationConfigurer
-import io.beaniejoy.dongnecafe.domain.common.utils.security.JwtTokenUtils
 import io.beaniejoy.dongnecafe.common.security.handler.CustomAccessDeniedHandler
 import io.beaniejoy.dongnecafe.common.security.handler.CustomAuthenticationEntryPoint
+import io.beaniejoy.dongnecafe.domain.common.utils.security.JwtTokenUtils
+import io.beaniejoy.dongnecafe.domain.member.constant.RoleType
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointProperties
 import org.springframework.boot.autoconfigure.security.StaticResourceLocation
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -16,6 +18,7 @@ import org.springframework.security.web.SecurityFilterChain
 @Configuration
 @EnableWebSecurity
 class SecurityConfig {
+
     @Autowired
     lateinit var jwtTokenUtils: JwtTokenUtils
 
@@ -25,11 +28,15 @@ class SecurityConfig {
     @Autowired
     lateinit var customAuthenticationEntryPoint: CustomAuthenticationEntryPoint
 
+    @Autowired
+    lateinit var actuatorProperties: WebEndpointProperties
+
     companion object {
         val permittedUrls = arrayOf(
             "/error",
             "/auth/members/join",
-            "/auth/authenticate"
+            "/auth/authenticate",
+            "/auth/token/refresh"
         )
 
         // resource urls
@@ -47,6 +54,7 @@ class SecurityConfig {
             .csrf().disable()
 
             .authorizeRequests()
+            .antMatchers("${actuatorProperties.basePath}/**").hasRole(RoleType.ROLE_MONITORING.securityRoleName())
             .antMatchers(*permittedUrls, *resourceUrls).permitAll()
             .anyRequest().authenticated()
 

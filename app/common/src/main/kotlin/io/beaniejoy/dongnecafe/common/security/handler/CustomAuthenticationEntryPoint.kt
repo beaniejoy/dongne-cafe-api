@@ -24,7 +24,7 @@ class CustomAuthenticationEntryPoint(
         response: HttpServletResponse,
         authException: AuthenticationException
     ) {
-        logger.info { "Unauthorized Error!! ${SecurityFilterHelper.getAccessToken(request)}" }
+        logger.info { "Unauthorized Error!!" }
 
         val convertedAuthException = getValidAuthException(
             request = request,
