@@ -1,38 +1,57 @@
 package io.beaniejoy.dongnecafe.app.auth
 
 import io.beaniejoy.dongnecafe.app.auth.facade.AuthFacade
+import io.beaniejoy.dongnecafe.app.auth.model.request.AuthInputDto
+import io.beaniejoy.dongnecafe.app.auth.model.request.AuthInputDtoMapper
 import io.beaniejoy.dongnecafe.app.auth.model.request.SignInRequest
-import io.beaniejoy.dongnecafe.app.auth.model.response.TokenResponse
+import io.beaniejoy.dongnecafe.app.auth.model.response.AuthOutputDto
+import io.beaniejoy.dongnecafe.app.auth.model.response.RefreshAuthTokenResponse
 import io.beaniejoy.dongnecafe.common.response.ApplicationResponse
-import mu.KLogging
+import io.beaniejoy.dongnecafe.domain.auth.service.AuthTokenService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/auth")
 class AuthController(
-    private val authFacade: AuthFacade
+    private val authFacade: AuthFacade,
+    private val authTokenService: AuthTokenService,
+    private val authInputDtoMapper: AuthInputDtoMapper
 ) {
-    companion object : KLogging()
-
     @PostMapping("/authenticate")
-    fun signIn(@RequestBody signInRequest: SignInRequest): ApplicationResponse<TokenResponse> {
-        val accessToken = authFacade.signIn(
+    fun signIn(
+        @RequestBody signInRequest: SignInRequest
+    ): ApplicationResponse<AuthOutputDto.RegisteredAuthTokenResponse> {
+        val registeredAuthToken = authFacade.signIn(
             email = signInRequest.email,
             password = signInRequest.password
         )
 
         return ApplicationResponse
             .success("success authenticate")
-            .data(TokenResponse(accessToken))
+            .data(registeredAuthToken)
     }
 
     @GetMapping("/check")
     fun checkAuthenticated(@AuthenticationPrincipal principal: String?): ApplicationResponse<String> {
-        logger.info { "[Authentication Principal] $principal" }
-
         return ApplicationResponse
             .success("authenticated")
             .data(principal)
+    }
+
+    /**
+     * access token만 갱신 대상, refresh token은 검증 용도만
+     */
+    @PostMapping("/token/refresh")
+    fun refreshAccessToken(
+        @RequestBody resource: AuthInputDto.RefreshAuthTokenRequest
+    ): ApplicationResponse<RefreshAuthTokenResponse> {
+        val refreshCommand = authInputDtoMapper.of(resource)
+
+        val newAccessToken = authTokenService.refreshToken(refreshCommand)
+
+        return ApplicationResponse
+            .success()
+            .data(RefreshAuthTokenResponse.of(newAccessToken))
     }
 }

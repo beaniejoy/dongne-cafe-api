@@ -1,6 +1,6 @@
 package io.beaniejoy.dongnecafe.domain.member.entity
 
-import io.beaniejoy.dongnecafe.common.entity.BaseEntity
+import io.beaniejoy.dongnecafe.domain.common.entity.BaseEntity
 import io.beaniejoy.dongnecafe.domain.member.constant.RoleType
 import io.beaniejoy.dongnecafe.domain.member.model.MemberCommand
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -41,8 +41,7 @@ class Member(
         protected set
 
     @Column(name = "activated", nullable = false)
-    var activated: Boolean = true
-        protected set
+    protected var activated: Boolean = true
 
     companion object {
         fun createEntity(
@@ -56,5 +55,9 @@ class Member(
                 phoneNumber = command.phoneNumber
             )
         }
+    }
+
+    fun isActivated(): Boolean {
+        return activated
     }
 }

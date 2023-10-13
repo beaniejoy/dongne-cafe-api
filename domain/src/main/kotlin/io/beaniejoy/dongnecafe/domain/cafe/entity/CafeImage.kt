@@ -1,6 +1,6 @@
 package io.beaniejoy.dongnecafe.domain.cafe.entity
 
-import io.beaniejoy.dongnecafe.common.entity.BaseEntity
+import io.beaniejoy.dongnecafe.domain.common.entity.BaseEntity
 import javax.persistence.*
 
 @Entity
