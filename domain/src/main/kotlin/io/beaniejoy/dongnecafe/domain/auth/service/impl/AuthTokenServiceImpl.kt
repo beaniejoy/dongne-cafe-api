@@ -31,12 +31,13 @@ class AuthTokenServiceImpl(
 
     @Transactional
     override fun issueNewTokens(authentication: Authentication): AuthInfo.RegisteredAuthToken {
-        // 기존 저장된 토큰 조회
+        // select AuthToken from DB table
         val authToken: AuthToken? = authReaderPort.getAuthTokenByMember(authentication.getMember())
 
-        // 토큰 신규 생성(혹은 갱신)
+        // create or update(when already existed) new tokens(access, refresh)
         val newAuthToken = jwtTokenUtils.createOrUpdateNewToken(authToken, authentication)
 
+        // persist(or merge) AuthToken
         val savedAuthToken = authStorePort.store(newAuthToken)
 
         return authInfoMapper.of(savedAuthToken)
@@ -56,6 +57,7 @@ class AuthTokenServiceImpl(
         )
 
         return generateNewAccessToken(authToken.refreshToken).also {
+            // update new access token of AuthToken
             authToken.updateAccessToken(it)
         }
     }
@@ -73,9 +75,10 @@ class AuthTokenServiceImpl(
             )
     }
 
+    // refresh token > generate new access token
     private fun generateNewAccessToken(refreshToken: String): String {
         // refresh token already checked being not expired when validating.
-        // so, if authentication in refresh is null, it is not valid
+        // so, if authentication in refresh is null, it is not valid token
         val refreshAuth = jwtTokenUtils.getAuthentication(refreshToken, AuthTokenType.REFRESH)
             ?: throw BusinessException(
                 errorCode = ErrorCode.AUTH_TOKEN_INVALID_REQUEST,

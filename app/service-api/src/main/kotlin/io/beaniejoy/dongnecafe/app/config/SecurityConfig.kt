@@ -4,7 +4,9 @@ import io.beaniejoy.dongnecafe.domain.common.utils.security.JwtTokenUtils
 import io.beaniejoy.dongnecafe.common.security.config.JwtAuthenticationConfigurer
 import io.beaniejoy.dongnecafe.common.security.handler.CustomAccessDeniedHandler
 import io.beaniejoy.dongnecafe.common.security.handler.CustomAuthenticationEntryPoint
+import io.beaniejoy.dongnecafe.domain.member.constant.RoleType
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointProperties
 import org.springframework.boot.autoconfigure.security.StaticResourceLocation
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -24,6 +26,9 @@ class SecurityConfig {
 
     @Autowired
     lateinit var customAuthenticationEntryPoint: CustomAuthenticationEntryPoint
+
+    @Autowired
+    lateinit var actuatorProperties: WebEndpointProperties
 
     companion object {
         val permittedUrls = arrayOf(
@@ -47,10 +52,11 @@ class SecurityConfig {
             .formLogin().disable()
 
             .authorizeRequests()
+            .antMatchers("${actuatorProperties.basePath}/**").hasRole(RoleType.ROLE_MONITORING.securityRoleName())
             .antMatchers(*permittedUrls, *resourceUrls).authenticated()
             // TODO 임시 적용(추후에 모든 api에 대해서 인증 설정 내용을 통한 authenticated 필요)
-            .anyRequest().authenticated()
-//            .anyRequest().permitAll()
+//            .anyRequest().authenticated()
+            .anyRequest().permitAll()
 
             .and()
             .sessionManagement()

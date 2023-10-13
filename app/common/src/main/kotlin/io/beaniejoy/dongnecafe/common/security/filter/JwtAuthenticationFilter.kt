@@ -1,6 +1,7 @@
 package io.beaniejoy.dongnecafe.common.security.filter
 
 import io.beaniejoy.dongnecafe.common.security.helper.SecurityFilterHelper
+import io.beaniejoy.dongnecafe.domain.auth.service.AuthTokenService
 import io.beaniejoy.dongnecafe.domain.common.utils.security.AuthTokenType
 import io.beaniejoy.dongnecafe.domain.common.utils.security.JwtTokenUtils
 import mu.KotlinLogging
@@ -12,7 +13,8 @@ import javax.servlet.ServletResponse
 import javax.servlet.http.HttpServletRequest
 
 class JwtAuthenticationFilter(
-    private val jwtTokenUtils: JwtTokenUtils
+    private val jwtTokenUtils: JwtTokenUtils,
+    private val authTokenService: AuthTokenService
 ) : GenericFilterBean() {
     private val log = KotlinLogging.logger {}
 
@@ -37,4 +39,10 @@ class JwtAuthenticationFilter(
 
         chain.doFilter(request, response)
     }
+
+//    private fun checkExpiredAccessToken(accessToken: String) {
+//        if (jwtTokenUtils.checkTokenExpired(authToken = accessToken, tokenType = AuthTokenType.ACCESS)) {
+//            authTokenService.refreshToken()
+//        }
+//    }
 }

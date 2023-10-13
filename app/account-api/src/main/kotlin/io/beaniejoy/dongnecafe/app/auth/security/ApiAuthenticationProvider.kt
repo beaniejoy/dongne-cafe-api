@@ -33,8 +33,6 @@ class ApiAuthenticationProvider(
             throw BadCredentialsException(ErrorCode.AUTH_PASSWORD_NOT_VALID.name)
         }
 
-        logger.info { "User password ${user.password}" }
-
         return UsernamePasswordAuthenticationToken(user, null, user.authorities)
     }
 

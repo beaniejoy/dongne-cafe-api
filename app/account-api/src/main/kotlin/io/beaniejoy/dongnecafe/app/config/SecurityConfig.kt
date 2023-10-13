@@ -51,7 +51,9 @@ class SecurityConfig {
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
+            // only api 방식 인증 & 인가 적용 위해 csrf & formLogin 비활성화
             .csrf().disable()
+            .formLogin().disable()
 
             .authorizeRequests()
             .antMatchers("${actuatorProperties.basePath}/**").hasRole(RoleType.ROLE_MONITORING.securityRoleName())
