@@ -1,6 +1,0 @@
-java_package:
-  Amazon: java-17-amazon-corretto
-  Debian: openjdk-17-jre
-nginx_package:
-  Amazon: nginx
-  Debian: nginx

@@ -1,14 +1,11 @@
 # 동네 카페 전용 사이렌 오더 서비스
 
 개인 프로젝트
-- [dongne-cafe-web(프론트 개발)](https://github.com/beaniejoy/dongne-cafe-web)
-
-<br>
 
 ## :pushpin: Specification
-- Lang
+- Language
   - java 17
-  - kotlin 1.6.21
+  - kotlin 1.8.21
 - Framework
   - Spring Boot 2.7.0
 - DB
@@ -16,21 +13,31 @@
   - Flyway(migration)
 - CI/CD
   - Jenkins
-  - Ansible
+  - Ansible ([playbook and scripts repo](https://github.com/beaniejoy/ansible-deploy-script))
 - Cloud Server
   - AWS Lightsail(Amazon Linux2)
+  - Raspberry Pi 4(a tiny physical server)
+- Front
+  - Vue 3 ([dongne-cafe-web 프론트 개발](https://github.com/beaniejoy/dongne-cafe-web))
+
 
 <br>
 
 ## :pushpin: Multi Modules
-- `dongne-account-api`
-  - 회원가입, 인증 관련 내용
-- `dongne-service-api`
-  - 카페 관련 도메인 내용(추후 주문, 결제 적용 계획)
-- `dongne-common`
-  - entity, repository, error, security(jwt util) 등 관리하는 공통모듈
+- `app`
+  - `account-api`
+    - 회원가입, 인증 관련 내용
+  - `service-api`
+    - 카페 관련 도메인 내용(추후 주문, 결제 적용 계획)
+  - `common`
+    - 각 app이 사용하는 공통 내용 관리
+    - error response, filter(security, logging)
 - `db`
-  - flyway migration 관리 디렉토리
+  - db datasource, jpa 설정 관리
+  - repository 관리
+- `domain`
+  - 전반적인 비즈니스 로직 관리
+  - Entity 관리
 
 <br>
 
