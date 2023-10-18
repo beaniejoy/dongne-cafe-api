@@ -1,0 +1,14 @@
+spring:
+  redis:
+    url:
+    port: 6379
+    password:
+    connect-timeout: 3000
+    timeout: 3000
+    database: 0
+    lettuce:
+      pool:
+        max-active: 6
+        max-idle: 6
+        min-idle: 1
+        max-wait: 3

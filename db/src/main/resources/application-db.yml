@@ -23,32 +23,10 @@ spring:
         show-sql: false
     open-in-view: false
 
-  config:
-    import:
-      - optional:vault://
-      - optional:file:./env/.env.${spring.profiles.active}[.properties] # local
-  cloud:
-    vault:
-      uri: ${VAULT_DOMAIN_ADDR} # vault domain uri (port: 8200)
-      authentication: TOKEN
-      token: ${VAULT_AUTH_TOKEN} # vault root token
-      connection-timeout: 3000
-      read-timeout: 10000
-      kv:
-        backend: secret
-        application-name: dongne
-        default-context:
-        profiles: ${spring.profiles.active}
+  data:
+    jpa:
+      repositories:
+        enabled: false
 
 server:
   shutdown: graceful
-
----
-spring:
-  config:
-    activate:
-      on-profile: test
-
-  cloud:
-    vault:
-      enabled: false

@@ -9,7 +9,6 @@ import org.mapstruct.*
     unmappedTargetPolicy = ReportingPolicy.ERROR
 )
 interface AuthInfoMapper {
-    @Mapping(source = "authToken.member.id", target = "memberId")
-    @Mapping(source = "authToken.member.email", target = "email")
+    @Mapping(source = "authToken.id", target = "memberId")
     fun of(authToken: AuthToken): AuthInfo.RegisteredAuthToken
 }

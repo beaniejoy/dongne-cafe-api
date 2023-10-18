@@ -26,7 +26,8 @@ dependencies {
     implementation(project(SubModule.DOMAIN))
     testImplementation(testFixtures(project(SubModule.DOMAIN)))
 
-    implementation("org.springframework.cloud:spring-cloud-starter-vault-config:3.1.3")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+
     // DB
     runtimeOnly("mysql:mysql-connector-java:${Version.Deps.MYSQL}") // MySQL
     runtimeOnly("com.h2database:h2") // H2

@@ -5,4 +5,5 @@ object SubModule {
 
     const val DOMAIN = ":domain"
     const val DB = ":db"
+    const val INFRA = ":infra"
 }
