@@ -30,7 +30,7 @@ class AuthValidatorImpl(private val jwtTokenUtils: JwtTokenUtils) : AuthValidato
         // access 만료된 케이스만 통과
         check(isAccessTokenExpired) {
             // access 유효 or 올바르지 못한 토큰
-            throw BusinessException(ErrorCode.AUTH_TOKEN_INVALID_REQUEST)
+            throw BusinessException(ErrorCode.AUTH_TOKEN_INVALID_REQUEST, "인증 토큰이 아직 유효합니다.")
         }
     }
 }

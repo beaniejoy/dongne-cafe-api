@@ -9,8 +9,8 @@ import java.security.Key
  * echo '.....' | base64
  */
 data class TokenConfigProperties(
-    val secretKey: String,
-    val validityTimeInSec: Long
+    private val secretKey: String,
+    private val validityTimeInSec: Long
 ) {
     private val generatedKey = Keys.hmacShaKeyFor(secretKey.toByteArray())
 
@@ -24,5 +24,9 @@ data class TokenConfigProperties(
 
     fun getValidityTimeWithMilliSec(): Long {
         return validityTimeInSec * MILLI_SEC_UNIT
+    }
+
+    fun getValidityTimeWithSec(): Long {
+        return validityTimeInSec
     }
 }

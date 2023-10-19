@@ -36,7 +36,7 @@ class SecurityConfig {
             "/error",
             "/auth/members/join",
             "/auth/authenticate",
-            "/auth/token/refresh"
+            "/auth/token/renew"
         )
 
         // resource urls

@@ -12,5 +12,5 @@ import org.mapstruct.ReportingPolicy
     unmappedTargetPolicy = ReportingPolicy.ERROR
 )
 interface AuthInputDtoMapper {
-    fun of(request: AuthInputDto.RefreshAuthTokenRequest): AuthCommand.RefreshAuthToken
+    fun of(request: AuthInputDto.RenewAuthTokenRequest): AuthCommand.RenewAuthToken
 }

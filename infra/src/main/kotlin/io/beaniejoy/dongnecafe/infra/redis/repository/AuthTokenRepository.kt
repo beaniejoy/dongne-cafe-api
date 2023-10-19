@@ -1,8 +1,6 @@
 package io.beaniejoy.dongnecafe.infra.redis.repository
 
 import io.beaniejoy.dongnecafe.domain.auth.entity.AuthToken
-import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.repository.CrudRepository
 
-interface AuthTokenRepository : JpaRepository<AuthToken, Long> {
-    fun findByAccessToken(accessToken: String): AuthToken?
-}
+interface AuthTokenRepository : CrudRepository<AuthToken, Long>

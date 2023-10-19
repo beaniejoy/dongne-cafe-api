@@ -14,7 +14,6 @@ import io.beaniejoy.dongnecafe.domain.common.utils.security.AuthTokenType
 import io.beaniejoy.dongnecafe.domain.common.utils.security.JwtTokenUtils
 import io.beaniejoy.dongnecafe.domain.common.utils.security.SecurityConstant.JWT_AUTHORITY_DELIMITER
 import io.beaniejoy.dongnecafe.domain.common.utils.security.getAuthPrincipal
-import io.beaniejoy.dongnecafe.domain.common.utils.security.getMember
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -31,11 +30,8 @@ class AuthTokenServiceImpl(
 
     @Transactional
     override fun issueNewTokens(authentication: Authentication): AuthInfo.RegisteredAuthToken {
-        // select AuthToken from DB table
-        val authToken: AuthToken? = authReaderPort.getAuthTokenByMember(authentication.getMember())
-
         // create or update(when already existed) new tokens(access, refresh)
-        val newAuthToken = jwtTokenUtils.createOrUpdateNewToken(authToken, authentication)
+        val newAuthToken = jwtTokenUtils.createNewAuthToken(authentication)
 
         // persist(or merge) AuthToken
         val savedAuthToken = authStorePort.store(newAuthToken)
@@ -44,7 +40,7 @@ class AuthTokenServiceImpl(
     }
 
     @Transactional
-    override fun refreshToken(command: AuthCommand.RefreshAuthToken): String {
+    override fun renewToken(command: AuthCommand.RenewAuthToken): String {
         authValidator.validateAuthTokens(
             accessToken = command.accessToken,
             refreshToken = command.refreshToken
@@ -52,20 +48,27 @@ class AuthTokenServiceImpl(
 
         // TODO: 상위 Transactional > 하위 Transactional readonly 다른 transactionManager 적용된 경우 어떻게 동작??
         val authToken = getValidAuthTokenEntity(
+            memberId = command.memberId,
             accessToken = command.accessToken,
             refreshToken = command.refreshToken
         )
 
-        return generateNewAccessToken(authToken.refreshToken).also {
+        return generateNewAccessToken(authToken.refreshToken).also { newAccessToken ->
             // update new access token of AuthToken
-            authToken.updateAccessToken(it)
+            authToken.updateAccessToken(newAccessToken)
+            // FIXME: redis cache에 accessToken update가 이루어지지 않는다.
+            authStorePort.store(authToken)
         }
     }
 
-    private fun getValidAuthTokenEntity(accessToken: String, refreshToken: String): AuthToken {
-        return authReaderPort.getAuthTokenByAccessToken(accessToken)
+    private fun getValidAuthTokenEntity(
+        memberId: Long,
+        accessToken: String,
+        refreshToken: String
+    ): AuthToken {
+        return authReaderPort.getAuthTokenByMemberId(memberId)
             ?.also { token ->
-                check(token.refreshToken == refreshToken) {
+                check(token.accessToken == accessToken && token.refreshToken == refreshToken) {
                     throw BusinessException(ErrorCode.AUTH_TOKEN_INVALID_REQUEST, "갱신 토큰이 일치하지 않습니다.")
                 }
             }

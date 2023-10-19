@@ -5,11 +5,12 @@ import io.beaniejoy.dongnecafe.app.auth.model.request.AuthInputDto
 import io.beaniejoy.dongnecafe.app.auth.model.request.AuthInputDtoMapper
 import io.beaniejoy.dongnecafe.app.auth.model.request.SignInRequest
 import io.beaniejoy.dongnecafe.app.auth.model.response.AuthOutputDto
-import io.beaniejoy.dongnecafe.app.auth.model.response.RefreshAuthTokenResponse
+import io.beaniejoy.dongnecafe.app.auth.model.response.RenewAuthTokenResponse
 import io.beaniejoy.dongnecafe.common.response.ApplicationResponse
 import io.beaniejoy.dongnecafe.domain.auth.service.AuthTokenService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/auth")
@@ -42,16 +43,16 @@ class AuthController(
     /**
      * access token만 갱신 대상, refresh token은 검증 용도만
      */
-    @PostMapping("/token/refresh")
-    fun refreshAccessToken(
-        @RequestBody resource: AuthInputDto.RefreshAuthTokenRequest
-    ): ApplicationResponse<RefreshAuthTokenResponse> {
-        val refreshCommand = authInputDtoMapper.of(resource)
+    @PostMapping("/token/renew")
+    fun renewAccessToken(
+        @Valid @RequestBody resource: AuthInputDto.RenewAuthTokenRequest
+    ): ApplicationResponse<RenewAuthTokenResponse> {
+        val renewCommand = authInputDtoMapper.of(resource)
 
-        val newAccessToken = authTokenService.refreshToken(refreshCommand)
+        val newAccessToken = authTokenService.renewToken(renewCommand)
 
         return ApplicationResponse
             .success()
-            .data(RefreshAuthTokenResponse.of(newAccessToken))
+            .data(RenewAuthTokenResponse.of(newAccessToken))
     }
 }

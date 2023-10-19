@@ -17,4 +17,9 @@ enum class AuthTokenType(
 
         return jwtTokenProperties.refresh
     }
+
+    fun getValidityTimeWithMilliSec(jwtTokenProperties: JwtTokenProperties): Long {
+        return getTokenConfigProperties(jwtTokenProperties)
+            .getValidityTimeWithMilliSec()
+    }
 }

@@ -6,6 +6,7 @@ import io.beaniejoy.dongnecafe.app.member.model.response.MemberOutputDto
 import io.beaniejoy.dongnecafe.app.member.model.response.MemberOutputDtoMapper
 import io.beaniejoy.dongnecafe.common.response.ApplicationResponse
 import io.beaniejoy.dongnecafe.domain.member.service.MemberService
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -18,6 +19,7 @@ class MemberController(
     private val memberInputDtoMapper: MemberInputDtoMapper,
     private val memberOutputDtoMapper: MemberOutputDtoMapper
 ) {
+    @PreAuthorize("permitAll()")
     @PostMapping("/join")
     fun joinMember(
         @RequestBody resource: MemberInputDto.RegisterMemberRequest

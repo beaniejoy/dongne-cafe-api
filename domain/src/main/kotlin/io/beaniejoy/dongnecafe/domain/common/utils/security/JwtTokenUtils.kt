@@ -22,11 +22,10 @@ class JwtTokenUtils(private val jwtTokenProperties: JwtTokenProperties) {
 
     /**
      * access, refresh token 신규 발급
-     * @param authToken AuthToken? 기존 저장된 AuthToken entity (없으면 신규 생성)
      * @param authentication Authentication 인증된 auth 객체
-     * @return AuthToken
+     * @return AuthToken(redis cache)
      */
-    fun createOrUpdateNewToken(authToken: AuthToken?, authentication: Authentication): AuthToken {
+    fun createNewAuthToken(authentication: Authentication): AuthToken {
         val authenticatedMember = authentication.getMember()
         val authorities = authentication.authorities.joinToString(JWT_AUTHORITY_DELIMITER) { it.authority }
 
@@ -36,11 +35,10 @@ class JwtTokenUtils(private val jwtTokenProperties: JwtTokenProperties) {
             val accessToken = generateToken(authenticatedMember.id, authorities, nowTime, AuthTokenType.ACCESS)
             val refreshToken = generateToken(authenticatedMember.id, authorities, nowTime, AuthTokenType.REFRESH)
 
-            return createOrUpdateAuthToken(
-                authToken = authToken,
+            return createAuthTokenCache(
                 member = authenticatedMember,
                 accessToken = accessToken,
-                refreshToken = refreshToken
+                refreshToken = refreshToken,
             )
         }
     }
@@ -63,25 +61,19 @@ class JwtTokenUtils(private val jwtTokenProperties: JwtTokenProperties) {
             .compact()
     }
 
-    /**
-     * 기존 authToken entity 존재시 token update
-     * 기존 authToken entity 없으면 신규 entity create
-     */
-    private fun createOrUpdateAuthToken(
-        authToken: AuthToken?,
+    private fun createAuthTokenCache(
         member: Member,
         accessToken: String,
-        refreshToken: String
+        refreshToken: String,
+        tokenType: AuthTokenType = AuthTokenType.REFRESH
     ): AuthToken {
-        return authToken?.apply {
-            this.updateTokens(
-                accessToken = accessToken,
-                refreshToken = refreshToken
-            )
-        } ?: AuthToken.createEntity(
+        val tokenProperties = tokenType.getTokenConfigProperties(jwtTokenProperties)
+
+        return AuthToken.createEntity(
             member = member,
             accessToken = accessToken,
-            refreshToken = refreshToken
+            refreshToken = refreshToken,
+            expiration = tokenProperties.getValidityTimeWithSec()
         )
     }
 
