@@ -1,9 +1,10 @@
-package io.beaniejoy.dongnecafe.db.auth.adapter
+package io.beaniejoy.dongnecafe.infra.redis.adapter
 
-import io.beaniejoy.dongnecafe.db.auth.repository.AuthTokenRepository
 import io.beaniejoy.dongnecafe.domain.auth.entity.AuthToken
 import io.beaniejoy.dongnecafe.domain.auth.persistence.AuthReaderPort
 import io.beaniejoy.dongnecafe.domain.member.entity.Member
+import io.beaniejoy.dongnecafe.infra.redis.repository.AuthTokenRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -13,7 +14,7 @@ class AuthTokenReaderAdapter(
     private val authTokenRepository: AuthTokenRepository
 ) : AuthReaderPort {
     override fun getAuthTokenByMember(member: Member): AuthToken? {
-        return authTokenRepository.findByMember(member)
+        return authTokenRepository.findByIdOrNull(member.id)
     }
 
     override fun getAuthTokenByAccessToken(accessToken: String): AuthToken? {

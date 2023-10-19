@@ -4,29 +4,29 @@ import io.beaniejoy.dongnecafe.domain.common.entity.BaseTimeEntity
 import io.beaniejoy.dongnecafe.domain.common.error.constant.ErrorCode
 import io.beaniejoy.dongnecafe.domain.common.error.exception.BusinessException
 import io.beaniejoy.dongnecafe.domain.member.entity.Member
-import javax.persistence.*
+import org.springframework.data.redis.core.RedisHash
+import org.springframework.data.redis.core.index.Indexed
+import javax.persistence.Entity
+import javax.persistence.Id
 
 @Entity
-@Table(name = "auth_tokens")
+@RedisHash("auth_tokens")
 class AuthToken protected constructor(
+    id: Long,
     accessToken: String,
     refreshToken: String
 ) : BaseTimeEntity() {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "token_id", nullable = false)
-    val id: Long = 0L
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    var member: Member? = null
+    // TODO: 불필요한 key 값이 생김 (하나의 auth_token에 대해서 2개의 key가 생기는 셈)
+    // @Id 없애도 되는지도 볼 것, @Id하고 필드이름하고 똑같아야 하는 것인지도 찾아볼 것
+    @Id
+    var id: Long = id
         protected set
 
-    @Column(name = "access_token", nullable = false, unique = true)
+    @Indexed
     var accessToken: String = accessToken
         protected set
 
-    @Column(name = "refresh_token", nullable = false, unique = true)
     var refreshToken: String = refreshToken
         protected set
 
@@ -42,10 +42,9 @@ class AuthToken protected constructor(
         ): AuthToken {
             return AuthToken(
                 accessToken = accessToken,
-                refreshToken = refreshToken
-            ).apply {
-                this.member = member
-            }
+                refreshToken = refreshToken,
+                id = member.id
+            )
         }
     }
 

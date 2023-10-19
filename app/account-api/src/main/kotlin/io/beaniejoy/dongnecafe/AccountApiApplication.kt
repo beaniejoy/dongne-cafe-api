@@ -1,5 +1,6 @@
 package io.beaniejoy.dongnecafe
 
+import io.beaniejoy.dongnecafe.common.constant.AppModule
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
 
@@ -8,6 +9,6 @@ class AccountApiApplication
 
 fun main(args: Array<String>) {
     SpringApplicationBuilder(AccountApiApplication::class.java)
-        .properties("spring.config.name=application,application-common,application-db")
+        .properties("spring.config.name=${AppModule.getConfigNames()}")
         .run(*args)
 }

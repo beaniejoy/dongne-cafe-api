@@ -1,8 +1,8 @@
-package io.beaniejoy.dongnecafe.db.auth.adapter
+package io.beaniejoy.dongnecafe.infra.redis.adapter
 
-import io.beaniejoy.dongnecafe.db.auth.repository.AuthTokenRepository
 import io.beaniejoy.dongnecafe.domain.auth.entity.AuthToken
 import io.beaniejoy.dongnecafe.domain.auth.persistence.AuthStorePort
+import io.beaniejoy.dongnecafe.infra.redis.repository.AuthTokenRepository
 import org.springframework.stereotype.Component
 
 @Component

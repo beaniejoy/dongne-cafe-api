@@ -17,7 +17,8 @@ afterEvaluate {
             dependsOn(
                 ":ktlintCheck",
                 "${SubModule.DB}:ktlintCheck",
-                "${SubModule.DOMAIN}:ktlintCheck"
+                "${SubModule.DOMAIN}:ktlintCheck",
+                "${SubModule.INFRA}:ktlintCheck"
             )
         }
     }

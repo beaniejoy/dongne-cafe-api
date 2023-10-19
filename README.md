@@ -9,11 +9,14 @@
 - Framework
   - Spring Boot 2.7.0
 - DB
-  - MySQL 8.0.21
+  - MySQL 8.0.32
   - Flyway(migration)
 - CI/CD
   - Jenkins
   - Ansible ([playbook and scripts repo](https://github.com/beaniejoy/ansible-deploy-script))
+- Infra
+  - Redis(memory cache)
+  - Vault
 - Cloud Server
   - AWS Lightsail(Amazon Linux2)
   - Raspberry Pi 4(a tiny physical server)

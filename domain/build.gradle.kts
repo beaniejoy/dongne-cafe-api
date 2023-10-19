@@ -30,4 +30,6 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-api:${Version.Deps.JWT}")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:${Version.Deps.JWT}")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:${Version.Deps.JWT}")
+
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
 }
