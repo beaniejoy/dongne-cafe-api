@@ -14,6 +14,7 @@ import io.beaniejoy.dongnecafe.domain.common.utils.security.AuthTokenType
 import io.beaniejoy.dongnecafe.domain.common.utils.security.JwtTokenUtils
 import io.beaniejoy.dongnecafe.domain.common.utils.security.SecurityConstant.JWT_AUTHORITY_DELIMITER
 import io.beaniejoy.dongnecafe.domain.common.utils.security.getAuthPrincipal
+import mu.KLogging
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -27,6 +28,8 @@ class AuthTokenServiceImpl(
     private val authInfoMapper: AuthInfoMapper,
     private val authValidator: AuthValidator
 ) : AuthTokenService {
+
+    companion object : KLogging()
 
     @Transactional
     override fun issueNewTokens(authentication: Authentication): AuthInfo.RegisteredAuthToken {
@@ -53,12 +56,16 @@ class AuthTokenServiceImpl(
             refreshToken = command.refreshToken
         )
 
-        return generateNewAccessToken(authToken.refreshToken).also { newAccessToken ->
+        generateNewAccessToken(authToken.refreshToken).also { newAccessToken ->
             // update new access token of AuthToken
             authToken.updateAccessToken(newAccessToken)
-            // FIXME: redis cache에 accessToken update가 이루어지지 않는다.
-            authStorePort.store(authToken)
         }
+
+        val savedAuthToken = authStorePort.store(authToken).also {
+            logger.info { "saved new access_token: ${it.accessToken}" }
+        }
+
+        return savedAuthToken.accessToken
     }
 
     private fun getValidAuthTokenEntity(
