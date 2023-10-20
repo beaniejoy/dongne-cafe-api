@@ -6,7 +6,7 @@ import io.beaniejoy.dongnecafe.infra.redis.repository.AuthTokenRepository
 import org.springframework.stereotype.Component
 
 @Component
-class AuthTokenStoreAdapter(
+class AuthTokenStoreRedisAdapter(
     private val authTokenRepository: AuthTokenRepository
 ) : AuthStorePort {
     override fun store(authToken: AuthToken): AuthToken {

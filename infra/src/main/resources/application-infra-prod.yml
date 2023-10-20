@@ -1,5 +1,6 @@
 spring:
   redis:
+    # TODO: 실환경 redis 구성하기
     url:
     port: 6379
     password:
@@ -10,5 +11,5 @@ spring:
       pool:
         max-active: 6
         max-idle: 6
-        min-idle: 1
+        min-idle: 6
         max-wait: 3

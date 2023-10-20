@@ -17,7 +17,6 @@ import io.beaniejoy.dongnecafe.domain.common.utils.security.getAuthPrincipal
 import mu.KLogging
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
@@ -31,7 +30,6 @@ class AuthTokenServiceImpl(
 
     companion object : KLogging()
 
-    @Transactional
     override fun issueNewTokens(authentication: Authentication): AuthInfo.RegisteredAuthToken {
         // create or update(when already existed) new tokens(access, refresh)
         val newAuthToken = jwtTokenUtils.createNewAuthToken(authentication)
@@ -42,7 +40,6 @@ class AuthTokenServiceImpl(
         return authInfoMapper.of(savedAuthToken)
     }
 
-    @Transactional
     override fun renewToken(command: AuthCommand.RenewAuthToken): String {
         authValidator.validateAuthTokens(
             accessToken = command.accessToken,
@@ -61,11 +58,21 @@ class AuthTokenServiceImpl(
             authToken.updateAccessToken(newAccessToken)
         }
 
-        val savedAuthToken = authStorePort.store(authToken).also {
-            logger.info { "saved new access_token: ${it.accessToken}" }
-        }
+        return try {
+            val savedAuthToken = authStorePort.store(authToken).also {
+                logger.info { "saved new access_token: ${it.accessToken}" }
+            }
 
-        return savedAuthToken.accessToken
+            savedAuthToken.accessToken
+        } catch (e: Exception) {
+            // **update prior accessToken in Redis for rollback**
+            // (Redis itself does not have transaction(rollback))
+            authStorePort.store(
+                authToken.apply { this.updateAccessToken(command.accessToken) }
+            )
+
+            throw e
+        }
     }
 
     private fun getValidAuthTokenEntity(
