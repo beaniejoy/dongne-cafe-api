@@ -1,6 +1,9 @@
 # 동네 카페 전용 사이렌 오더 서비스
 
-개인 프로젝트
+코틀린 기반의 Spring Boot로 만들어보는 개인 프로젝트  
+(Web Application with Kotlin-based Spring Boot)
+
+<br>
 
 ## :pushpin: Specification
 - Language
