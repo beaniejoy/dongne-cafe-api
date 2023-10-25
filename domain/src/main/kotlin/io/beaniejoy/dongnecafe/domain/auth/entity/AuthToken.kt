@@ -3,7 +3,6 @@ package io.beaniejoy.dongnecafe.domain.auth.entity
 import io.beaniejoy.dongnecafe.domain.common.entity.BaseTimeEntity
 import io.beaniejoy.dongnecafe.domain.common.error.constant.ErrorCode
 import io.beaniejoy.dongnecafe.domain.common.error.exception.BusinessException
-import io.beaniejoy.dongnecafe.domain.member.entity.Member
 import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.TimeToLive
 import javax.persistence.Id
@@ -39,13 +38,13 @@ class AuthToken protected constructor(
         private const val EXTRA_EXPIRATION_SEC = 5
 
         fun createEntity(
-            member: Member,
+            memberId: Long,
             accessToken: String,
             refreshToken: String,
             expiration: Long
         ): AuthToken {
             return AuthToken(
-                id = member.id,
+                id = memberId,
                 accessToken = accessToken,
                 refreshToken = refreshToken,
                 expiration = expiration + EXTRA_EXPIRATION_SEC
@@ -53,7 +52,7 @@ class AuthToken protected constructor(
         }
     }
 
-    fun updateAccessToken(accessToken: String) {
+    fun updateTokens(accessToken: String) {
         validateTokens(accessToken, this.refreshToken)
 
         this.accessToken = accessToken

@@ -2,12 +2,13 @@ package io.beaniejoy.dongnecafe.domain.common.utils.security
 
 import io.beaniejoy.dongnecafe.domain.common.config.property.JwtTokenProperties
 import io.beaniejoy.dongnecafe.domain.common.config.property.TokenConfigProperties
+import java.util.*
 
 enum class AuthTokenType(
-    val typeName: String
+    private val prefix: HeaderPrefix
 ) {
-    ACCESS("인증토큰"),
-    REFRESH("갱신토큰")
+    ACCESS(HeaderPrefix.BEARER),
+    REFRESH(HeaderPrefix.REFRESH)
     ;
 
     fun getTokenConfigProperties(jwtTokenProperties: JwtTokenProperties): TokenConfigProperties {
@@ -18,8 +19,19 @@ enum class AuthTokenType(
         return jwtTokenProperties.refresh
     }
 
-    fun getValidityTimeWithMilliSec(jwtTokenProperties: JwtTokenProperties): Long {
-        return getTokenConfigProperties(jwtTokenProperties)
-            .getValidityTimeWithMilliSec()
+    fun getCapitalizedPrefix(): String {
+        return prefix.capitalize()
+    }
+
+    enum class HeaderPrefix {
+        BEARER,
+        REFRESH
+        ;
+
+        fun capitalize(): String {
+            return BEARER.name.replaceFirstChar {
+                if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+            }
+        }
     }
 }

@@ -33,7 +33,7 @@ class ApiAuthenticationProvider(
             throw BadCredentialsException(ErrorCode.AUTH_PASSWORD_NOT_VALID.name)
         }
 
-        return UsernamePasswordAuthenticationToken(user, null, user.authorities)
+        return UsernamePasswordAuthenticationToken(user.member.id, null, user.authorities)
     }
 
     override fun supports(authentication: Class<*>): Boolean {

@@ -2,9 +2,9 @@ package io.beaniejoy.dongnecafe.domain.common.utils.security
 
 import io.beaniejoy.dongnecafe.domain.auth.entity.AuthToken
 import io.beaniejoy.dongnecafe.domain.common.config.property.JwtTokenProperties
+import io.beaniejoy.dongnecafe.domain.common.error.exception.auth.UnauthorizedMemberException
 import io.beaniejoy.dongnecafe.domain.common.utils.security.SecurityConstant.JWT_AUTHORITIES_KEY
 import io.beaniejoy.dongnecafe.domain.common.utils.security.SecurityConstant.JWT_AUTHORITY_DELIMITER
-import io.beaniejoy.dongnecafe.domain.member.entity.Member
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
@@ -26,17 +26,19 @@ class JwtTokenUtils(private val jwtTokenProperties: JwtTokenProperties) {
      * @return AuthToken(redis cache)
      */
     fun createNewAuthToken(authentication: Authentication): AuthToken {
-        val authenticatedMember = authentication.getMember()
+        val authMemberId = authentication.getMemberId()
+            ?: throw UnauthorizedMemberException("no valid authenticated memberId")
+
         val authorities = authentication.authorities.joinToString(JWT_AUTHORITY_DELIMITER) { it.authority }
 
         val nowTime = Date()
 
         jwtTokenProperties.also {
-            val accessToken = generateToken(authenticatedMember.id, authorities, nowTime, AuthTokenType.ACCESS)
-            val refreshToken = generateToken(authenticatedMember.id, authorities, nowTime, AuthTokenType.REFRESH)
+            val accessToken = generateToken(authMemberId, authorities, nowTime, AuthTokenType.ACCESS)
+            val refreshToken = generateToken(authMemberId, authorities, nowTime, AuthTokenType.REFRESH)
 
-            return createAuthTokenCache(
-                member = authenticatedMember,
+            return createAuthTokenRedis(
+                memberId = authMemberId,
                 accessToken = accessToken,
                 refreshToken = refreshToken,
             )
@@ -44,7 +46,7 @@ class JwtTokenUtils(private val jwtTokenProperties: JwtTokenProperties) {
     }
 
     fun generateToken(
-        authenticatedMemberId: Long,
+        memberId: Long,
         authorities: String,
         baseDate: Date,
         tokenType: AuthTokenType
@@ -53,7 +55,7 @@ class JwtTokenUtils(private val jwtTokenProperties: JwtTokenProperties) {
         val expirationDate = Date(baseDate.time + tokenProperties.getValidityTimeWithMilliSec())
 
         return Jwts.builder()
-            .setSubject(authenticatedMemberId.toString())
+            .setSubject(memberId.toString())
             .claim(JWT_AUTHORITIES_KEY, authorities)
             .setIssuedAt(baseDate)
             .signWith(tokenProperties.getGeneratedKey(), SignatureAlgorithm.HS256)
@@ -61,8 +63,8 @@ class JwtTokenUtils(private val jwtTokenProperties: JwtTokenProperties) {
             .compact()
     }
 
-    private fun createAuthTokenCache(
-        member: Member,
+    private fun createAuthTokenRedis(
+        memberId: Long,
         accessToken: String,
         refreshToken: String,
         tokenType: AuthTokenType = AuthTokenType.REFRESH
@@ -70,7 +72,7 @@ class JwtTokenUtils(private val jwtTokenProperties: JwtTokenProperties) {
         val tokenProperties = tokenType.getTokenConfigProperties(jwtTokenProperties)
 
         return AuthToken.createEntity(
-            member = member,
+            memberId = memberId,
             accessToken = accessToken,
             refreshToken = refreshToken,
             expiration = tokenProperties.getValidityTimeWithSec()
@@ -81,15 +83,17 @@ class JwtTokenUtils(private val jwtTokenProperties: JwtTokenProperties) {
         val claims = getValidTokenBody(authToken, tokenType)
             ?: return null
 
+        val memberId = claims.subject
+
         val authorities = claims[JWT_AUTHORITIES_KEY].toString()
             .split(JWT_AUTHORITY_DELIMITER)
             .map { SimpleGrantedAuthority(it) }
 
-        return UsernamePasswordAuthenticationToken(claims.subject, authToken, authorities)
+        return UsernamePasswordAuthenticationToken(memberId, authToken, authorities)
     }
 
     // jwt access token 유효성 검증 및 claims 획득
-    private fun getValidTokenBody(accessToken: String, tokenType: AuthTokenType): Claims? {
+    private fun getValidTokenBody(authToken: String, tokenType: AuthTokenType): Claims? {
         return try {
             Jwts.parserBuilder()
                 .setSigningKey(
@@ -98,7 +102,7 @@ class JwtTokenUtils(private val jwtTokenProperties: JwtTokenProperties) {
                         .getGeneratedKey()
                 )
                 .build()
-                .parseClaimsJws(accessToken)
+                .parseClaimsJws(authToken)
                 .body
         } catch (e: ExpiredJwtException) {
             logger.info { "JWT access token expired. > Error: ${e.message}" }

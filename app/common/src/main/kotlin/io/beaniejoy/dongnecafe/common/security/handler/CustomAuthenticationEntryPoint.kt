@@ -1,6 +1,6 @@
 package io.beaniejoy.dongnecafe.common.security.handler
 
-import io.beaniejoy.dongnecafe.common.security.helper.SecurityFilterHelper
+import io.beaniejoy.dongnecafe.common.security.helper.SecurityHelper
 import io.beaniejoy.dongnecafe.domain.common.error.exception.auth.TokenExpiredException
 import io.beaniejoy.dongnecafe.domain.common.utils.security.AuthTokenType
 import io.beaniejoy.dongnecafe.domain.common.utils.security.JwtTokenUtils
@@ -38,7 +38,10 @@ class CustomAuthenticationEntryPoint(
         request: HttpServletRequest,
         originException: AuthenticationException
     ): AuthenticationException {
-        val accessToken = SecurityFilterHelper.getAccessToken(request) ?: run {
+        val accessToken = SecurityHelper.getAuthTokenFromRequest(
+            request = request,
+            tokenType = AuthTokenType.ACCESS
+        ) ?: run {
             return originException
         }
 

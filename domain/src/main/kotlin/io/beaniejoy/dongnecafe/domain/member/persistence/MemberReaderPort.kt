@@ -6,4 +6,6 @@ interface MemberReaderPort {
     fun existsMemberByEmail(email: String): Boolean
 
     fun getMemberByEmail(email: String): Member?
+
+    fun getMemberByIdNotNull(memberId: Long): Member
 }

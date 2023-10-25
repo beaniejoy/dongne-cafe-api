@@ -1,6 +1,6 @@
 package io.beaniejoy.dongnecafe.common.security.filter
 
-import io.beaniejoy.dongnecafe.common.security.helper.SecurityFilterHelper
+import io.beaniejoy.dongnecafe.common.security.helper.SecurityHelper
 import io.beaniejoy.dongnecafe.domain.common.utils.security.AuthTokenType
 import io.beaniejoy.dongnecafe.domain.common.utils.security.JwtTokenUtils
 import mu.KotlinLogging
@@ -24,7 +24,7 @@ class JwtAuthenticationFilter(
         log.info { "[JwtAuthenticationFilter][${request.dispatcherType}] uri: ${request.requestURI}" }
 
         // 인증 헤더에 토큰값 없는 경우 pass
-        SecurityFilterHelper.getAccessToken(httpRequest)?.let {
+        SecurityHelper.getAuthTokenFromRequest(httpRequest)?.let {
             jwtTokenUtils.getAuthentication(
                 authToken = it,
                 tokenType = AuthTokenType.ACCESS

@@ -7,25 +7,20 @@ import io.beaniejoy.dongnecafe.domain.auth.model.AuthInfoMapper
 import io.beaniejoy.dongnecafe.domain.auth.persistence.AuthReaderPort
 import io.beaniejoy.dongnecafe.domain.auth.persistence.AuthStorePort
 import io.beaniejoy.dongnecafe.domain.auth.service.AuthTokenService
-import io.beaniejoy.dongnecafe.domain.auth.service.validator.AuthValidator
 import io.beaniejoy.dongnecafe.domain.common.error.constant.ErrorCode
 import io.beaniejoy.dongnecafe.domain.common.error.exception.BusinessException
 import io.beaniejoy.dongnecafe.domain.common.utils.security.AuthTokenType
 import io.beaniejoy.dongnecafe.domain.common.utils.security.JwtTokenUtils
-import io.beaniejoy.dongnecafe.domain.common.utils.security.SecurityConstant.JWT_AUTHORITY_DELIMITER
-import io.beaniejoy.dongnecafe.domain.common.utils.security.getAuthPrincipal
 import mu.KLogging
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
-import java.util.*
 
 @Service
 class AuthTokenServiceImpl(
     private val jwtTokenUtils: JwtTokenUtils,
     private val authReaderPort: AuthReaderPort,
     private val authStorePort: AuthStorePort,
-    private val authInfoMapper: AuthInfoMapper,
-    private val authValidator: AuthValidator
+    private val authInfoMapper: AuthInfoMapper
 ) : AuthTokenService {
 
     companion object : KLogging()
@@ -40,49 +35,26 @@ class AuthTokenServiceImpl(
         return authInfoMapper.of(savedAuthToken)
     }
 
-    override fun renewToken(command: AuthCommand.RenewAuthToken): String {
-        authValidator.validateAuthTokens(
-            accessToken = command.accessToken,
-            refreshToken = command.refreshToken
-        )
-
-        // TODO: 상위 Transactional > 하위 Transactional readonly 다른 transactionManager 적용된 경우 어떻게 동작??
+    override fun renewToken(command: AuthCommand.RenewAuthToken): AuthInfo.RegisteredAuthToken {
         val authToken = getValidAuthTokenEntity(
             memberId = command.memberId,
-            accessToken = command.accessToken,
             refreshToken = command.refreshToken
         )
 
-        generateNewAccessToken(authToken.refreshToken).also { newAccessToken ->
-            // update new access token of AuthToken
-            authToken.updateAccessToken(newAccessToken)
+        val savedAuthToken = generateNewAuthToken(authToken.refreshToken).run {
+            authStorePort.store(this)
         }
 
-        return try {
-            val savedAuthToken = authStorePort.store(authToken).also {
-                logger.info { "saved new access_token: ${it.accessToken}" }
-            }
-
-            savedAuthToken.accessToken
-        } catch (e: Exception) {
-            // **update prior accessToken in Redis for rollback**
-            // (Redis itself does not have transaction(rollback))
-            authStorePort.store(
-                authToken.apply { this.updateAccessToken(command.accessToken) }
-            )
-
-            throw e
-        }
+        return authInfoMapper.of(savedAuthToken)
     }
 
     private fun getValidAuthTokenEntity(
         memberId: Long,
-        accessToken: String,
         refreshToken: String
     ): AuthToken {
         return authReaderPort.getAuthTokenByMemberId(memberId)
             ?.also { token ->
-                check(token.accessToken == accessToken && token.refreshToken == refreshToken) {
+                check(token.refreshToken == refreshToken) {
                     throw BusinessException(ErrorCode.AUTH_TOKEN_INVALID_REQUEST, "갱신 토큰이 일치하지 않습니다.")
                 }
             }
@@ -92,8 +64,8 @@ class AuthTokenServiceImpl(
             )
     }
 
-    // refresh token > generate new access token
-    private fun generateNewAccessToken(refreshToken: String): String {
+    // generate new access token from refresh token
+    private fun generateNewAuthToken(refreshToken: String): AuthToken {
         // refresh token already checked being not expired when validating.
         // so, if authentication in refresh is null, it is not valid token
         val refreshAuth = jwtTokenUtils.getAuthentication(refreshToken, AuthTokenType.REFRESH)
@@ -102,19 +74,6 @@ class AuthTokenServiceImpl(
                 message = "유효하지 않는 ${AuthTokenType.REFRESH}입니다."
             )
 
-        val memberId = refreshAuth.getAuthPrincipal()?.toLong()
-            ?: throw BusinessException(ErrorCode.AUTH_TOKEN_INVALID_REQUEST)
-
-        val authorities = refreshAuth.authorities
-            .joinToString(JWT_AUTHORITY_DELIMITER) { it.authority }
-
-        val nowTime = Date()
-
-        return jwtTokenUtils.generateToken(
-            authenticatedMemberId = memberId,
-            authorities = authorities,
-            baseDate = nowTime,
-            tokenType = AuthTokenType.ACCESS
-        )
+        return jwtTokenUtils.createNewAuthToken(refreshAuth)
     }
 }

@@ -10,7 +10,11 @@ import org.springframework.stereotype.Component
 @Component
 class AuthValidatorImpl(private val jwtTokenUtils: JwtTokenUtils) : AuthValidator {
 
-    // accessToken: 만료 / refreshToken: 유효 >> 해당 케이스만 통과
+    /**
+     * accessToken: 만료 / refreshToken: 유효 >> 해당 케이스만 통과
+     * (this function is deprecated because token validator logic changed / accessToken is useless)
+     */
+    @Deprecated("not used")
     override fun validateAuthTokens(accessToken: String, refreshToken: String) {
         // 각 토큰들에 대한 만료 체크
         val isAccessTokenExpired = jwtTokenUtils.checkTokenExpired(
