@@ -24,7 +24,10 @@ class JwtAuthenticationFilter(
         log.info { "[JwtAuthenticationFilter][${request.dispatcherType}] uri: ${request.requestURI}" }
 
         // 인증 헤더에 토큰값 없는 경우 pass
-        SecurityHelper.getAuthTokenFromRequest(httpRequest)?.let {
+        SecurityHelper.getAuthTokenFromRequest(
+            request = httpRequest,
+            tokenType = AuthTokenType.ACCESS
+        )?.let {
             jwtTokenUtils.getAuthentication(
                 authToken = it,
                 tokenType = AuthTokenType.ACCESS
