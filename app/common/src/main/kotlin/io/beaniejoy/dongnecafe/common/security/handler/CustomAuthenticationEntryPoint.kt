@@ -1,6 +1,6 @@
 package io.beaniejoy.dongnecafe.common.security.handler
 
-import io.beaniejoy.dongnecafe.common.security.helper.SecurityHelper
+import io.beaniejoy.dongnecafe.common.security.utils.SecurityHelper
 import io.beaniejoy.dongnecafe.domain.common.error.exception.auth.TokenExpiredException
 import io.beaniejoy.dongnecafe.domain.common.utils.security.AuthTokenType
 import io.beaniejoy.dongnecafe.domain.common.utils.security.JwtTokenUtils

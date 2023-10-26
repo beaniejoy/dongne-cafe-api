@@ -2,7 +2,7 @@ package io.beaniejoy.dongnecafe.app.common.interceptor
 
 import io.beaniejoy.dongnecafe.app.auth.model.request.AuthInputDto
 import io.beaniejoy.dongnecafe.app.common.annotation.RenewToken
-import io.beaniejoy.dongnecafe.common.security.helper.SecurityHelper
+import io.beaniejoy.dongnecafe.common.security.utils.SecurityHelper
 import io.beaniejoy.dongnecafe.domain.common.error.exception.auth.UnauthorizedMemberException
 import io.beaniejoy.dongnecafe.domain.common.utils.security.AuthTokenType
 import io.beaniejoy.dongnecafe.domain.common.utils.security.JwtTokenUtils

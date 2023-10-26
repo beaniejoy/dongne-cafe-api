@@ -4,7 +4,6 @@ import io.beaniejoy.dongnecafe.domain.auth.entity.AuthToken
 import io.beaniejoy.dongnecafe.domain.common.config.property.JwtTokenProperties
 import io.beaniejoy.dongnecafe.domain.common.error.exception.auth.UnauthorizedMemberException
 import io.beaniejoy.dongnecafe.domain.common.utils.security.SecurityConstant.JWT_AUTHORITIES_KEY
-import io.beaniejoy.dongnecafe.domain.common.utils.security.SecurityConstant.JWT_AUTHORITY_DELIMITER
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
@@ -18,7 +17,9 @@ import java.util.*
 
 @Component
 class JwtTokenUtils(private val jwtTokenProperties: JwtTokenProperties) {
-    companion object : KLogging()
+    companion object : KLogging() {
+        const val JWT_AUTHORITY_DELIMITER = ","
+    }
 
     /**
      * access, refresh token 신규 발급

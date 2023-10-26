@@ -29,9 +29,10 @@ enum class AuthTokenType(
         ;
 
         fun capitalize(): String {
-            return BEARER.name.replaceFirstChar {
-                if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
-            }
+            return this.name.lowercase()
+                .replaceFirstChar {
+                    if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+                }
         }
     }
 }

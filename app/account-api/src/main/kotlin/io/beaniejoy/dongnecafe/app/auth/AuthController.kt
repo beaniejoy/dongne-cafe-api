@@ -9,8 +9,11 @@ import io.beaniejoy.dongnecafe.app.auth.model.response.AuthOutputDtoMapper
 import io.beaniejoy.dongnecafe.app.auth.model.response.RenewAuthTokenResponse
 import io.beaniejoy.dongnecafe.app.common.annotation.RenewToken
 import io.beaniejoy.dongnecafe.common.response.ApplicationResponse
-import io.beaniejoy.dongnecafe.common.security.helper.SecurityHelper
+import io.beaniejoy.dongnecafe.common.response.utils.addSafeCookie
+import io.beaniejoy.dongnecafe.common.security.utils.SecurityHelper
 import io.beaniejoy.dongnecafe.domain.auth.service.AuthTokenService
+import io.beaniejoy.dongnecafe.domain.common.utils.security.AuthTokenType
+import org.springframework.http.HttpHeaders
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletResponse
@@ -23,11 +26,6 @@ class AuthController(
     private val authInputDtoMapper: AuthInputDtoMapper,
     private val authOutputDtoMapper: AuthOutputDtoMapper
 ) {
-
-    companion object {
-        const val APP_DOMAIN_NAME = "localhost"
-    }
-
     @PostMapping("/authenticate")
     fun signIn(
         @RequestBody signInRequest: SignInRequest,
@@ -38,14 +36,10 @@ class AuthController(
             password = signInRequest.password
         )
 
-        response.apply {
-            this.addCookie(
-                SecurityHelper.generateRefreshTokenCookie(
-                    refreshToken = registeredAuthToken.refreshToken,
-                    domain = APP_DOMAIN_NAME
-                )
-            )
-        }
+        addRefreshTokenCookie(
+            response = response,
+            refreshToken = registeredAuthToken.refreshToken
+        )
 
         return ApplicationResponse
             .success("success authenticate")
@@ -53,10 +47,10 @@ class AuthController(
     }
 
     @GetMapping("/check")
-    fun checkAuthenticated(@AuthenticationPrincipal principal: String?): ApplicationResponse<String> {
+    fun checkAuthenticated(@AuthenticationPrincipal memberId: String): ApplicationResponse<String> {
         return ApplicationResponse
             .success("authenticated")
-            .data(principal)
+            .data(memberId)
     }
 
     /**
@@ -72,17 +66,20 @@ class AuthController(
 
         val updatedAuthToken = authTokenService.renewToken(renewCommand)
 
-        response.apply {
-            this.addCookie(
-                SecurityHelper.generateRefreshTokenCookie(
-                    refreshToken = updatedAuthToken.refreshToken,
-                    domain = APP_DOMAIN_NAME
-                )
-            )
-        }
+        addRefreshTokenCookie(
+            response = response,
+            refreshToken = updatedAuthToken.refreshToken
+        )
 
         return ApplicationResponse
             .success()
             .data(RenewAuthTokenResponse.of(updatedAuthToken.accessToken))
+    }
+
+    private fun addRefreshTokenCookie(response: HttpServletResponse, refreshToken: String) {
+        response.addSafeCookie(
+            name = HttpHeaders.AUTHORIZATION,
+            value = SecurityHelper.getAuthTokenValue(AuthTokenType.REFRESH, refreshToken)
+        )
     }
 }

@@ -1,6 +1,6 @@
 package io.beaniejoy.dongnecafe.common.security.filter
 
-import io.beaniejoy.dongnecafe.common.security.helper.SecurityHelper
+import io.beaniejoy.dongnecafe.common.security.utils.SecurityHelper
 import io.beaniejoy.dongnecafe.domain.common.utils.security.AuthTokenType
 import io.beaniejoy.dongnecafe.domain.common.utils.security.JwtTokenUtils
 import mu.KotlinLogging

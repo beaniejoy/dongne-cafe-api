@@ -1,15 +1,17 @@
-package io.beaniejoy.dongnecafe.common.security.helper
+package io.beaniejoy.dongnecafe.common.security.utils
 
 import io.beaniejoy.dongnecafe.domain.common.error.constant.ErrorCode
 import io.beaniejoy.dongnecafe.domain.common.error.exception.BusinessException
 import io.beaniejoy.dongnecafe.domain.common.utils.security.AuthTokenType
-import io.beaniejoy.dongnecafe.domain.common.utils.security.SecurityConstant
 import org.springframework.http.HttpHeaders.AUTHORIZATION
-import javax.servlet.http.Cookie
+import java.net.URLDecoder
 import javax.servlet.http.HttpServletRequest
 
 class SecurityHelper {
+
     companion object {
+        private const val WHITESPACE = " "
+
         /**
          * 인증 토큰 획득(header or cookie)
          * Authorization : Bearer [ACCESS_TOKEN] / Refresh [REFRESH_TOKEN]
@@ -23,7 +25,7 @@ class SecurityHelper {
             val tokenValue = extractValueFromRequest(request, isOnlyCookie)
                 ?: return null
 
-            val splitBearer = tokenValue.split(SecurityConstant.WHITESPACE)
+            val splitBearer = tokenValue.split(WHITESPACE)
             if (splitBearer.first() != tokenType.getCapitalizedPrefix()) {
                 return null
             }
@@ -39,15 +41,19 @@ class SecurityHelper {
             val headerValue = if (isOnlyCookie.not()) request.getHeader(AUTHORIZATION) else null
 
             val cookieValue = request.cookies
-                .filter { it.name == AUTHORIZATION }
-                .also { authorizations ->
+                ?.filter { it.name == AUTHORIZATION }
+                ?.also { authorizations ->
                     // Invalid, if one more authorization values exists in cookie,
                     if (authorizations.size > 1) {
                         throw BusinessException(ErrorCode.AUTH_TOKEN_INVALID_REQUEST)
                     }
                 }
-                .firstOrNull()
+                ?.firstOrNull()
                 ?.value
+                ?.let {
+                    // decoding cookie value with UTF-8 charset
+                    URLDecoder.decode(it, Charsets.UTF_8)
+                }
 
             // if both values are null, auth token is not existed
             if (headerValue == null && cookieValue == null) {
@@ -57,15 +63,9 @@ class SecurityHelper {
             return headerValue ?: cookieValue
         }
 
-        fun generateRefreshTokenCookie(refreshToken: String, domain: String): Cookie {
-            return Cookie(
-                AUTHORIZATION,
-                "${AuthTokenType.REFRESH.getCapitalizedPrefix()}${SecurityConstant.WHITESPACE}$refreshToken"
-            ).apply {
-                this.domain = domain
-                this.secure = true
-                this.isHttpOnly = true
-            }
+        // ex) Refresh [auth_token]
+        fun getAuthTokenValue(tokenType: AuthTokenType, authToken: String): String {
+            return "${tokenType.getCapitalizedPrefix()}${WHITESPACE}$authToken"
         }
     }
 }
