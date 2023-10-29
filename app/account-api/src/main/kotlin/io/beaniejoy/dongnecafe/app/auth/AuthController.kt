@@ -7,9 +7,10 @@ import io.beaniejoy.dongnecafe.app.auth.model.request.SignInRequest
 import io.beaniejoy.dongnecafe.app.auth.model.response.AuthOutputDto
 import io.beaniejoy.dongnecafe.app.auth.model.response.AuthOutputDtoMapper
 import io.beaniejoy.dongnecafe.app.auth.model.response.RenewAuthTokenResponse
-import io.beaniejoy.dongnecafe.app.common.annotation.RenewToken
+import io.beaniejoy.dongnecafe.app.common.annotation.RenewTokenCookie
 import io.beaniejoy.dongnecafe.common.response.ApplicationResponse
 import io.beaniejoy.dongnecafe.common.response.utils.addSafeCookie
+import io.beaniejoy.dongnecafe.common.response.utils.deleteCookie
 import io.beaniejoy.dongnecafe.common.security.utils.SecurityHelper
 import io.beaniejoy.dongnecafe.domain.auth.service.AuthTokenService
 import io.beaniejoy.dongnecafe.domain.common.utils.security.AuthTokenType
@@ -26,6 +27,10 @@ class AuthController(
     private val authInputDtoMapper: AuthInputDtoMapper,
     private val authOutputDtoMapper: AuthOutputDtoMapper
 ) {
+    companion object {
+        const val AUTHORIZATION_HEADER = HttpHeaders.AUTHORIZATION
+    }
+
     @PostMapping("/authenticate")
     fun signIn(
         @RequestBody signInRequest: SignInRequest,
@@ -47,7 +52,9 @@ class AuthController(
     }
 
     @GetMapping("/check")
-    fun checkAuthenticated(@AuthenticationPrincipal memberId: String): ApplicationResponse<String> {
+    fun checkAuthenticated(
+        @AuthenticationPrincipal memberId: String
+    ): ApplicationResponse<String> {
         return ApplicationResponse
             .success("authenticated")
             .data(memberId)
@@ -55,16 +62,16 @@ class AuthController(
 
     /**
      * access token, refresh token 갱신
-     * (기존 refresh token으로 갱신)
+     * (cookie refresh token 으로 갱신)
      */
     @PostMapping("/token/renew")
     fun renewAccessToken(
-        @RenewToken resource: AuthInputDto.RenewAuthTokenRequest,
+        @RenewTokenCookie resource: AuthInputDto.SearchAuthTokenRequest,
         response: HttpServletResponse
     ): ApplicationResponse<RenewAuthTokenResponse> {
-        val renewCommand = authInputDtoMapper.of(resource)
+        val searchTokenCommand = authInputDtoMapper.of(resource)
 
-        val updatedAuthToken = authTokenService.renewToken(renewCommand)
+        val updatedAuthToken = authTokenService.renewToken(searchTokenCommand)
 
         addRefreshTokenCookie(
             response = response,
@@ -76,9 +83,33 @@ class AuthController(
             .data(RenewAuthTokenResponse.of(updatedAuthToken.accessToken))
     }
 
+    /**
+     * logout
+     * Authorization Header(access), Cookie(refresh) required
+     */
+    @PostMapping("/logout")
+    fun logout(
+        @AuthenticationPrincipal memberId: String,
+        @RenewTokenCookie resource: AuthInputDto.SearchAuthTokenRequest,
+        response: HttpServletResponse
+    ): ApplicationResponse<String> {
+        val searchTokenCommand = authInputDtoMapper.of(resource)
+
+        authTokenService.removeToken(
+            logoutMemberId = memberId.toLong(),
+            command = searchTokenCommand
+        )
+
+        response.deleteCookie(AUTHORIZATION_HEADER)
+
+        return ApplicationResponse
+            .success("logout")
+            .data(memberId)
+    }
+
     private fun addRefreshTokenCookie(response: HttpServletResponse, refreshToken: String) {
         response.addSafeCookie(
-            name = HttpHeaders.AUTHORIZATION,
+            name = AUTHORIZATION_HEADER,
             value = SecurityHelper.getAuthTokenValue(AuthTokenType.REFRESH, refreshToken)
         )
     }

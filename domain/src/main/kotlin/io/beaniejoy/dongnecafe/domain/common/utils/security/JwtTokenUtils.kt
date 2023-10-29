@@ -106,10 +106,10 @@ class JwtTokenUtils(private val jwtTokenProperties: JwtTokenProperties) {
                 .parseClaimsJws(authToken)
                 .body
         } catch (e: ExpiredJwtException) {
-            logger.info { "JWT access token expired. > Error: ${e.message}" }
+            logger.info { "JWT ${tokenType.name} token expired. > Error: ${e.message}" }
             null
         } catch (e: Exception) {
-            logger.info { "JWT access token invalid. > Error: ${e.message}" }
+            logger.info { "JWT ${tokenType.name} token invalid. > Error: ${e.message}" }
             null
         }
     }

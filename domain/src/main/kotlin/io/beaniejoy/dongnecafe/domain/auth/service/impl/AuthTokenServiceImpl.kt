@@ -5,6 +5,7 @@ import io.beaniejoy.dongnecafe.domain.auth.model.AuthCommand
 import io.beaniejoy.dongnecafe.domain.auth.model.AuthInfo
 import io.beaniejoy.dongnecafe.domain.auth.model.AuthInfoMapper
 import io.beaniejoy.dongnecafe.domain.auth.persistence.AuthReaderPort
+import io.beaniejoy.dongnecafe.domain.auth.persistence.AuthRemoverPort
 import io.beaniejoy.dongnecafe.domain.auth.persistence.AuthStorePort
 import io.beaniejoy.dongnecafe.domain.auth.service.AuthTokenService
 import io.beaniejoy.dongnecafe.domain.common.error.constant.ErrorCode
@@ -18,9 +19,10 @@ import org.springframework.stereotype.Service
 @Service
 class AuthTokenServiceImpl(
     private val jwtTokenUtils: JwtTokenUtils,
+    private val authInfoMapper: AuthInfoMapper,
     private val authReaderPort: AuthReaderPort,
     private val authStorePort: AuthStorePort,
-    private val authInfoMapper: AuthInfoMapper
+    private val authRemoverPort: AuthRemoverPort
 ) : AuthTokenService {
 
     companion object : KLogging()
@@ -35,7 +37,7 @@ class AuthTokenServiceImpl(
         return authInfoMapper.of(savedAuthToken)
     }
 
-    override fun renewToken(command: AuthCommand.RenewAuthToken): AuthInfo.RegisteredAuthToken {
+    override fun renewToken(command: AuthCommand.SearchAuthToken): AuthInfo.RegisteredAuthToken {
         val authToken = getValidAuthTokenEntity(
             memberId = command.memberId,
             refreshToken = command.refreshToken
@@ -48,9 +50,22 @@ class AuthTokenServiceImpl(
         return authInfoMapper.of(savedAuthToken)
     }
 
+    override fun removeToken(logoutMemberId: Long, command: AuthCommand.SearchAuthToken) {
+        if (logoutMemberId != command.memberId) {
+            throw BusinessException(ErrorCode.AUTH_TOKEN_INVALID_REQUEST)
+        }
+
+        val authToken = getValidAuthTokenEntity(
+            memberId = logoutMemberId,
+            refreshToken = command.refreshToken
+        )
+
+        authRemoverPort.delete(authToken)
+    }
+
     private fun getValidAuthTokenEntity(
         memberId: Long,
-        refreshToken: String
+        refreshToken: String?
     ): AuthToken {
         return authReaderPort.getAuthTokenByMemberId(memberId)
             ?.also { token ->

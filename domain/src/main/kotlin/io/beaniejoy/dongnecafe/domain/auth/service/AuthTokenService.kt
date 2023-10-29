@@ -17,5 +17,7 @@ interface AuthTokenService {
      * @param command AuthCommand.RenewAuthToken > accessToken(expired), refreshToken(valid)
      * @return String > accessToken(new token)
      */
-    fun renewToken(command: AuthCommand.RenewAuthToken): AuthInfo.RegisteredAuthToken
+    fun renewToken(command: AuthCommand.SearchAuthToken): AuthInfo.RegisteredAuthToken
+
+    fun removeToken(logoutMemberId: Long, command: AuthCommand.SearchAuthToken)
 }

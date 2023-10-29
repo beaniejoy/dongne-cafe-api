@@ -1,7 +1,7 @@
 package io.beaniejoy.dongnecafe.app.common.interceptor
 
 import io.beaniejoy.dongnecafe.app.auth.model.request.AuthInputDto
-import io.beaniejoy.dongnecafe.app.common.annotation.RenewToken
+import io.beaniejoy.dongnecafe.app.common.annotation.RenewTokenCookie
 import io.beaniejoy.dongnecafe.common.security.utils.SecurityHelper
 import io.beaniejoy.dongnecafe.domain.common.error.exception.auth.UnauthorizedMemberException
 import io.beaniejoy.dongnecafe.domain.common.utils.security.AuthTokenType
@@ -17,14 +17,14 @@ import org.springframework.web.method.support.ModelAndViewContainer
 import javax.servlet.http.HttpServletRequest
 
 @Component
-class RenewTokenResolver(
+class RefreshTokenCookieResolver(
     private val jwtTokenUtils: JwtTokenUtils
 ) : HandlerMethodArgumentResolver {
 
     companion object : KLogging()
 
     override fun supportsParameter(parameter: MethodParameter): Boolean {
-        return parameter.getParameterAnnotation(RenewToken::class.java) != null
+        return parameter.getParameterAnnotation(RenewTokenCookie::class.java) != null
     }
 
     override fun resolveArgument(
@@ -32,7 +32,7 @@ class RenewTokenResolver(
         mavContainer: ModelAndViewContainer?,
         webRequest: NativeWebRequest,
         binderFactory: WebDataBinderFactory?
-    ): AuthInputDto.RenewAuthTokenRequest {
+    ): AuthInputDto.SearchAuthTokenRequest {
         logger.info { "###### extract refresh token from cookie ######" }
 
         val refreshToken = SecurityHelper.getAuthTokenFromRequest(
@@ -47,7 +47,7 @@ class RenewTokenResolver(
         )?.getMemberId()
             ?: throw UnauthorizedMemberException("invalid refresh token")
 
-        return AuthInputDto.RenewAuthTokenRequest(
+        return AuthInputDto.SearchAuthTokenRequest(
             memberId = memberId,
             refreshToken = refreshToken
         )

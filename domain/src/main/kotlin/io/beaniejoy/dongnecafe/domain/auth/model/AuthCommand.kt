@@ -1,7 +1,7 @@
 package io.beaniejoy.dongnecafe.domain.auth.model
 
 class AuthCommand {
-    data class RenewAuthToken(
+    data class SearchAuthToken(
         val memberId: Long,
         val refreshToken: String
     )
