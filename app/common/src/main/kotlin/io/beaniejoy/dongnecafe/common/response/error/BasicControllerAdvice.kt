@@ -57,7 +57,7 @@ class BasicControllerAdvice {
             else -> ErrorCode.DEFAULT
         }
 
-        logger.error { "[${e::class.simpleName}] <ErrorCode>: ${errorCode.name}, <ErrorMessage>: ${e.message}" }
+        logger.info { "[${e::class.simpleName}] <ErrorCode>: ${errorCode.name}, <ErrorMessage>: ${e.message}" }
         e.printStackTrace()
 
         return ApplicationResponse.fail(errorCode = errorCode).build()

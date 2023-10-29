@@ -16,7 +16,10 @@ import io.beaniejoy.dongnecafe.domain.auth.service.AuthTokenService
 import io.beaniejoy.dongnecafe.domain.common.utils.security.AuthTokenType
 import org.springframework.http.HttpHeaders
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import javax.servlet.http.HttpServletResponse
 
 @RestController
@@ -49,15 +52,6 @@ class AuthController(
         return ApplicationResponse
             .success("success authenticate")
             .data(authOutputDtoMapper.of(registeredAuthToken))
-    }
-
-    @GetMapping("/check")
-    fun checkAuthenticated(
-        @AuthenticationPrincipal memberId: String
-    ): ApplicationResponse<String> {
-        return ApplicationResponse
-            .success("authenticated")
-            .data(memberId)
     }
 
     /**
