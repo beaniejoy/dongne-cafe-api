@@ -38,8 +38,10 @@ pipeline {
                     MIGRATION_WORKSPACE = "${WORKSPACE}/flyway"
 
                     // ansible playbook
+                    SCRIPT_ANSIBLE_DEPLOY_REPO = "${JENKINS_HOME}/workspace/SCRIPT_ansible-deploy"
+
                     ANSIBLE_INVENTORY = "${HOME}/ansible/inventory"
-                    ANSIBLE_PLAYBOOK = "${WORKSPACE}/scripts/deploy/${PROJECT_NAME}.yml"
+                    ANSIBLE_PLAYBOOK = "${SCRIPT_ANSIBLE_DEPLOY_REPO}/${PROJECT_NAME}.yml"
 
                     // credentials info
                     def secrets = [
