@@ -3,31 +3,30 @@ package io.beaniejoy.dongnecafe.domain.auth.entity
 import io.beaniejoy.dongnecafe.domain.common.entity.BaseTimeEntity
 import io.beaniejoy.dongnecafe.domain.common.error.constant.ErrorCode
 import io.beaniejoy.dongnecafe.domain.common.error.exception.BusinessException
-import io.beaniejoy.dongnecafe.domain.member.entity.Member
 import org.springframework.data.redis.core.RedisHash
-import org.springframework.data.redis.core.index.Indexed
-import javax.persistence.Entity
+import org.springframework.data.redis.core.TimeToLive
 import javax.persistence.Id
 
-@Entity
 @RedisHash("auth_tokens")
 class AuthToken protected constructor(
     id: Long,
     accessToken: String,
-    refreshToken: String
+    refreshToken: String,
+    expiration: Long
 ) : BaseTimeEntity() {
 
-    // TODO: 불필요한 key 값이 생김 (하나의 auth_token에 대해서 2개의 key가 생기는 셈)
-    // @Id 없애도 되는지도 볼 것, @Id하고 필드이름하고 똑같아야 하는 것인지도 찾아볼 것
     @Id
     var id: Long = id
         protected set
 
-    @Indexed
     var accessToken: String = accessToken
         protected set
 
     var refreshToken: String = refreshToken
+        protected set
+
+    @TimeToLive
+    var expiration: Long = expiration
         protected set
 
     init {
@@ -35,27 +34,25 @@ class AuthToken protected constructor(
     }
 
     companion object {
+        // JWT 토큰 설정된 것보다 여유 있게 캐시 설정
+        private const val EXTRA_EXPIRATION_SEC = 5
+
         fun createEntity(
-            member: Member,
+            memberId: Long,
             accessToken: String,
-            refreshToken: String
+            refreshToken: String,
+            expiration: Long
         ): AuthToken {
             return AuthToken(
+                id = memberId,
                 accessToken = accessToken,
                 refreshToken = refreshToken,
-                id = member.id
+                expiration = expiration + EXTRA_EXPIRATION_SEC
             )
         }
     }
 
-    fun updateTokens(accessToken: String, refreshToken: String) {
-        validateTokens(accessToken, refreshToken)
-
-        this.accessToken = accessToken
-        this.refreshToken = refreshToken
-    }
-
-    fun updateAccessToken(accessToken: String) {
+    fun updateTokens(accessToken: String) {
         validateTokens(accessToken, this.refreshToken)
 
         this.accessToken = accessToken

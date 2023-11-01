@@ -20,6 +20,6 @@ class UserDetailsServiceImpl(
         return memberReaderPort.getMemberByEmail(email)?.let {
             logger.info { "[LOAD MEMBER] email: ${it.email}, role: ${it.roleType}, activated: ${it.isActivated()}" }
             SecurityUser.of(it)
-        } ?: throw UsernameNotFoundException(ErrorCode.AUTH_MEMBER_NOT_FOUND.name)
+        } ?: throw UsernameNotFoundException(ErrorCode.MEMBER_NOT_FOUND.name)
     }
 }

@@ -1,4 +1,4 @@
-package io.beaniejoy.dongnecafe.app.config
+package io.beaniejoy.dongnecafe.app.common.config
 
 import io.beaniejoy.dongnecafe.common.security.config.JwtAuthenticationConfigurer
 import io.beaniejoy.dongnecafe.common.security.handler.CustomAccessDeniedHandler
@@ -36,7 +36,7 @@ class SecurityConfig {
             "/error",
             "/auth/members/join",
             "/auth/authenticate",
-            "/auth/token/refresh"
+            "/auth/token/renew"
         )
 
         // resource urls

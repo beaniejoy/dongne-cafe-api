@@ -14,8 +14,10 @@ interface AuthTokenService {
 
     /**
      * refresh only access token (not refresh token) and update AuthToken Entity
-     * @param command AuthCommand.RefreshAuthToken > accessToken(expired), refreshToken(valid)
+     * @param command AuthCommand.RenewAuthToken > accessToken(expired), refreshToken(valid)
      * @return String > accessToken(new token)
      */
-    fun refreshToken(command: AuthCommand.RefreshAuthToken): String
+    fun renewToken(command: AuthCommand.SearchAuthToken): AuthInfo.RegisteredAuthToken
+
+    fun removeToken(logoutMemberId: Long, command: AuthCommand.SearchAuthToken)
 }
