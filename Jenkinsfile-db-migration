@@ -13,12 +13,13 @@ def executeFlywayRunner(stage) {
         return
     }
 
-    flywayrunner installationName: 'flyway-jenkins',
-            flywayCommand: "$stage".toLowerCase(),
-            commandLineArgs: "-configFiles=${MIGRATION_WORKSPACE}/flyway-${PROJECT_PROFILE}.conf",
-            credentialsId: "VAULT_DB_CONNECTION_${PROJECT_PROFILE.toString().toUpperCase()}",
-            url: "${JDBC_URL}",
-            locations: "filesystem:${MIGRATION_WORKSPACE}/migration"
+    sh """
+        ./gradlew clean :db:flyway${stage.name().capitalize()} \
+            -Dprofile=${PROJECT_PROFILE} \
+            -Dflyway.url='${DB_URL}' \
+            -Dflyway.uesr='${DB_USERNAME}' \
+            -Dflyway.password='${DB_PASSWORD}'
+    """
 }
 
 pipeline {
@@ -54,13 +55,17 @@ pipeline {
                             path: "secret/dongne/${PROJECT_PROFILE}",
                             engineVersion: 2,
                             secretValues: [
-                                [envVar: 'jdbcUrl', vaultKey: 'spring.datasource.hikari.jdbc-url']
+                                [envVar: 'jdbcUrl', vaultKey: 'spring.datasource.hikari.jdbc-url'],
+                                [envVar: 'username', vaultKey: 'spring.datasource.hikari.username'],
+                                [envVar: 'password', vaultKey: 'spring.datasource.hikari.password']
                             ]
                         ],
                     ]
 
                     withVault([vaultSecrets: secrets]) {
-                        JDBC_URL = "${jdbcUrl}"
+                        DB_URL = "${jdbcUrl}"
+                        DB_USERNAME = "${username}"
+                        DB_PASSWORD = "${password}"
                     }
                 }
             }

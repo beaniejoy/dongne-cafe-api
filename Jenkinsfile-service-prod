@@ -89,9 +89,9 @@ pipeline {
                 sh """
                     ./gradlew clean :db:flywayValidate \
                         -Dprofile=${PROJECT_PROFILE} \
-                        -Dflyway.url=${DB_URL} \
-                        -Dflyway.username=${DB_USERNAME} \
-                        -Dflyway.password=${DB_PASSWORD}
+                        -Dflyway.url='${DB_URL}' \
+                        -Dflyway.uesr='${DB_USERNAME}' \
+                        -Dflyway.password='${DB_PASSWORD}'
                 """
             }
         }

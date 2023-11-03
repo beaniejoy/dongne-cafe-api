@@ -1,4 +1,5 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
+import plugin.flyway.FlywayConfig
 
 val jar: Jar by tasks
 val bootJar: BootJar by tasks
@@ -39,9 +40,6 @@ flyway {
     val flywayConfig = FlywayConfig.init()
 
     baselineDescription = "Start Flyway Migration!"
-    url = flywayConfig.getConnection().url
-    user = flywayConfig.getConnection().username
-    password = flywayConfig.getConnection().password
     baselineOnMigrate = true
     baselineVersion = "000"
     locations = flywayConfig.getLocations()

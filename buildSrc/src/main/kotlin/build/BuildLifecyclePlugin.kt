@@ -1,4 +1,4 @@
-package plugin
+package build
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project

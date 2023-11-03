@@ -3,7 +3,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 import org.jlleitschuh.gradle.ktlint.tasks.GenerateReportsTask
-import plugin.BuildLifecyclePlugin
+import build.BuildLifecyclePlugin
 import task.test.TestContainer
 import task.test.TestLoggingUtils
 import task.test.TestSummary
