@@ -17,7 +17,7 @@ def executeFlywayRunner(stage) {
         ./gradlew clean :db:flyway${stage.name().capitalize()} \
             -Dprofile=${PROJECT_PROFILE} \
             -Dflyway.url='${DB_URL}' \
-            -Dflyway.uesr='${DB_USERNAME}' \
+            -Dflyway.user='${DB_USERNAME}' \
             -Dflyway.password='${DB_PASSWORD}'
     """
 }
