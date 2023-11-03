@@ -1,6 +1,10 @@
 enum Stage {
     ALL, INFO, MIGRATE, VALIDATE, REPAIR;
     Stage() {}
+
+    def capitalize() {
+        return this.name().substring(0, 1) + this.name().substring(1).toLowerCase()
+    }
 }
 
 def executeConditionAllOr(stage) {
@@ -14,7 +18,7 @@ def executeFlywayRunner(stage) {
     }
 
     sh """
-        ./gradlew clean :db:flyway${stage.name().capitalize()} \
+        ./gradlew clean :db:flyway${stage.capitalize()} \
             -Dprofile=${PROJECT_PROFILE} \
             -Dflyway.url='${DB_URL}' \
             -Dflyway.user='${DB_USERNAME}' \
