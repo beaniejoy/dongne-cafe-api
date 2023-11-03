@@ -87,7 +87,7 @@ pipeline {
             }
             steps {
                 sh """
-                    ./gradlew clean :db:gradlewValidate \
+                    ./gradlew clean :db:flywayValidate \
                         -Dconfig=${PROJECT_PROFILE} \
                         -Dflyway.url=${DB_URL} \
                         -Dflyway.username=${DB_USERNAME} \
