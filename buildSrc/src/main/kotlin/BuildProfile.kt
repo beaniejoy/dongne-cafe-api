@@ -4,8 +4,10 @@ class BuildProfile private constructor(
     private val activeProfile: Profile
 ) {
     companion object {
+        private const val PROFILE_KEY = "profile"
+
         fun init(): BuildProfile {
-            val activeProfile = System.getProperty("profile")?.let {
+            val activeProfile = System.getProperty(PROFILE_KEY)?.let {
                 Profile.of(it)
             } ?: Profile.NONE
 
