@@ -86,15 +86,11 @@ pipeline {
                 expression { executeConditionAllOr(Stage.DB_VALIDATE) }
             }
             steps {
-                script {
-                    sh script: """
-                        ./gradlew clean :db:flywayValidate \
-                            -Dconfig=${PROJECT_PROFILE} \
-                            -Dflyway.url=${DB_URL} \
-                            -Dflyway.username=${DB_USERNAME} \
-                            -Dflyway.password=${DB_PASSWORD}
-                    """, returnStdout: true
-                }
+                sh "./gradlew clean :db:flywayValidate " +
+                        "-Dconfig=${PROJECT_PROFILE} " +
+                        "-Dflyway.url=${DB_URL} " +
+                        "-Dflyway.username=${DB_USERNAME} " +
+                        "-Dflyway.password=${DB_PASSWORD}"
             }
         }
 
