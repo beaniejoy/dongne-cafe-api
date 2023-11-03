@@ -86,7 +86,7 @@ pipeline {
                 expression { executeConditionAllOr(Stage.DB_VALIDATE) }
             }
             steps {
-                sh "./gradlew clean"
+                sh "./gradlew clean :db:gradlewValidate -Dconfig=prod"
             }
         }
 
