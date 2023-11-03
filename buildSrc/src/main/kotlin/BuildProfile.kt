@@ -26,7 +26,10 @@ class BuildProfile private constructor(
     }
 
     enum class Profile(val profileName: String) {
-        NONE("none"), LOCAL("local"), PROD("prod");
+        NONE("none"),
+        LOCAL("local"),
+        PROD("prod")
+        ;
 
         companion object {
             fun of(profileName: String): Profile {
