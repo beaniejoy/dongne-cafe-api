@@ -1,7 +1,7 @@
 jwt:
   access:
     secret-key: dGVzdF9kb25nbmVfY2FmZV9wcm9qZWN0X2FjY2Vzc19zZWNyZXRfa2V5Cg==
-    validity-time-sec: 60
+    validity-time-in-sec: 60
   refresh:
     secret-key: dGVzdF9kb25nbmVfY2FmZV9wcm9qZWN0X3JlZnJlc2hfc2VjcmV0X2tleQo=
-    validity-time-sec: 3600
+    validity-time-in-sec: 3600

@@ -26,8 +26,9 @@ spring:
     jpa:
       repositories:
         enabled: false
+
   flyway:
-    locations:
+    enabled: false
 
 server:
   shutdown: graceful
