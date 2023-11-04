@@ -147,6 +147,17 @@ pipeline {
             }
         }
 
+        /**
+         * >> base tag
+         * - `init`: when initial server setup
+         * - `nginx`: only nginx setup
+         * - `setup`: make directory for deploying
+         * - `deploy`: only deploying
+         * >> deploy strategy tag(when deploying)
+         * - `rolling_update`
+         * - `blue_green`
+         * - `blue_green_init`
+         */
         stage('Run Application with Ansible') {
             when {
                 expression { executeConditionAllOr(Stage.RUN_APP) }
