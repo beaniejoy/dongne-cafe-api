@@ -3,7 +3,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 import org.jlleitschuh.gradle.ktlint.tasks.GenerateReportsTask
-import plugin.BuildLifecyclePlugin
+import build.BuildLifecyclePlugin
 import task.test.TestContainer
 import task.test.TestLoggingUtils
 import task.test.TestSummary
@@ -11,10 +11,10 @@ import task.test.TestSummary
 plugins {
     id(Plugins.Spring.BOOT).version(Version.Spring.BOOT)
     id(Plugins.Spring.DEPENDENCY_MANAGEMENT).version(Version.Spring.DEPENDENCY_MANAGEMENT).apply(false)
-    kotlin(Plugins.Kotlin.JVM).version(Version.KOTLIN)
-    kotlin(Plugins.Kotlin.PLUGIN_SPRING).version(Version.KOTLIN).apply(false)
-    kotlin(Plugins.Kotlin.PLUGIN_JPA).version(Version.KOTLIN).apply(false)
-    kotlin(Plugins.Kotlin.KAPT).version(Version.KOTLIN)
+    kotlin(Plugins.Kotlin.JVM)
+    kotlin(Plugins.Kotlin.PLUGIN_SPRING).apply(false)
+    kotlin(Plugins.Kotlin.PLUGIN_JPA).apply(false)
+    kotlin(Plugins.Kotlin.KAPT)
 
     id(Plugins.KTLINT).version(Version.KtLint.PLUGIN)
 }

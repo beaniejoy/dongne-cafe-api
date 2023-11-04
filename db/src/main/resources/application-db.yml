@@ -22,11 +22,13 @@ spring:
         format_sql: true
         show-sql: false
     open-in-view: false
-
   data:
     jpa:
       repositories:
         enabled: false
+
+  flyway:
+    enabled: false
 
 server:
   shutdown: graceful

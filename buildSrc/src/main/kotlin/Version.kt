@@ -18,6 +18,8 @@ object Version {
         const val MYSQL = "8.0.32"
 
         const val MAPSTRUCT = "1.5.5.Final"
+
+        const val FLYWAY = "9.8.3"
     }
 
     object KtLint {

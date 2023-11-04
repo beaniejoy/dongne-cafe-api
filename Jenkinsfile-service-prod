@@ -37,7 +37,7 @@ pipeline {
                     // flyway migration
                     MIGRATION_WORKSPACE = "${WORKSPACE}/flyway"
 
-                    // ansible playbook
+                    // ansible playbook repo
                     SCRIPT_ANSIBLE_DEPLOY_REPO = "${JENKINS_HOME}/workspace/SCRIPT_ansible-deploy"
 
                     ANSIBLE_INVENTORY = "${HOME}/ansible/inventory"
@@ -49,7 +49,9 @@ pipeline {
                             path: "secret/dongne/${PROJECT_PROFILE}",
                             engineVersion: 2,
                             secretValues: [
-                                [envVar: 'jdbcUrl', vaultKey: 'spring.datasource.hikari.jdbc-url']
+                                [envVar: 'jdbcUrl', vaultKey: 'spring.datasource.hikari.jdbc-url'],
+                                [envVar: 'username', vaultKey: 'spring.datasource.hikari.username'],
+                                [envVar: 'password', vaultKey: 'spring.datasource.hikari.password']
                             ]
                         ],
                         [
@@ -69,7 +71,9 @@ pipeline {
                             timeout: 10
                         ]
                     ]) {
-                        JDBC_URL = "${jdbcUrl}"
+                        DB_URL = "${jdbcUrl}"
+                        DB_USERNAME = "${username}"
+                        DB_PASSWORD = "${password}"
                         VAULT_ADDR = "${vaultAddr}"
                         VAULT_TOKEN = "${vaultToken}"
                     }
@@ -82,12 +86,13 @@ pipeline {
                 expression { executeConditionAllOr(Stage.DB_VALIDATE) }
             }
             steps {
-                flywayrunner installationName: 'flyway-jenkins',
-                        flywayCommand: 'info validate',
-                        commandLineArgs: "-configFiles=${MIGRATION_WORKSPACE}/flyway-${PROJECT_PROFILE}.conf",
-                        credentialsId: "VAULT_DB_CONNECTION_${PROJECT_PROFILE.toString().toUpperCase()}",
-                        url: "${JDBC_URL}",
-                        locations: "filesystem:${MIGRATION_WORKSPACE}/migration"
+                sh """
+                    ./gradlew clean :db:flywayValidate \
+                        -Dprofile=${PROJECT_PROFILE} \
+                        -Dflyway.url='${DB_URL}' \
+                        -Dflyway.user='${DB_USERNAME}' \
+                        -Dflyway.password='${DB_PASSWORD}'
+                """
             }
         }
 
@@ -142,6 +147,17 @@ pipeline {
             }
         }
 
+        /**
+         * >> base tag
+         * - `init`: when initial server setup
+         * - `nginx`: only nginx setup
+         * - `setup`: make directory for deploying
+         * - `deploy`: only deploying
+         * >> deploy strategy tag(when deploying)
+         * - `rolling_update`
+         * - `blue_green`
+         * - `blue_green_init`
+         */
         stage('Run Application with Ansible') {
             when {
                 expression { executeConditionAllOr(Stage.RUN_APP) }
@@ -151,7 +167,7 @@ pipeline {
                         installation: 'ansible',
                         playbook: "${ANSIBLE_PLAYBOOK}",
                         inventory: "${ANSIBLE_INVENTORY}",
-                        tags: 'deploy,blue_green',
+                        tags: 'init,blue_green_init',
                         extraVars: [
                             module_name: "${PROJECT_NAME}",
                             spring_profile: "${PROJECT_PROFILE}",

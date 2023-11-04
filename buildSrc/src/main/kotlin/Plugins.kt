@@ -19,4 +19,5 @@ object Plugins {
     }
 
     const val KTLINT = "org.jlleitschuh.gradle.ktlint"
+    const val FLYWAY = "org.flywaydb.flyway"
 }

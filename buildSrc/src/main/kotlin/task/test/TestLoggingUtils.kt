@@ -5,9 +5,9 @@ import org.gradle.api.tasks.testing.TestResult
 
 class TestLoggingUtils {
     companion object {
-        const val ANSI_RESET = "\u001B[0m"
-        const val ANSI_GREEN = "\u001B[32m"
-        const val ANSI_RED = "\u001B[31m"
+        private const val ANSI_RESET = "\u001B[0m"
+        private const val ANSI_GREEN = "\u001B[32m"
+        private const val ANSI_RED = "\u001B[31m"
 
         fun printTotalResult(summary: TestSummary?) {
             if (summary == null) return
@@ -49,7 +49,7 @@ class TestLoggingUtils {
 
             return resultType to if (color.isNotEmpty()) {
                 "${color}${resultType}$ANSI_RESET"
-            } else "${resultType}"
+            } else "$resultType"
         }
     }
 }
