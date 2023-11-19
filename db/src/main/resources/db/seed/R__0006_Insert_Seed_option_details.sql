@@ -19,7 +19,12 @@ BEGIN
         INSERT IGNORE INTO `option_details` (name, extra_price, created_at, created_by, updated_at, updated_by, menu_option_id)
         VALUES ('VENTI', FLOOR(RAND() * 3 + 1) * 1000, now(), 'system', now(), 'system', var_menu_option_id);
 
-        SET i = i + 1;
+        INSERT IGNORE INTO `option_details` (name, extra_price, created_at, created_by, updated_at, updated_by, menu_option_id)
+        VALUES ('HOT', 0, now(), 'system', now(), 'system', var_menu_option_id + 1);
+       INSERT IGNORE INTO `option_details` (name, extra_price, created_at, created_by, updated_at, updated_by, menu_option_id)
+        VALUES ('ICE', 500, now(), 'system', now(), 'system', var_menu_option_id + 1);
+
+        SET i = i + 2;
     END WHILE;
 END$$
 DELIMITER ;

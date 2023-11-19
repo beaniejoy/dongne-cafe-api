@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# !!!!!!!! DEPRECATED !!!!!!!!
+# !!!!!!!! DEPRECATED !!!!!!!!
+
 # ctrl + c handling
 trap "echo -e '\nThe script is terminated'; exit" SIGINT
 

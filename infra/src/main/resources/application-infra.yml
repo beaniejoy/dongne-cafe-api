@@ -20,7 +20,9 @@ spring:
 spring:
   config:
     activate:
-      on-profile: test
+      on-profile:
+        - local
+        - test
 
   cloud:
     vault:
