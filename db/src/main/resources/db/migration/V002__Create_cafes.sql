@@ -1,5 +1,5 @@
-CREATE TABLE `cafe` (
-    `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '카페 ID',
+CREATE TABLE `cafes` (
+    `cafe_id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '카페 ID',
     `name` varchar(20) NOT NULL COMMENT '카페명',
     `address` varchar(100) NOT NULL COMMENT '카페 주소',
     `phone_number` varchar(11) NOT NULL COMMENT '카페 전화번호',
@@ -9,5 +9,6 @@ CREATE TABLE `cafe` (
     `created_by` varchar(320) NOT NULL COMMENT '카페 등록자',
     `updated_at` datetime NULL COMMENT '카페 변경날짜',
     `updated_by` varchar(320) NULL COMMENT '카페 변경자',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`cafe_id`),
+    UNIQUE KEY `uk_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

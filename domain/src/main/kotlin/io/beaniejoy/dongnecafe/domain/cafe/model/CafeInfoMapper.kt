@@ -1,6 +1,7 @@
 package io.beaniejoy.dongnecafe.domain.cafe.model
 
 import io.beaniejoy.dongnecafe.domain.cafe.entity.*
+import io.beaniejoy.dongnecafe.domain.cafe.entity.image.CafeImage
 import org.mapstruct.*
 
 @Mapper(
