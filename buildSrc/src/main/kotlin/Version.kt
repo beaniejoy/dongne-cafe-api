@@ -4,6 +4,7 @@ object Version {
     const val PROJECT_VERSION = "0.0.1-SNAPSHOT"
 
     val JAVA = JavaVersion.VERSION_17
+    val KOTLIN = "1.8.22"
 
     object Spring {
         // spring boot v3
