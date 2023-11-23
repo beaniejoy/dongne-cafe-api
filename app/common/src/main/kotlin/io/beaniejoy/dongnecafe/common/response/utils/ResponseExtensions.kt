@@ -1,8 +1,8 @@
 package io.beaniejoy.dongnecafe.common.response.utils
 
+import jakarta.servlet.http.Cookie
+import jakarta.servlet.http.HttpServletResponse
 import java.net.URLEncoder
-import javax.servlet.http.Cookie
-import javax.servlet.http.HttpServletResponse
 
 private const val DEFAULT_COOKIE_PATH = "/"
 

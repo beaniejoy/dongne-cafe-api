@@ -1,9 +1,9 @@
 package io.beaniejoy.dongnecafe.app.cafe.model.request
 
 import io.beaniejoy.dongnecafe.domain.cafe.entity.Cafe
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.Pattern
 import java.math.BigDecimal
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.Pattern
 
 class CafeInputDto {
     // ### Request Body ###

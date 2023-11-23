@@ -2,9 +2,9 @@ package io.beaniejoy.dongnecafe.common.logging
 
 import com.google.gson.Gson
 import io.beaniejoy.dongnecafe.common.logging.constant.HttpClientIp
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.web.util.ContentCachingRequestWrapper
 import org.springframework.web.util.ContentCachingResponseWrapper
-import javax.servlet.http.HttpServletRequest
 
 fun HttpServletRequest.getRequestHeaders(): String? {
     val request = this

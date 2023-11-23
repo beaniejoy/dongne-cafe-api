@@ -1,11 +1,10 @@
 package io.beaniejoy.dongnecafe.domain.auth.entity
 
-import io.beaniejoy.dongnecafe.domain.common.entity.BaseTimeEntity
 import io.beaniejoy.dongnecafe.domain.common.error.constant.ErrorCode
 import io.beaniejoy.dongnecafe.domain.common.error.exception.BusinessException
+import jakarta.persistence.Id
 import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.TimeToLive
-import javax.persistence.Id
 
 @RedisHash("auth_tokens")
 class AuthToken protected constructor(
@@ -13,7 +12,7 @@ class AuthToken protected constructor(
     accessToken: String,
     refreshToken: String,
     expiration: Long
-) : BaseTimeEntity() {
+) {
 
     @Id
     var id: Long = id

@@ -6,19 +6,19 @@ import io.beaniejoy.dongnecafe.app.cafe.model.response.CafeOutputDto
 import io.beaniejoy.dongnecafe.app.cafe.model.response.CafeOutputDtoMapper
 import io.beaniejoy.dongnecafe.common.response.ApplicationResponse
 import io.beaniejoy.dongnecafe.domain.cafe.service.CafeService
+import jakarta.validation.Valid
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
 import org.springframework.web.bind.annotation.*
-import javax.validation.Valid
 
 @RestController
 @RequestMapping("/api/cafes")
 class CafeController(
     private val cafeService: CafeService,
     private val cafeInputDtoMapper: CafeInputDtoMapper,
-    private val cafeOutputDtoMapper: CafeOutputDtoMapper,
+    private val cafeOutputDtoMapper: CafeOutputDtoMapper
 ) {
     /**
      * 신규 카페 생성

@@ -3,8 +3,8 @@ package io.beaniejoy.dongnecafe.domain.member.entity
 import io.beaniejoy.dongnecafe.domain.common.entity.BaseEntity
 import io.beaniejoy.dongnecafe.domain.member.constant.RoleType
 import io.beaniejoy.dongnecafe.domain.member.model.MemberCommand
+import jakarta.persistence.*
 import org.springframework.security.crypto.password.PasswordEncoder
-import javax.persistence.*
 
 @Entity
 @Table(name = "members")

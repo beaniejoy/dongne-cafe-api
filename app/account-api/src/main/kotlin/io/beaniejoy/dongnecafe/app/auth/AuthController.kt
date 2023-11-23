@@ -7,20 +7,20 @@ import io.beaniejoy.dongnecafe.app.auth.model.request.SignInRequest
 import io.beaniejoy.dongnecafe.app.auth.model.response.AuthOutputDto
 import io.beaniejoy.dongnecafe.app.auth.model.response.AuthOutputDtoMapper
 import io.beaniejoy.dongnecafe.app.auth.model.response.RenewAuthTokenResponse
-import io.beaniejoy.dongnecafe.app.common.annotation.RenewTokenCookie
+import io.beaniejoy.dongnecafe.app.common.annotation.RefreshTokenCookie
 import io.beaniejoy.dongnecafe.common.response.ApplicationResponse
 import io.beaniejoy.dongnecafe.common.response.utils.addSafeCookie
 import io.beaniejoy.dongnecafe.common.response.utils.deleteCookie
 import io.beaniejoy.dongnecafe.common.security.utils.SecurityHelper
 import io.beaniejoy.dongnecafe.domain.auth.service.AuthTokenService
 import io.beaniejoy.dongnecafe.domain.common.utils.security.AuthTokenType
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpHeaders
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import javax.servlet.http.HttpServletResponse
 
 @RestController
 @RequestMapping("/auth")
@@ -56,11 +56,12 @@ class AuthController(
 
     /**
      * access token, refresh token 갱신
-     * (cookie refresh token 으로 갱신)
+     * - cookie refresh token 으로 갱신
+     * - access, refresh 둘 다 갱신(access > response body / refresh > cookie
      */
     @PostMapping("/token/renew")
     fun renewAccessToken(
-        @RenewTokenCookie resource: AuthInputDto.SearchAuthTokenRequest,
+        @RefreshTokenCookie resource: AuthInputDto.SearchAuthTokenRequest,
         response: HttpServletResponse
     ): ApplicationResponse<RenewAuthTokenResponse> {
         val searchTokenCommand = authInputDtoMapper.of(resource)
@@ -84,7 +85,7 @@ class AuthController(
     @PostMapping("/logout")
     fun logout(
         @AuthenticationPrincipal memberId: String,
-        @RenewTokenCookie resource: AuthInputDto.SearchAuthTokenRequest,
+        @RefreshTokenCookie resource: AuthInputDto.SearchAuthTokenRequest,
         response: HttpServletResponse
     ): ApplicationResponse<String> {
         val searchTokenCommand = authInputDtoMapper.of(resource)
