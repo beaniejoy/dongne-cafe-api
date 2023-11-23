@@ -9,7 +9,7 @@ import jakarta.persistence.*
 
 @Entity
 @Table(name = "cafe_menu_categories")
-class CafeMenuCategory(
+class CafeMenuCategory protected constructor(
     name: String,
     description: String?
 ) : BaseEntity() {
