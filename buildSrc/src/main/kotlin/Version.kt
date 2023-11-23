@@ -2,13 +2,13 @@ import org.gradle.api.JavaVersion
 
 object Version {
     const val PROJECT_VERSION = "0.0.1-SNAPSHOT"
-    const val KOTLIN = "1.8.21"
 
     val JAVA = JavaVersion.VERSION_17
 
     object Spring {
-        const val BOOT = "2.7.0"
-        const val DEPENDENCY_MANAGEMENT = "1.0.14.RELEASE"
+        // spring boot v3
+        const val BOOT = "3.1.5"
+        const val DEPENDENCY_MANAGEMENT = "1.1.3"
     }
 
     object Deps {

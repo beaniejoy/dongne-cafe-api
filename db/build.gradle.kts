@@ -17,7 +17,7 @@ buildscript {
 }
 
 plugins {
-    kotlin(Plugins.Kotlin.PLUGIN_JPA).version(Version.KOTLIN)
+    kotlin(Plugins.Kotlin.PLUGIN_JPA)
     id(Plugins.FLYWAY).version(Version.Deps.FLYWAY)
 }
 
