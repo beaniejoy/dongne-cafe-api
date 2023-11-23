@@ -1,10 +1,10 @@
 package io.beaniejoy.dongnecafe.db.cafe.adapter
 
-import io.beaniejoy.dongnecafe.domain.common.error.constant.ErrorCode
-import io.beaniejoy.dongnecafe.domain.common.error.exception.BusinessException
 import io.beaniejoy.dongnecafe.db.cafe.repository.CafeRepository
 import io.beaniejoy.dongnecafe.domain.cafe.entity.Cafe
 import io.beaniejoy.dongnecafe.domain.cafe.persistence.CafeReaderPort
+import io.beaniejoy.dongnecafe.domain.common.error.constant.ErrorCode
+import io.beaniejoy.dongnecafe.domain.common.error.exception.BusinessException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull

@@ -1,3 +1,5 @@
+package build
+
 import java.lang.IllegalArgumentException
 
 class BuildProfile private constructor(

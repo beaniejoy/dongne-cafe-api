@@ -5,10 +5,8 @@ import io.beaniejoy.dongnecafe.db.cafe.repository.MenuOptionRepository
 import io.beaniejoy.dongnecafe.db.cafe.repository.OptionDetailRepository
 import io.beaniejoy.dongnecafe.domain.cafe.persistence.CafeSeriesRemoverPort
 import org.springframework.stereotype.Component
-import org.springframework.transaction.annotation.Transactional
 
 @Component
-@Transactional
 class CafeSeriesRemoverAdapter(
     private val cafeMenuRepository: CafeMenuRepository,
     private val menuOptionRepository: MenuOptionRepository,

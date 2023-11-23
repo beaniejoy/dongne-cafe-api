@@ -81,8 +81,6 @@ class AuthTokenServiceImpl(
 
     // generate new access token from refresh token
     private fun generateNewAuthToken(refreshToken: String): AuthToken {
-        // refresh token already checked being not expired when validating.
-        // so, if authentication in refresh is null, it is not valid token
         val refreshAuth = jwtTokenUtils.getAuthentication(refreshToken, AuthTokenType.REFRESH)
             ?: throw BusinessException(
                 errorCode = ErrorCode.AUTH_TOKEN_INVALID_REQUEST,

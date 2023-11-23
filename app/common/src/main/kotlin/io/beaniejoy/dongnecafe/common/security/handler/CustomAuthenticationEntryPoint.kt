@@ -4,13 +4,13 @@ import io.beaniejoy.dongnecafe.common.security.utils.SecurityHelper
 import io.beaniejoy.dongnecafe.domain.common.error.exception.auth.TokenExpiredException
 import io.beaniejoy.dongnecafe.domain.common.utils.security.AuthTokenType
 import io.beaniejoy.dongnecafe.domain.common.utils.security.JwtTokenUtils
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import mu.KLogging
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.stereotype.Component
 import org.springframework.web.servlet.HandlerExceptionResolver
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 @Component
 class CustomAuthenticationEntryPoint(

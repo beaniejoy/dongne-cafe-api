@@ -3,9 +3,9 @@ package io.beaniejoy.dongnecafe.common.security.utils
 import io.beaniejoy.dongnecafe.domain.common.error.constant.ErrorCode
 import io.beaniejoy.dongnecafe.domain.common.error.exception.BusinessException
 import io.beaniejoy.dongnecafe.domain.common.utils.security.AuthTokenType
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpHeaders.AUTHORIZATION
 import java.net.URLDecoder
-import javax.servlet.http.HttpServletRequest
 
 class SecurityHelper {
 

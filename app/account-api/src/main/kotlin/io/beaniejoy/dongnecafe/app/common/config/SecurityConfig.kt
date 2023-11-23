@@ -52,25 +52,28 @@ class SecurityConfig {
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
             // only api 방식 인증 & 인가 적용 위해 csrf & formLogin 비활성화
-            .csrf().disable()
-            .formLogin().disable()
+            .csrf { it.disable() }
+            .formLogin { it.disable() }
 
-            .authorizeRequests()
-            .antMatchers("${actuatorProperties.basePath}/**").hasRole(RoleType.ROLE_MONITORING.securityRoleName())
-            .antMatchers(*permittedUrls, *resourceUrls).permitAll()
-            .anyRequest().authenticated()
+            .authorizeHttpRequests {
+                it
+                    .requestMatchers(
+                        "${actuatorProperties.basePath}/**"
+                    ).hasRole(RoleType.ROLE_MONITORING.securityRoleName())
+                    .requestMatchers(*permittedUrls, *resourceUrls).permitAll()
+                    .anyRequest().authenticated()
+            }
 
-            .and()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 방식(세션 불필요)
+            .sessionManagement {
+                it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 방식(세션 불필요)
+            }
 
-            .and()
+            .exceptionHandling {
+                it
+                    .authenticationEntryPoint(customAuthenticationEntryPoint)   // 인증 예외 entryPoint 적용
+                    .accessDeniedHandler(customAccessDeniedHandler)             // 인가 예외 handler 적용
+            }
             .also { jwtAuthenticationConfigurer(it) }
-            .exceptionHandling()
-            .authenticationEntryPoint(customAuthenticationEntryPoint)   // 인증 예외 entryPoint 적용
-            .accessDeniedHandler(customAccessDeniedHandler)             // 인가 예외 handler 적용
-
-            .and()
             .build()
     }
 
