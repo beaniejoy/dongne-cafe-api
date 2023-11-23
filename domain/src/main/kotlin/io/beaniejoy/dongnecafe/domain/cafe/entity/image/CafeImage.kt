@@ -1,7 +1,7 @@
 package io.beaniejoy.dongnecafe.domain.cafe.entity.image
 
 import io.beaniejoy.dongnecafe.domain.cafe.entity.Cafe
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "cafe_images")

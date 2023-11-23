@@ -1,8 +1,8 @@
 package io.beaniejoy.dongnecafe.domain.cafe.entity.image
 
 import io.beaniejoy.dongnecafe.domain.common.entity.BaseEntity
-import javax.persistence.Column
-import javax.persistence.MappedSuperclass
+import jakarta.persistence.Column
+import jakarta.persistence.MappedSuperclass
 
 @MappedSuperclass
 abstract class Image protected constructor(imgUrl: String) : BaseEntity() {

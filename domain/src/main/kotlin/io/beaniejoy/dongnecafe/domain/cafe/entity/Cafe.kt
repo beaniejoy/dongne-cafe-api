@@ -5,7 +5,7 @@ import io.beaniejoy.dongnecafe.domain.cafe.model.CafeCommand
 import io.beaniejoy.dongnecafe.domain.common.entity.BaseEntity
 import io.beaniejoy.dongnecafe.domain.common.error.constant.ErrorCode
 import io.beaniejoy.dongnecafe.domain.common.error.exception.BusinessException
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "cafes")

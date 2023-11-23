@@ -1,10 +1,10 @@
 package io.beaniejoy.dongnecafe.domain.cafe.entity
 
+import io.beaniejoy.dongnecafe.domain.cafe.model.CafeCommand
 import io.beaniejoy.dongnecafe.domain.common.entity.BaseEntity
 import io.beaniejoy.dongnecafe.domain.common.error.constant.ErrorCode
 import io.beaniejoy.dongnecafe.domain.common.error.exception.BusinessException
-import io.beaniejoy.dongnecafe.domain.cafe.model.CafeCommand
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "menu_options")

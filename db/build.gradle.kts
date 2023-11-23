@@ -12,6 +12,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
+        // flyway mysql 8 version gradle 실행 전용
+        // (이거 없으면 gradle flyway task 수행시 에러 발생)
         classpath("org.flywaydb:flyway-mysql:${Version.Deps.FLYWAY}")
     }
 }

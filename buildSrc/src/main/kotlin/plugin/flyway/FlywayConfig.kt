@@ -1,6 +1,6 @@
 package plugin.flyway
 
-import BuildProfile
+import build.BuildProfile
 
 class FlywayConfig(
     private val activeProfile: BuildProfile
