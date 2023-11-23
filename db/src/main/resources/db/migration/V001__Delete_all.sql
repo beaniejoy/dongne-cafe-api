@@ -9,7 +9,10 @@ DROP TABLE IF EXISTS `cafe_menu_categories`;
 DROP TABLE IF EXISTS `cafes`;
 DROP TABLE IF EXISTS `members`;
 
-DROP PROCEDURE IF EXISTS insertCafeImages;
+DROP PROCEDURE IF EXISTS insertCafeMenuCategories;
 DROP PROCEDURE IF EXISTS insertCafeMenus;
 DROP PROCEDURE IF EXISTS insertMenuOptions;
 DROP PROCEDURE IF EXISTS insertOptionDetails;
+DROP PROCEDURE IF EXISTS insertCafeImages;
+DROP PROCEDURE IF EXISTS insertCafeMenuCategoryImages;
+DROP PROCEDURE IF EXISTS insertCafeMenuImages;

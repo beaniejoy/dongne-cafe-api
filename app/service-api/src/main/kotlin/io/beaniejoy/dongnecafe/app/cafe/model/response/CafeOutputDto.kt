@@ -38,12 +38,7 @@ class CafeOutputDto {
         val name: String,
         val address: String,
         val totalRate: Float,
-        val cafeImages: List<CafeImageResponse>
-    )
-
-    data class CafeImageResponse(
-        val cafeImageId: Long,
-        val imgUrl: String
+        val cafeImages: List<ImageResponse>
     )
 
     data class CafeDetailedResponse(
@@ -54,7 +49,7 @@ class CafeOutputDto {
         val totalRate: Float,
         val description: String?,
         val cafeMenuCategories: List<CafeMenuCategoryResponse> = emptyList(),
-        val cafeImages: List<CafeImageResponse> = emptyList()
+        val cafeImages: List<ImageResponse> = emptyList()
     )
 
     data class CafeMenuCategoryResponse(
@@ -62,6 +57,7 @@ class CafeOutputDto {
         val name: String,
         val description: String?,
         val cafeMenus: List<CafeMenuResponse> = emptyList(),
+        val cafeMenuCategoryImages: List<ImageResponse> = emptyList()
     )
 
     data class CafeMenuResponse(
@@ -69,7 +65,13 @@ class CafeOutputDto {
         val name: String,
         val price: BigDecimal,
         val description: String?,
-        val menuOptions: List<MenuOptionResponse> = emptyList()
+        val menuOptions: List<MenuOptionResponse> = emptyList(),
+        val cafeMenuImages: List<ImageResponse> = emptyList()
+    )
+
+    data class ImageResponse(
+        val imageId: Long,
+        val imgUrl: String
     )
 
     data class MenuOptionResponse(

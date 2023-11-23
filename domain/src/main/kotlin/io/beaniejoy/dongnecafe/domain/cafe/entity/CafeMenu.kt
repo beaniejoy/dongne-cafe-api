@@ -1,9 +1,10 @@
 package io.beaniejoy.dongnecafe.domain.cafe.entity
 
+import io.beaniejoy.dongnecafe.domain.cafe.entity.image.CafeMenuImage
+import io.beaniejoy.dongnecafe.domain.cafe.model.CafeCommand
 import io.beaniejoy.dongnecafe.domain.common.entity.BaseEntity
 import io.beaniejoy.dongnecafe.domain.common.error.constant.ErrorCode
 import io.beaniejoy.dongnecafe.domain.common.error.exception.BusinessException
-import io.beaniejoy.dongnecafe.domain.cafe.model.CafeCommand
 import java.math.BigDecimal
 import javax.persistence.*
 
@@ -38,6 +39,9 @@ class CafeMenu protected constructor(
 
     @OneToMany(mappedBy = "cafeMenu", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     val menuOptions: MutableList<MenuOption> = arrayListOf()
+
+    @OneToMany(mappedBy = "cafeMenu", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    val cafeMenuImages: MutableList<CafeMenuImage> = arrayListOf()
 
     companion object {
         fun createEntity(command: CafeCommand.RegisterCafeMenu): CafeMenu {
