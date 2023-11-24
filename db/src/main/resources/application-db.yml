@@ -20,6 +20,7 @@ spring:
       hibernate:
         format_sql: true
         show-sql: false
+        default_batch_fetch_size: 100 # JPA OneToMany 조회 성능 개선
     open-in-view: false
   data:
     jpa:

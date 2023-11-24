@@ -43,13 +43,13 @@ class CafeServiceImpl(
         }
     }
 
-    // TODO cafe, image, category, menu 적절히 분리해서 join fetch로 성능 개선해보기
-    // 대표 이미지 해야할지 고민(카페 메뉴에 대해서) >> 왜냐하면 최초 카페 진입시 모든 카페 메뉴 이미지 내용 가져오려면 방대한 데이터가 필요
-    // 카테고리 5개, 카테고리당 메뉴 4개, 메뉴당 이미지 3개, 메뉴당 옵션 2개,  옵션당 상세 2개 = 5 * 4 * 3 * 2 * 2 = 240개 데이터 응답
-    // 카테고리는 이미지 한 개로 고정
+    /**
+     * Cafe, CafeMenuCategory > fetch join
+     * others > in query with batch_size
+     */
     @Transactional(readOnly = true)
     override fun getDetailedCafe(name: String): CafeInfo.CafeDetailedInfo {
-        val cafe = cafeReaderPort.getCafeNotNullByName(name)
+        val cafe = cafeReaderPort.getCafeNotNullWithCategoryFetch(name)
 
         return cafeInfoMapper.cafeDetailedInfoOf(cafe)
     }

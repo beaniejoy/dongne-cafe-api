@@ -11,7 +11,7 @@ fun HttpServletRequest.getRequestHeaders(): String? {
     return Gson().toJson(
         mutableMapOf<String, String?>().apply {
             request.headerNames.toList().forEach {
-                this[it] = request.getHeader(it)
+                this@apply[it] = request.getHeader(it)
             }
         }
     )
@@ -42,4 +42,15 @@ fun ContentCachingRequestWrapper.getRequestBody(): String {
 // TODO: logging response body maximum size 고려
 fun ContentCachingResponseWrapper.getResponseBody(): String {
     return this.contentAsByteArray.toString(Charsets.UTF_8)
+}
+
+fun ContentCachingResponseWrapper.getRequestHeaders(): String? {
+    val response = this
+    return Gson().toJson(
+        mutableMapOf<String, String?>().apply {
+            response.headerNames.toList().forEach {
+                this@apply[it] = response.getHeader(it)
+            }
+        }
+    )
 }

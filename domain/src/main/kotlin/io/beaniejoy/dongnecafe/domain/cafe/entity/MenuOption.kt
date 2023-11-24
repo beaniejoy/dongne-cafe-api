@@ -25,7 +25,7 @@ class MenuOption protected constructor(
     var cafeMenu: CafeMenu? = null
         protected set
 
-    @OneToMany(mappedBy = "menuOption", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "menuOption", fetch = FetchType.LAZY)
     val optionDetails: MutableList<OptionDetail> = arrayListOf()
 
     companion object {

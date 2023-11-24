@@ -32,9 +32,6 @@ interface CafeInfoMapper {
     @Mapping(source = "cafe.id", target = "cafeId")
     fun cafeSearchInfoOf(cafe: Cafe, cafeImages: List<CafeImage>): CafeInfo.CafeSearchInfo
 
-    @Mapping(source = "cafeImage.id", target = "imageId")
-    fun cafeImageSearchInfoOf(cafeImage: CafeImage): CafeInfo.ImageInfo
-
     @Mapping(source = "cafe.id", target = "cafeId")
     fun cafeDetailedInfoOf(cafe: Cafe): CafeInfo.CafeDetailedInfo
 
@@ -43,6 +40,9 @@ interface CafeInfoMapper {
 
     @Mapping(source = "cafeMenu.id", target = "cafeMenuId")
     fun cafeMenuInfoOf(cafeMenu: CafeMenu): CafeInfo.CafeMenuInfo
+
+    @Mapping(source = "cafeImage.id", target = "imageId")
+    fun cafeImageSearchInfoOf(cafeImage: CafeImage): CafeInfo.ImageInfo
 
     @Mapping(source = "cafeMenuCategoryImage.id", target = "imageId")
     fun cafeMenuCategoryImageInfoOf(cafeMenuCategoryImage: CafeMenuCategoryImage): CafeInfo.ImageInfo

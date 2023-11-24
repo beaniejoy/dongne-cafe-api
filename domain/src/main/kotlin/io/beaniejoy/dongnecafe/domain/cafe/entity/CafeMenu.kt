@@ -37,10 +37,10 @@ class CafeMenu protected constructor(
     var cafeMenuCategory: CafeMenuCategory? = null
         protected set
 
-    @OneToMany(mappedBy = "cafeMenu", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "cafeMenu", fetch = FetchType.LAZY)
     val menuOptions: MutableList<MenuOption> = arrayListOf()
 
-    @OneToMany(mappedBy = "cafeMenu", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "cafeMenu", fetch = FetchType.LAZY)
     val cafeMenuImages: MutableList<CafeMenuImage> = arrayListOf()
 
     companion object {
