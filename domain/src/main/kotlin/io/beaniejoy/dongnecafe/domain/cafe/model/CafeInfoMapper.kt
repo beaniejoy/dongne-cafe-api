@@ -1,6 +1,9 @@
 package io.beaniejoy.dongnecafe.domain.cafe.model
 
 import io.beaniejoy.dongnecafe.domain.cafe.entity.*
+import io.beaniejoy.dongnecafe.domain.cafe.entity.image.CafeImage
+import io.beaniejoy.dongnecafe.domain.cafe.entity.image.CafeMenuCategoryImage
+import io.beaniejoy.dongnecafe.domain.cafe.entity.image.CafeMenuImage
 import org.mapstruct.*
 
 @Mapper(
@@ -29,21 +32,23 @@ interface CafeInfoMapper {
     @Mapping(source = "cafe.id", target = "cafeId")
     fun cafeSearchInfoOf(cafe: Cafe, cafeImages: List<CafeImage>): CafeInfo.CafeSearchInfo
 
-    @Mapping(source = "cafeImage.id", target = "cafeImageId")
-    fun cafeImageSearchInfoOf(cafeImage: CafeImage): CafeInfo.CafeImageInfo
+    @Mapping(source = "cafeImage.id", target = "imageId")
+    fun cafeImageSearchInfoOf(cafeImage: CafeImage): CafeInfo.ImageInfo
 
     @Mapping(source = "cafe.id", target = "cafeId")
-    fun cafeDetailedInfoOf(
-        cafe: Cafe,
-        cafeMenuCategories: List<CafeMenuCategory>,
-        cafeImages: List<CafeImage>
-    ): CafeInfo.CafeDetailedInfo
+    fun cafeDetailedInfoOf(cafe: Cafe): CafeInfo.CafeDetailedInfo
 
     @Mapping(source = "cafeMenuCategory.id", target = "menuCategoryId")
     fun cafeMenuCategoryInfoOf(cafeMenuCategory: CafeMenuCategory): CafeInfo.CafeMenuCategoryInfo
 
     @Mapping(source = "cafeMenu.id", target = "cafeMenuId")
     fun cafeMenuInfoOf(cafeMenu: CafeMenu): CafeInfo.CafeMenuInfo
+
+    @Mapping(source = "cafeMenuCategoryImage.id", target = "imageId")
+    fun cafeMenuCategoryImageInfoOf(cafeMenuCategoryImage: CafeMenuCategoryImage): CafeInfo.ImageInfo
+
+    @Mapping(source = "cafeMenuImage.id", target = "imageId")
+    fun cafeMenuImageInfoOf(cafeMenuImage: CafeMenuImage): CafeInfo.ImageInfo
 
     @Mapping(source = "menuOption.id", target = "menuOptionId")
     fun menuOptionInfoOf(menuOption: MenuOption): CafeInfo.MenuOptionInfo

@@ -1,3 +1,5 @@
+DROP PROCEDURE IF EXISTS insertCafeImages;
+
 DELIMITER $$
 CREATE PROCEDURE insertCafeImages()
 BEGIN

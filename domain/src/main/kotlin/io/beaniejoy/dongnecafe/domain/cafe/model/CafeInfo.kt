@@ -38,7 +38,7 @@ class CafeInfo {
         val name: String,
         val address: String,
         val totalRate: Float,
-        val cafeImages: List<CafeImageInfo> = emptyList()
+        val cafeImages: List<ImageInfo> = emptyList()
     )
 
     data class CafeDetailedInfo(
@@ -49,12 +49,7 @@ class CafeInfo {
         val totalRate: Float,
         val description: String?,
         val cafeMenuCategories: List<CafeMenuCategoryInfo> = emptyList(),
-        val cafeImages: List<CafeImageInfo> = emptyList()
-    )
-
-    data class CafeImageInfo(
-        val cafeImageId: Long,
-        val imgUrl: String
+        val cafeImages: List<ImageInfo> = emptyList()
     )
 
     data class CafeMenuCategoryInfo(
@@ -62,6 +57,7 @@ class CafeInfo {
         val name: String,
         val description: String?,
         val cafeMenus: List<CafeMenuInfo> = emptyList(),
+        val cafeMenuCategoryImages: List<ImageInfo> = emptyList()
     )
 
     data class CafeMenuInfo(
@@ -69,7 +65,13 @@ class CafeInfo {
         val name: String,
         val price: BigDecimal,
         val description: String?,
-        val menuOptions: List<MenuOptionInfo> = emptyList()
+        val menuOptions: List<MenuOptionInfo> = emptyList(),
+        val cafeMenuImages: List<ImageInfo> = emptyList()
+    )
+
+    data class ImageInfo(
+        val imageId: Long,
+        val imgUrl: String
     )
 
     data class MenuOptionInfo(

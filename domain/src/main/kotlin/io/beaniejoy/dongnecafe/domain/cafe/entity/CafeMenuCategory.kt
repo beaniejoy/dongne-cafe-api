@@ -1,5 +1,6 @@
 package io.beaniejoy.dongnecafe.domain.cafe.entity
 
+import io.beaniejoy.dongnecafe.domain.cafe.entity.image.CafeMenuCategoryImage
 import io.beaniejoy.dongnecafe.domain.cafe.model.CafeCommand
 import io.beaniejoy.dongnecafe.domain.common.entity.BaseEntity
 import io.beaniejoy.dongnecafe.domain.common.error.constant.ErrorCode
@@ -8,7 +9,7 @@ import jakarta.persistence.*
 
 @Entity
 @Table(name = "cafe_menu_categories")
-class CafeMenuCategory(
+class CafeMenuCategory protected constructor(
     name: String,
     description: String?
 ) : BaseEntity() {
@@ -32,6 +33,9 @@ class CafeMenuCategory(
 
     @OneToMany(mappedBy = "cafeMenuCategory", fetch = FetchType.LAZY)
     val cafeMenus: MutableList<CafeMenu> = arrayListOf()
+
+    @OneToMany(mappedBy = "cafeMenuCategory", fetch = FetchType.LAZY)
+    val cafeMenuCategoryImages: MutableList<CafeMenuCategoryImage> = arrayListOf()
 
     companion object {
         fun createEntity(command: CafeCommand.RegisterCafeMenuCategory): CafeMenuCategory {

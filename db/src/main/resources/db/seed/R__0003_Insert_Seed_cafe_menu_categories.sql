@@ -1,3 +1,5 @@
+DROP PROCEDURE IF EXISTS insertCafeMenuCategories;
+
 DELIMITER $$
 CREATE PROCEDURE insertCafeMenuCategories()
 BEGIN
