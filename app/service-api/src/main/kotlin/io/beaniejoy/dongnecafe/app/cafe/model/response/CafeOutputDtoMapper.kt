@@ -1,6 +1,6 @@
 package io.beaniejoy.dongnecafe.app.cafe.model.response
 
-import io.beaniejoy.dongnecafe.domain.cafe.model.CafeInfo
+import io.beaniejoy.dongnecafe.domain.cafe.entity.CafeInfo
 import org.mapstruct.InjectionStrategy
 import org.mapstruct.Mapper
 import org.mapstruct.MappingConstants
@@ -20,5 +20,5 @@ interface CafeOutputDtoMapper {
 
     fun of(cafeSearchInfo: CafeInfo.CafeSearchInfo): CafeOutputDto.CafeSearchResponse
 
-    fun of(cafeDetailedInfo: CafeInfo.CafeDetailedInfo): CafeOutputDto.CafeDetailedResponse
+    fun of(cafeDetailInfo: CafeInfo.CafeDetailInfo): CafeOutputDto.CafeDetailedResponse
 }

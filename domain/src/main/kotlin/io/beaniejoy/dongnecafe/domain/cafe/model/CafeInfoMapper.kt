@@ -33,7 +33,7 @@ interface CafeInfoMapper {
     fun cafeSearchInfoOf(cafe: Cafe, cafeImages: List<CafeImage>): CafeInfo.CafeSearchInfo
 
     @Mapping(source = "cafe.id", target = "cafeId")
-    fun cafeDetailedInfoOf(cafe: Cafe): CafeInfo.CafeDetailedInfo
+    fun cafeDetailInfoOf(cafe: Cafe): CafeInfo.CafeDetailInfo
 
     @Mapping(source = "cafeMenuCategory.id", target = "menuCategoryId")
     fun cafeMenuCategoryInfoOf(cafeMenuCategory: CafeMenuCategory): CafeInfo.CafeMenuCategoryInfo

@@ -2,7 +2,7 @@ package io.beaniejoy.dongnecafe.domain.cafe.service.impl
 
 import io.beaniejoy.dongnecafe.domain.cafe.entity.CafeMenuCategory
 import io.beaniejoy.dongnecafe.domain.cafe.model.CafeCommand
-import io.beaniejoy.dongnecafe.domain.cafe.model.CafeInfo
+import io.beaniejoy.dongnecafe.domain.cafe.entity.CafeInfo
 import io.beaniejoy.dongnecafe.domain.cafe.model.CafeInfoMapper
 import io.beaniejoy.dongnecafe.domain.cafe.persistence.CafeReaderPort
 import io.beaniejoy.dongnecafe.domain.cafe.persistence.CafeRemoverPort

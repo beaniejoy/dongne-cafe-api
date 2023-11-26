@@ -2,11 +2,10 @@ package io.beaniejoy.dongnecafe.common.logging
 
 import com.google.gson.Gson
 import io.beaniejoy.dongnecafe.common.logging.constant.HttpClientIp
-import jakarta.servlet.http.HttpServletRequest
 import org.springframework.web.util.ContentCachingRequestWrapper
 import org.springframework.web.util.ContentCachingResponseWrapper
 
-fun HttpServletRequest.getRequestHeaders(): String? {
+fun ContentCachingRequestWrapper.getRequestHeaders(): String? {
     val request = this
     return Gson().toJson(
         mutableMapOf<String, String?>().apply {
@@ -17,13 +16,13 @@ fun HttpServletRequest.getRequestHeaders(): String? {
     )
 }
 
-fun HttpServletRequest.getRequestParams(): String {
+fun ContentCachingRequestWrapper.getRequestParams(): String {
     return this.parameterMap.mapValues {
         it.value.joinToString(",")
     }.entries.joinToString("&")
 }
 
-fun HttpServletRequest.getClientIp(): String {
+fun ContentCachingRequestWrapper.getClientIp(): String {
     HttpClientIp.values().forEach { clientIpHeader ->
         this.getHeader(clientIpHeader.headerName).also {
             if (it.isNullOrBlank().not() && "unknown".equals(it, true).not()) {

@@ -3,6 +3,7 @@ package io.beaniejoy.dongnecafe.common.logging
 import org.springframework.http.HttpStatus
 import org.springframework.web.util.ContentCachingRequestWrapper
 import org.springframework.web.util.ContentCachingResponseWrapper
+import org.yaml.snakeyaml.util.UriEncoder
 
 data class HttpLogMessage(
     val httpMethod: String,
@@ -40,7 +41,7 @@ data class HttpLogMessage(
     fun toPrettierLog(): String {
         return """
         |
-        |[REQUEST] ${this.httpMethod} ${this.requestUri} ${this.httpStatus} (${this.elapsedTime})
+        |[REQUEST] ${this.httpMethod} ${UriEncoder.decode(this.requestUri)} ${this.httpStatus} (${this.elapsedTime}s)
         |>> CLIENT_IP: ${this.clientIp}
         |>> (in)REQUEST_HEADERS: ${this.requestHeaders}
         |>> (in)REQUEST_PARAM: ${this.requestParam}

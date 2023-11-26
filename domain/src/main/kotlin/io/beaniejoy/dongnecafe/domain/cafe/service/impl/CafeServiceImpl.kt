@@ -2,13 +2,14 @@ package io.beaniejoy.dongnecafe.domain.cafe.service.impl
 
 import io.beaniejoy.dongnecafe.domain.cafe.entity.Cafe
 import io.beaniejoy.dongnecafe.domain.cafe.model.CafeCommand
-import io.beaniejoy.dongnecafe.domain.cafe.model.CafeInfo
+import io.beaniejoy.dongnecafe.domain.cafe.entity.CafeInfo
 import io.beaniejoy.dongnecafe.domain.cafe.model.CafeInfoMapper
 import io.beaniejoy.dongnecafe.domain.cafe.model.CafeQuery
 import io.beaniejoy.dongnecafe.domain.cafe.persistence.CafeReaderPort
 import io.beaniejoy.dongnecafe.domain.cafe.persistence.CafeStorePort
 import io.beaniejoy.dongnecafe.domain.cafe.service.CafeService
 import io.beaniejoy.dongnecafe.domain.cafe.service.validator.CafeValidator
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -47,11 +48,13 @@ class CafeServiceImpl(
      * Cafe, CafeMenuCategory > fetch join
      * others > in query with batch_size
      */
+    // TODO test for sync and distributed instances sync
+    @Cacheable(cacheNames = ["cafeDetail"], key = "#name")
     @Transactional(readOnly = true)
-    override fun getDetailedCafe(name: String): CafeInfo.CafeDetailedInfo {
+    override fun getDetailedCafe(name: String): CafeInfo.CafeDetailInfo {
         val cafe = cafeReaderPort.getCafeNotNullWithCategoryFetch(name)
 
-        return cafeInfoMapper.cafeDetailedInfoOf(cafe)
+        return cafeInfoMapper.cafeDetailInfoOf(cafe)
     }
 
     /**
