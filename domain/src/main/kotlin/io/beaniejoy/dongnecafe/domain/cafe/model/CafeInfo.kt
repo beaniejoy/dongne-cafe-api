@@ -1,4 +1,4 @@
-package io.beaniejoy.dongnecafe.domain.cafe.entity
+package io.beaniejoy.dongnecafe.domain.cafe.model
 
 import java.math.BigDecimal
 

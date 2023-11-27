@@ -1,7 +1,7 @@
 package io.beaniejoy.dongnecafe.domain.cafe.service
 
 import io.beaniejoy.dongnecafe.domain.cafe.model.CafeCommand
-import io.beaniejoy.dongnecafe.domain.cafe.entity.CafeInfo
+import io.beaniejoy.dongnecafe.domain.cafe.model.CafeInfo
 import io.beaniejoy.dongnecafe.domain.cafe.model.CafeQuery
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
