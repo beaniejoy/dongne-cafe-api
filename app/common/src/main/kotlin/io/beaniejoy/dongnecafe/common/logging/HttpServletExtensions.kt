@@ -1,7 +1,7 @@
 package io.beaniejoy.dongnecafe.common.logging
 
 import com.google.gson.Gson
-import io.beaniejoy.dongnecafe.common.logging.constant.HttpClientIp
+import io.beaniejoy.dongnecafe.common.logging.constant.HttpClientIpType
 import org.springframework.web.util.ContentCachingRequestWrapper
 import org.springframework.web.util.ContentCachingResponseWrapper
 
@@ -23,15 +23,7 @@ fun ContentCachingRequestWrapper.getRequestParams(): String {
 }
 
 fun ContentCachingRequestWrapper.getClientIp(): String {
-    HttpClientIp.values().forEach { clientIpHeader ->
-        this.getHeader(clientIpHeader.headerName).also {
-            if (it.isNullOrBlank().not() && "unknown".equals(it, true).not()) {
-                return it
-            }
-        }
-    }
-
-    return this.remoteAddr
+    return HttpClientIpType.findClientIpInHeader(this)
 }
 
 fun ContentCachingRequestWrapper.getRequestBody(): String {
