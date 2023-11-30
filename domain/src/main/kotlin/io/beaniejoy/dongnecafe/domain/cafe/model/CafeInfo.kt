@@ -41,13 +41,13 @@ class CafeInfo {
         val cafeImages: List<ImageInfo> = emptyList()
     )
 
-    data class CafeDetailedInfo(
+    data class CafeDetailInfo(
         val cafeId: Long,
         val name: String,
         val address: String,
         val phoneNumber: String,
         val totalRate: Float,
-        val description: String?,
+        val description: String,
         val cafeMenuCategories: List<CafeMenuCategoryInfo> = emptyList(),
         val cafeImages: List<ImageInfo> = emptyList()
     )

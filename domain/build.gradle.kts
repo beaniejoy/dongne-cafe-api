@@ -33,5 +33,9 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:${Version.Deps.JWT}")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:${Version.Deps.JWT}")
 
+    // querydsl
+    implementation("com.querydsl:querydsl-jpa:${Version.Deps.QUERYDSL}:jakarta")
+    kapt("com.querydsl:querydsl-apt:${Version.Deps.QUERYDSL}:jakarta")
+
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
 }

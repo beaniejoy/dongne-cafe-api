@@ -21,7 +21,6 @@ class JwtAuthenticationFilter(
      */
     override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
         val httpRequest = request as HttpServletRequest
-        log.info { "[JwtAuthenticationFilter][${request.dispatcherType}] uri: ${request.requestURI}" }
 
         // 인증 헤더에 토큰값 없는 경우 pass
         SecurityHelper.getAuthTokenFromRequest(

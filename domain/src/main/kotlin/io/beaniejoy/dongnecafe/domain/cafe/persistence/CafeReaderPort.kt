@@ -13,5 +13,5 @@ interface CafeReaderPort {
 
     fun getCafeNotNull(id: Long): Cafe
 
-    fun getCafeNotNullByName(name: String): Cafe
+    fun getCafeNotNullWithCategoryFetch(name: String): Cafe
 }

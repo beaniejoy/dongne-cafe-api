@@ -3,6 +3,7 @@ package io.beaniejoy.dongnecafe.common.logging
 import org.springframework.http.HttpStatus
 import org.springframework.web.util.ContentCachingRequestWrapper
 import org.springframework.web.util.ContentCachingResponseWrapper
+import org.yaml.snakeyaml.util.UriEncoder
 
 data class HttpLogMessage(
     val httpMethod: String,
@@ -10,9 +11,10 @@ data class HttpLogMessage(
     val httpStatus: HttpStatus,
     val clientIp: String,
     val elapsedTime: Double,
-    val headers: String?,
+    val requestHeaders: String?,
     val requestParam: String?,
     val requestBody: String?,
+    val responseHeaders: String?,
     val responseBody: String?,
 ) {
     companion object {
@@ -27,9 +29,10 @@ data class HttpLogMessage(
                 httpStatus = HttpStatus.valueOf(responseWrapper.status),
                 clientIp = requestWrapper.getClientIp(),
                 elapsedTime = elapsedTime,
-                headers = requestWrapper.getRequestHeaders(),
+                requestHeaders = requestWrapper.getRequestHeaders(),
                 requestParam = requestWrapper.getRequestParams(),
                 requestBody = requestWrapper.getRequestBody(),
+                responseHeaders = responseWrapper.getRequestHeaders(),
                 responseBody = responseWrapper.getResponseBody(),
             )
         }
@@ -38,12 +41,13 @@ data class HttpLogMessage(
     fun toPrettierLog(): String {
         return """
         |
-        |[REQUEST] ${this.httpMethod} ${this.requestUri} ${this.httpStatus} (${this.elapsedTime})
+        |[REQUEST] ${this.httpMethod} ${UriEncoder.decode(this.requestUri)} ${this.httpStatus} (${this.elapsedTime}s)
         |>> CLIENT_IP: ${this.clientIp}
-        |>> HEADERS: ${this.headers}
-        |>> REQUEST_PARAM: ${this.requestParam}
-        |>> REQUEST_BODY: ${this.requestBody}
-        |>> RESPONSE_BODY: ${this.responseBody}
+        |>> (in)REQUEST_HEADERS: ${this.requestHeaders}
+        |>> (in)REQUEST_PARAM: ${this.requestParam}
+        |>> (in)REQUEST_BODY: ${this.requestBody}
+        |>> (out)RESPONSE_HEADERS: ${this.responseHeaders}
+        |>> (out)RESPONSE_BODY: ${this.responseBody}
         """.trimMargin()
     }
 }

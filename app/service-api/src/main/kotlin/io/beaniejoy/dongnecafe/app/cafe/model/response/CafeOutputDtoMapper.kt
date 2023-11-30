@@ -20,5 +20,5 @@ interface CafeOutputDtoMapper {
 
     fun of(cafeSearchInfo: CafeInfo.CafeSearchInfo): CafeOutputDto.CafeSearchResponse
 
-    fun of(cafeDetailedInfo: CafeInfo.CafeDetailedInfo): CafeOutputDto.CafeDetailedResponse
+    fun of(cafeDetailInfo: CafeInfo.CafeDetailInfo): CafeOutputDto.CafeDetailedResponse
 }

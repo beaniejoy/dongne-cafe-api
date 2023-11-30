@@ -34,8 +34,8 @@ class CafeReaderAdapter(
             ?: throw BusinessException(ErrorCode.CAFE_NOT_FOUND)
     }
 
-    override fun getCafeNotNullByName(name: String): Cafe {
-        return cafeRepository.findByName(name)
+    override fun getCafeNotNullWithCategoryFetch(name: String): Cafe {
+        return cafeRepository.findDetailFetchJoinByName(name)
             ?: throw BusinessException(ErrorCode.CAFE_NOT_FOUND)
     }
 }

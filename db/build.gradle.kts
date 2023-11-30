@@ -33,6 +33,10 @@ dependencies {
     implementation("org.flywaydb:flyway-core:${Version.Deps.FLYWAY}")
     implementation("org.flywaydb:flyway-mysql:${Version.Deps.FLYWAY}") // mysql 8 version ??
 
+    // querydsl
+    implementation("com.querydsl:querydsl-jpa:${Version.Deps.QUERYDSL}:jakarta")
+    kapt("com.querydsl:querydsl-apt:${Version.Deps.QUERYDSL}:jakarta")
+
     // DB
     runtimeOnly("mysql:mysql-connector-java:${Version.Deps.MYSQL}") // MySQL
     runtimeOnly("com.h2database:h2") // H2

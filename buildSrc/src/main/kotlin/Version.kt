@@ -21,6 +21,8 @@ object Version {
         const val MAPSTRUCT = "1.5.3.Final"
 
         const val FLYWAY = "9.8.3"
+
+        const val QUERYDSL = "5.0.0"
     }
 
     object KtLint {
