@@ -23,7 +23,7 @@ class BasicControllerAdvice {
      */
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception::class)
-    fun handleException(e: Exception): ApplicationResponse<Nothing> {
+    fun handleException(e: Exception): ApplicationResponse<Unit> {
         logger.error { "[COMMON][${e::class.simpleName}]" }
         e.printStackTrace()
         return ApplicationResponse.fail(errorCode = ErrorCode.COMMON_SERVER_ERROR).build()
@@ -35,7 +35,7 @@ class BasicControllerAdvice {
      */
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(BusinessException::class)
-    fun handleBusinessException(e: BusinessException): ApplicationResponse<Nothing> {
+    fun handleBusinessException(e: BusinessException): ApplicationResponse<Unit> {
         logger.error {
             "[${BusinessException::class.simpleName}] <ErrorCode>: ${e.errorCode.name}, <ErrorMessage>: ${e.message}"
         }
@@ -50,7 +50,7 @@ class BasicControllerAdvice {
      */
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(*arrayOf(AuthenticationException::class, AccessDeniedException::class))
-    fun handleAuthException(e: Exception): ApplicationResponse<Nothing> {
+    fun handleAuthException(e: Exception): ApplicationResponse<Unit> {
         val errorCode = when (e) {
             is AuthenticationException -> sortErrorCodeByAuthException(e)
             is AccessDeniedException -> ErrorCode.AUTH_ACCESS_DENIED

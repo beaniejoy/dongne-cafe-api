@@ -7,6 +7,7 @@ bootJar.enabled = false
 jar.enabled = true
 
 plugins {
+    // noarg, allOpen 사용을 위함
     kotlin(Plugins.Kotlin.PLUGIN_JPA).version(Version.KOTLIN)
     `java-test-fixtures`
 }

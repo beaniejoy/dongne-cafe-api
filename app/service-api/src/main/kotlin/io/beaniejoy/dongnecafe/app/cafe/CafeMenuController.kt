@@ -49,7 +49,7 @@ class CafeMenuController(
         @PathVariable("menuCategoryId") menuCategoryId: Long,
         @PathVariable("menuId") menuId: Long,
         @RequestBody resource: CafeInputDto.UpdateCafeMenuRequest
-    ): ApplicationResponse<Nothing> {
+    ): ApplicationResponse<Unit> {
         val updateCommand = cafeInputDtoMapper.of(resource)
 
         cafeMenuService.updateCafeMenuWithSeries(
@@ -72,7 +72,7 @@ class CafeMenuController(
         @PathVariable("cafeId") cafeId: Long,
         @PathVariable("menuCategoryId") menuCategoryId: Long,
         @RequestBody resource: CafeInputDto.BulkDeleteCafeMenusRequest
-    ): ApplicationResponse<Nothing> {
+    ): ApplicationResponse<Unit> {
         cafeMenuService.bulkDeleteCafeMenus(
             cafeId = cafeId,
             menuCategoryId = menuCategoryId,

@@ -16,7 +16,7 @@ class BuildLifecyclePlugin : Plugin<Project> {
             "operationService",
             BuildOperationService::class.java
         ) {
-                gradle.taskGraph.whenReady {
+            gradle.taskGraph.whenReady {
                 parameters.targetTaskPaths =
                     this.allTasks
                         .map { it.path }

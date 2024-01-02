@@ -45,7 +45,7 @@ class ApplicationResponseBuilder(
     private val message: String? = null,
     private val errorCode: String? = null
 ) {
-    fun build(): ApplicationResponse<Nothing> {
+    fun build(): ApplicationResponse<Unit> {
         return data(null)
     }
 

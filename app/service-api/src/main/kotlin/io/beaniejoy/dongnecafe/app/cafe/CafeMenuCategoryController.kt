@@ -37,7 +37,7 @@ class CafeMenuCategoryController(
         @PathVariable("cafeId") cafeId: Long,
         @PathVariable("menuCategoryId") menuCategoryId: Long,
         @RequestBody resource: CafeInputDto.UpdateCafeMenuCategoryRequest
-    ): ApplicationResponse<Nothing> {
+    ): ApplicationResponse<Unit> {
         val updateCommand = cafeInputDtoMapper.of(resource)
 
         cafeMenuCategoryService.updateMenuCategory(
@@ -53,7 +53,7 @@ class CafeMenuCategoryController(
     fun delete(
         @PathVariable("cafeId") cafeId: Long,
         @PathVariable("menuCategoryId") menuCategoryId: Long
-    ): ApplicationResponse<Nothing> {
+    ): ApplicationResponse<Unit> {
         cafeMenuCategoryService.deleteMenuCategory(cafeId, menuCategoryId)
 
         return ApplicationResponse.deleted().build()

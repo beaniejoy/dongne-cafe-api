@@ -81,7 +81,7 @@ class CafeController(
     fun updateInfo(
         @PathVariable("id") id: Long,
         @RequestBody resource: CafeInputDto.UpdateCafeRequest
-    ): ApplicationResponse<Nothing> {
+    ): ApplicationResponse<Unit> {
         val updateCommand = cafeInputDtoMapper.of(resource)
 
         cafeService.updateCafe(
